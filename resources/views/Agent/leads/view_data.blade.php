@@ -1737,6 +1737,15 @@
                                                 General Liability
                                             </label>
                                         </div>
+                                          <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner Dob <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div><!--end col-->
                                     </div><!--end col-->
                                     <hr />
                                     <h5>Loss Runs/Docs Files</h5>

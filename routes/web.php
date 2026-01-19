@@ -477,3 +477,7 @@ Route::get('/employees', function () {
 Route::get('/goals-target', [GoalController::class, 'index'])->name('goals_target');
 Route::post('/save-goal', [GoalController::class, 'store'])->name('goal.store');
 
+//---zoom--//
+Route::get('/admin/zoom', function () {
+    return view('admin.zoom');
+})->name('admin_zoom');
