@@ -1,0 +1,33 @@
+.data-select-cursor {
+    cursor: pointer;
+}
+
+.data-select-cursor:hover {
+    background: #f3f6f9;
+     color:black !important;
+}
+
+.pulse {
+    -webkit-animation: pulse 400ms infinite alternate !important;
+    animation: pulse 400ms infinite alternate !important;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        background-color: red;
+    }
+
+    100% {
+        background-color: yellow;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        background-color: red;
+    }
+
+    100% {
+        background-color: yellow;
+    }
+}

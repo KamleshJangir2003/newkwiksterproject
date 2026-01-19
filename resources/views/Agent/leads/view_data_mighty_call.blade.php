@@ -1,0 +1,2440 @@
+@extends('Agent.common.app')
+@section('main')
+    <link href="{{ asset('Agent/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+    <!--start page wrapper -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <style>
+                .slider {
+                    background-color: #333;
+                    color: #fff;
+                    padding: 10px;
+                    overflow: hidden;
+                }
+
+                .news-ticker {
+                    font-size: 20px;
+                }
+
+                .black-row td {
+                    background-color: rgb(5, 5, 5);
+                }
+
+                .green-row td {
+                    background-color: rgb(0, 255, 68);
+                    color: white;
+                }
+            </style>
+            <style>
+                .webphone-modal {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 350px;
+                    height: 600px;
+                    background: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                    z-index: 10000;
+                    display: none;
+                    flex-direction: column;
+                    overflow: hidden;
+                    border: 1px solid #ddd;
+                    resize: both;
+                    /* Allows resizing */
+                    min-width: 310px;
+                    min-height: 530px;
+                }
+
+                .webphone-modal-header {
+                    padding: 10px 15px;
+                    background: #2c3e50;
+                    color: white;
+                    cursor: move;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    user-select: none;
+                }
+
+                .webphone-modal-close {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 20px;
+                    cursor: pointer;
+                    padding: 0 5px;
+                }
+
+                .webphone-modal-content {
+                    flex: 1;
+                    overflow: auto;
+                }
+
+                /* Make the Webphone SDK content fit properly */
+                #myContainerId {
+                    width: 100%;
+                    height: 100%;
+                    min-height: 0;
+                }
+
+                /* Handle resize limitation */
+                .webphone-modal {
+                    max-width: 90vw;
+                    max-height: 90vh;
+                }
+            </style>
+
+            <!--breadcrumb-->
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3 justify-content-between">
+                <div class="breadcrumb-title pe-3">Leads</div>
+                <div class="ps-3">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0 p-0">
+                            <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Leads data</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <div id="webphoneModal" class="webphone-modal">
+                    <div class="webphone-modal-header">
+                        <span>Webphone</span>
+                        <button class="webphone-modal-close">&times;</button>
+                    </div>
+                    <div id="myContainerId" class="webphone-modal-content"></div>
+                </div>
+
+
+                <div class="d-flex align-items-center ms-auto">
+                    <input type="number" class="form-control me-2" style="width:100px" placeholder="Start" id="startNumber"
+                        min="1" />
+                    <input type="number" class="form-control me-2" style="width:100px" placeholder="End" id="endNumber"
+                        min="1" />
+                    <button class="btn btn-primary" id="copyButton">Copy Emails</button>
+                </div>
+            </div>
+            <!-- Hidden container to store emails -->
+            <div id="emailsContainer" style="display: none;">
+                @foreach ($datas as $index => $data)
+                    <span class="email" data-index="{{ $index + 1 }}">{{ $data->email }}</span>
+                @endforeach
+            </div>
+
+
+            @php
+                $currentDate = Carbon\Carbon::now('America/New_York')->toDateString();
+                $informations = App\adminmodel\Information::where('duration', '>=', $currentDate)
+                    ->where('status', 1)
+                    ->get();
+            @endphp
+            @foreach ($informations as $data)
+                @if ($data->agent_id == null || $data->agent_id == session('agent_id'))
+                    <div class="slider">
+                        <marquee class="news-ticker" behavior="scroll" direction="left" scrollamount="5">
+                            {{ $data->text }}
+                        </marquee>
+                    </div>
+                    <br>
+                @endif
+            @endforeach
+
+            <!--end breadcrumb-->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Company Name</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Company Rep1</th>
+                                    <th scope="col">State</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            @php
+                                $interestedChecks = App\Models\ExcelData::whereIn('dot', $datas->pluck('dot'))
+                                    ->where('form_status', 'Intrested')
+                                    ->select('dot', 'click_id')
+                                    ->get()
+                                    ->groupBy('dot');
+                            @endphp
+                            <tbody>
+                                @if (!empty($datas))
+                                    @php $a = 0; @endphp
+                                    @foreach ($datas as $data)
+                                        @php
+                                            $a++;
+                                            // Define the allowed states array
+                                            $allowedStates = [
+                                                'CO',
+                                                'CT',
+                                                'DE',
+                                                'HI',
+                                                'IA',
+                                                'ME',
+                                                'MA',
+                                                'MI',
+                                                'MT',
+                                                'NE',
+                                                'NH',
+                                                'NJ',
+                                                'NM',
+                                                'NY',
+                                                'ND',
+                                                'OR',
+                                                'RI',
+                                                'SD',
+                                                'UT',
+                                                'VT',
+                                                'WV',
+                                                'WI',
+                                                'WY',
+                                            ];
+                                            // Initialize the row class
+                                            $rowClass = '';
+
+                                            // Check if the business_state is in the allowed list
+                                            if (in_array($data->business_state, $allowedStates)) {
+                                                $rowClass = 'black-row'; // Apply black-row if business_state matches allowed states
+                                            }
+
+                                            $is_intrested = 0;
+                                            $intre_agent_id = null;
+
+                                            if ($interestedChecks->has($data->dot)) {
+                                                $check = $interestedChecks->get($data->dot)->first(); // Get first 'Interested' entry
+                                                $userDetails = App\adminmodel\Users_detailsModal::where(
+                                                    'ajent_id',
+                                                    $check->click_id,
+                                                )
+                                                    ->select('alise_name')
+                                                    ->first();
+
+                                                if ($userDetails) {
+                                                    $intre_agent_id = $userDetails->alise_name;
+                                                    $is_intrested = 1;
+                                                    $rowClass = 'green-row';
+                                                }
+                                            }
+                                        @endphp
+                                        <tr class="{{ $rowClass }}">
+                                            <td class="{{ $rowClass }}">
+
+                                                {{ $a }}</td>
+                                            <td>
+                                                {{ $data->company_name }} @if (!empty($data->mail_status))
+                                                    @if ($data->mail_status == 'Mail')
+                                                        <i class="lni lni-envelope" style="pedding:5px;color:crimson"></i>
+                                                    @elseif($data->mail_status == 2)
+                                                        <i class="lni lni-envelope" style="pedding:5px;color:crimson"></i>
+                                                        <i class="lni lni-bubble" style="pedding:5px;color:crimson"></i>
+                                                    @else
+                                                        <i class="lni lni-bubble" style="pedding:5px;color:crimson"></i>
+                                                    @endif
+                                                @endif
+                                                @if ($is_intrested == 1)
+                                                    <p style="margin-bottom:0px">{{ $intre_agent_id }}</p>
+                                                @endif
+                                            </td>
+                                            <td class="phone_copy" onclick="copyPhoneNumber()">{{ $data->phone }}<br><span
+                                                    class="copy-indicator"
+                                                    style="display:none;padding:5px;background-color:rgb(172, 169, 169);margin-top:5px">copied!</span>
+                                            </td>
+                                            <td data-bs-toggle="modal" data-company-name="{{ $data->company_name }}"
+                                                data-phone="{{ $data->phone }}" data-id="{{ $data->id }}"
+                                                data-company-rep1="{{ $data->company_rep1 }}"
+                                                data-business-address="{{ $data->business_address }}"
+                                                data-business-city="{{ $data->business_city }}"
+                                                data-business-state="{{ $data->business_state }}"
+                                                data-business-zip="{{ $data->business_zip }}"
+                                                data-dot="{{ $data->dot }}" data-mc_docket="{{ $data->mc_docket }}"
+                                                data-email="{{ $data->email }}" data-bs-target="#exampleFullScreenModal">
+                                                {{ $data->company_rep1 }}</td>
+                                            <td>{{ $data->business_state }}</td>
+                                            @if ($data->form_status == 'NEW')
+                                                <td>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success"
+                                                                data-bs-toggle="dropdown"style="background-color:#119711;color:white; padding: 2px 15px;border: none;">NEW</button>
+                                                            </button>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Voice Mail">Voice Mail</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Intrested">Not
+                                                                    Intrested</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Connected">Not
+                                                                    Connected</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Wrong Number">Wrong
+                                                                    Number</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="WON">WON</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="DND">DND</a>
+
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Restricted">Restricted State</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @elseif($data->form_status == 'Voice Mail')
+                                                <td>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success"
+                                                                data-bs-toggle="dropdown"style="background-color:#742dc1;color:white; padding: 2px 15px;border: none;">Voice
+                                                                Mail</button> </button>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="NEW">New</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Intrested">Not
+                                                                    Intrested</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Connected">Not
+                                                                    Connected</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Wrong Number">Wrong
+                                                                    Number</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="WON">WON</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="DND">DND</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @elseif($data->form_status == 'Not Intrested' || $data->form_status == 'Wrong Number' || $data->form_status == 'DND')
+                                                <td>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success"
+                                                                data-bs-toggle="dropdown"style="background-color:#d91c1c;color:white; padding: 2px 15px;border: none;">{{ $data->form_status }}</button>
+                                                            </button>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="NEW">New</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Voice Mail">Voice Mail</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Intrested">Not
+                                                                    Intrested</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Connected">Not
+                                                                    Connected</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Wrong Number">Wrong
+                                                                    Number</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="WON">WON</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="DND">DND</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @elseif($data->form_status == 'Not Connected')
+                                                <td>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success"
+                                                                data-bs-toggle="dropdown"style="background-color:#e6ca00;color:white; padding: 2px 15px;border: none;">Not
+                                                                Connected</button> </button>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="NEW">New</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Voice Mail">Voice Mail</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Intrested">Not
+                                                                    Intrested</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Wrong Number">Wrong
+                                                                    Number</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="WON">WON</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="DND">DND</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-success"
+                                                                data-bs-toggle="dropdown"style="background-color:#00ff72;color:white; padding: 2px 15px;border: none;">{{ $data->form_status }}</button>
+                                                            </button>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="NEW">New</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Voice Mail">Voice Mail</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Intrested">Not
+                                                                    Intrested</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Not Connected">Not
+                                                                    Connected</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="Wrong Number">Wrong
+                                                                    Number</a>
+                                                                <a class="dropdown-item update-status"
+                                                                    href="#"data-lead-id="{{ $data->id }}"
+                                                                    data-status="DND">DND</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                            <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-y') }}</td>
+                                            <td>
+                                                <div class="btn-group" id="btns<?php echo $a; ?>">
+                                                    <a href="#" class="webphone-call-btn"
+                                                        data-phone="{{ $data->phone }}" data-toggle="tooltip"
+                                                        data-placement="top" title="Call">
+                                                        <i class="lni lni-phone"
+                                                            style="font-size:20px;margin-left:10px"></i>
+                                                    </a>
+                                                </div>
+                                                @if (!empty($data->email))
+                                                    <div class="btn-group">
+                                                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $data->email }}"
+                                                            class="btn-mail" data-lead-id="{{ $data->id }}"
+                                                            target="_blank"><i class="lni lni-envelope"
+                                                                style="font-size:20px;margin-left:10px"></i></a>
+                                                    </div>
+                                                @endif
+                                                <div class="btn-group">
+                                                    <a href="#" class="btn-message"
+                                                        data-lead-id="{{ $data->id }}"><i class="lni lni-bubble"
+                                                            style="font-size:20px;margin-left:10px"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Company Name</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Company Rep1</th>
+                                    <th scope="col">State</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" value="{{ $id }}" id="manager_id" name="manager_id">
+    {{-- modal start --}}
+    <div class="modal fade" id="exampleFullScreenModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <h4>Lead</h4>
+                    
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('agent_update_leads') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="data_id" value="" id="data_id">
+                        <input type="hidden" name="forword_id" value="" id="forword_id">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="row border-end border-primary">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="firstNameinput" class="form-label">Company Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter company name"
+                                                id="company_name" name="company_name" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="lastNameinput" class="form-label">Phone <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter phone number"
+                                                id="phone" name="phone" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email </label>
+                                            <input type="email" class="form-control" placeholder="example@gmail.com"
+                                                id="email" name="email">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="compnayNameinput" class="form-label">Company Rep1 <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter company rep..."
+                                                id="company_rep1" name="company_rep1" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="emailidInput" class="form-label">Business Address <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Enter business address" id="business_address"
+                                                name="business_address" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="address1ControlTextarea" class="form-label">Business City <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter business city"
+                                                id="business_city" name="business_city" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Business State <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter business state"
+                                                id="business_state" name="business_state" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Business ZIP <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter business zip"
+                                                id="business_zip" name="business_zip" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">DOT <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter DOT"
+                                                id="dot" name="dot" required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">MC/Docket <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter MC"
+                                                id="mc_docket" name="mc_docket"required>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-12 mb-3">
+                                        <h5>Commodities</h5>
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Building Materials - Machinery">
+                                                <label for="citynameInput" class="form-label"> Building Materials -
+                                                    Machinery</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Building Materials">
+                                                <label for="citynameInput" class="form-label"> Building Materials</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Dry Freight - Amazon">
+                                                <label for="citynameInput" class="form-label"> Dry Freight -
+                                                    Amazon</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Dry Freight">
+                                                <label for="citynameInput" class="form-label"> Dry Freight</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Reefer with seafood or flowers">
+                                                <label for="citynameInput" class="form-label"> Reefer with seafood or
+                                                    flowers</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Refrigerated Goods">
+                                                <label for="citynameInput" class="form-label"> Refrigerated Goods</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Reefer with flowers">
+                                                <label for="citynameInput" class="form-label"> Reefer with flowers</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Reefer with flowers">
+                                                <label for="citynameInput" class="form-label"> Fracking Sand</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Hazard">
+                                                <label for="citynameInput" class="form-label"> Hazard</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Containerized Freight">
+                                                <label for="citynameInput" class="form-label"> Containerized
+                                                    Freight</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Sand &amp; Gravel">
+                                                <label for="citynameInput" class="form-label"> Sand &amp; Gravel</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Auto 100%">
+                                                <label for="citynameInput" class="form-label"> Auto 100%</label>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <input type="checkbox" class="form-check-input" name="commodities[]"
+                                                    value="Hauls Oversized/Overweight">
+                                                <label for="citynameInput" class="form-label"> Hauls
+                                                    Oversized/Overweight</label>
+
+                                            </div>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Unit Owned <span
+                                                    class="text-danger">*</span></label>
+                                            <select id="unit_owned2" class="form-select" name="unit_owned">
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                            </select>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">VIN <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter VIN"
+                                                id="vin" name="vin">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Vehicle Year </label>
+                                            <input type="number" class="form-control" placeholder="YYYY"
+                                                id="vehicle_year" name="vehicle_year">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Vehicle Make </label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Enter Vehicle make..." id="vehicle_make"
+                                                name="vehicle_make">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Stated Value </label>
+                                            <input type="text" class="form-control" placeholder="Enter stated value"
+                                                id="stated_value" name="stated_value">
+                                        </div>
+                                    </div><!--end col-->
+
+                                    <div class="row unit2" id="unit22" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">VIN2 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin2" name="vin2">
+                                            </div>
+                                        </div><!--end col-->
+
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Year2 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year2" name="vehicle_year2">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Make2 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make2"
+                                                    name="vehicle_make2">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Stated Value2 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value2"
+                                                    name="stated_value2">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+
+                                    <div class="row unit3" id="unit33" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">VIN3 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin3" name="vin3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Year3 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year3" name="vehicle_year3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Make3 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make3"
+                                                    name="vehicle_make3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Stated Value3 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value3"
+                                                    name="stated_value3">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+
+                                    <div class="row unit4" id="unit44" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">VIN4 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin4" name="vin4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Year4 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year4" name="vehicle_year4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Make4 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make4"
+                                                    name="vehicle_make4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Stated Value4 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value4"
+                                                    name="stated_value4">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+
+                                    <div class="row unit5" id="unit55" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">VIN5 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin5" name="vin5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Year5 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year5" name="vehicle_year5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Vehicle Make5 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make5"
+                                                    name="vehicle_make5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Stated Value5 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value5"
+                                                    name="stated_value5">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                    <!-- Driver Unit 6 -->
+                                    <div class="row unit6" id="unit66" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vin6" class="form-label">VIN6 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin6" name="vin6">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_year6" class="form-label">Vehicle Year6 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year6" name="vehicle_year6">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_make6" class="form-label">Vehicle Make6 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make6"
+                                                    name="vehicle_make6">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="stated_value6" class="form-label">Stated Value6 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value6"
+                                                    name="stated_value6">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Driver Unit 7 -->
+                                    <div class="row unit7" id="unit77" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vin7" class="form-label">VIN7 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin7" name="vin7">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_year7" class="form-label">Vehicle Year7 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year7" name="vehicle_year7">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_make7" class="form-label">Vehicle Make7 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make7"
+                                                    name="vehicle_make7">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="stated_value7" class="form-label">Stated Value7 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value7"
+                                                    name="stated_value7">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Driver Unit 8 -->
+                                    <div class="row unit8" id="unit88" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vin8" class="form-label">VIN8 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin8" name="vin8">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_year8" class="form-label">Vehicle Year8 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year8" name="vehicle_year8">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_make8" class="form-label">Vehicle Make8 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make8"
+                                                    name="vehicle_make8">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="stated_value8" class="form-label">Stated Value8 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value8"
+                                                    name="stated_value8">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Driver Unit 9 -->
+                                    <div class="row unit9" id="unit99" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vin9" class="form-label">VIN9 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin9" name="vin9">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_year9" class="form-label">Vehicle Year9 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year9" name="vehicle_year9">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_make9" class="form-label">Vehicle Make9 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make9"
+                                                    name="vehicle_make9">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="stated_value9" class="form-label">Stated Value9 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value9"
+                                                    name="stated_value9">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Driver Unit 10 -->
+                                    <div class="row unit10" id="unit101" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vin10" class="form-label">VIN10 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Enter VIN"
+                                                    id="vin10" name="vin10">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_year10" class="form-label">Vehicle Year10 </label>
+                                                <input type="number" class="form-control" placeholder="YYYY"
+                                                    id="vehicle_year10" name="vehicle_year10">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="vehicle_make10" class="form-label">Vehicle Make10 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter Vehicle make..." id="vehicle_make10"
+                                                    name="vehicle_make10">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="stated_value10" class="form-label">Stated Value10 </label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter stated value" id="stated_value10"
+                                                    name="stated_value10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Drivers<span
+                                                    class="text-danger">*</span></label>
+                                            <select id="drivers_state2" class="form-select" name="drivers_state">
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Driver Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter driver name"
+                                                id="driver_name" name="driver_name">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Driver DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" placeholder="Enter driver dob"
+                                                id="driver_dob" name="driver_dob">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Driver License <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter driver license"
+                                                id="driver_license" name="driver_license">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Driver License State<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Enter driver license"
+                                                id="driver_license_state" name="driver_license_state">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="row unit2" id="driver22" style="display: '';">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver Name2 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name2"
+                                                    name="driver_name2">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver DOB2 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" placeholder="Enter driver dob"
+                                                    id="driver_dob2" name="driver_dob2">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License2 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license2"
+                                                    name="driver_license2">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License State2<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license_state2"
+                                                    name="driver_license_state2">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+                                    <div class="row unit3" id="driver33" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver Name3 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name3"
+                                                    name="driver_name3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver DOB3 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob3"
+                                                    name="driver_dob3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License3 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license3"
+                                                    name="driver_license3">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License State3<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license_state3"
+                                                    name="driver_license_state3">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                    <div class="row unit4" id="driver44" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver Name4 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name4"
+                                                    name="driver_name4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver DOB4 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob4"
+                                                    name="driver_dob4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License4 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license4"
+                                                    name="driver_license4">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License State4<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license_state4"
+                                                    name="driver_license_state4">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+                                    <div class="row unit5" id="driver55" style="display: none;">
+                                        <hr class=" border border-2 border-primary">
+
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver Name5 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name5"
+                                                    name="driver_name5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver DOB5 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob5"
+                                                    name="driver_dob5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License5 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license5"
+                                                    name="driver_license5">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="citynameInput" class="form-label">Driver License State5<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license_state5"
+                                                    name="driver_license_state5">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+                                    <!-- Driver Unit 6 -->
+                                    <div class="row unit6" id="driver66" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_name6" class="form-label">Driver Name6 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name6"
+                                                    name="driver_name6">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_dob6" class="form-label">Driver DOB6 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob6"
+                                                    name="driver_dob6">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license6" class="form-label">Driver License6 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license6"
+                                                    name="driver_license6">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license_state6" class="form-label">Driver License
+                                                    State6 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license state" id="driver_license_state6"
+                                                    name="driver_license_state6">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+
+                                    <div class="row unit7" id="driver77" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_name7" class="form-label">Driver Name7 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name7"
+                                                    name="driver_name7">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_dob7" class="form-label">Driver DOB7 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob7"
+                                                    name="driver_dob7">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license7" class="form-label">Driver License7 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license7"
+                                                    name="driver_license7">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license_state7" class="form-label">Driver License
+                                                    State7 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license state" id="driver_license_state7"
+                                                    name="driver_license_state7">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                    <!-- Driver Unit 8 -->
+                                    <div class="row unit8" id="driver88" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_name8" class="form-label">Driver Name8 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name8"
+                                                    name="driver_name8">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_dob8" class="form-label">Driver DOB8 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob8"
+                                                    name="driver_dob8">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license8" class="form-label">Driver License8 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license8"
+                                                    name="driver_license8">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license_state8" class="form-label">Driver License
+                                                    State8 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license state" id="driver_license_state8"
+                                                    name="driver_license_state8">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                    <!-- Driver Unit 9 -->
+                                    <div class="row unit9" id="driver99" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_name9" class="form-label">Driver Name9 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name9"
+                                                    name="driver_name9">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_dob9" class="form-label">Driver DOB9 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob9"
+                                                    name="driver_dob9">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license9" class="form-label">Driver License9 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license9"
+                                                    name="driver_license9">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license_state9" class="form-label">Driver License
+                                                    State9 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license state" id="driver_license_state9"
+                                                    name="driver_license_state9">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                    <!-- Driver Unit 10 -->
+                                    <div class="row unit10" id="driver101" style="display: none;">
+                                        <hr class="border border-2 border-primary">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_name10" class="form-label">Driver Name10 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver name" id="driver_name10"
+                                                    name="driver_name10">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_dob10" class="form-label">Driver DOB10 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter driver dob" id="driver_dob10"
+                                                    name="driver_dob10">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license10" class="form-label">Driver License10 <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license" id="driver_license10"
+                                                    name="driver_license10">
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="driver_license_state10" class="form-label">Driver License
+                                                    State10 <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="Enter driver license state" id="driver_license_state10"
+                                                    name="driver_license_state10">
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="row text-center">
+                                    <div class="col-12">
+                                        <img src="{{ asset('assets/images/phonetics.png') }}" alt=""
+                                            height="400" class="img-fluid">
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Status<span
+                                                    class="text-danger">*</span></label>
+                                            <select id="form_status2" class="form-select" name="form_status"
+                                                required="">
+                                                <option value="Intrested">Intrested</option>
+                                                <option value="Pipeline">Pipeline</option>
+                                            </select>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="pt-4">
+                                            <label id="model-form-status" class="form-label">NEW</label>
+                                            <div class="progress animated-progress custom-progress mb-4"
+                                                id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                aria-expanded="false" style="cursor:pointer;">
+                                                <div class="progress-bar bg-info" role="progressbar"
+                                                    style="width:100%" ;="" aria-valuenow="100" aria-valuemin="0"
+                                                    aria-valuemax="100" id="progress-bar">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6 reminder" style="display: none;">
+                                        <div class="pb-4">
+                                            <label for="dateInput" class="form-label">Date</label>
+                                            <input type="date" class="form-control" id="dateInput1"
+                                                name="dateInput">
+
+                                            <label for="timeInput" class="form-label">Time</label>
+                                            <input type="time" class="form-control" id="timeInput1"
+                                                name="timeInput">
+                                            <input type="hidden" name="reminder" id="reminder1"></input>
+                                            <button onclick="setReminder()">Set Reminder</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="citynameInput" class="form-label">Comment </label>
+                                            <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Write a Coment...."
+                                                required=""></textarea>
+                                        </div>
+                                    </div><!--end col-->
+
+                                    <h4>Policy</h4>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Liability limit</label>
+                                            <select id="form_status" class="form-select" name="Liability"
+                                                required="">
+                                                <option value="N/A">N/A</option>
+                                                <option value="$250,000">$250,000</option>
+                                                <option value="$300,000">$300,000</option>
+                                                <option value="$500,000">$500,000</option>
+                                                <option value="$750,000">$750,000</option>
+                                                <option value="$1,000,000">$1,000,000</option>
+                                                <option value="$1,500,000">$1,500,000</option>
+                                                <option value="$1,750,000">$1,750,000</option>
+                                                <option value="$2,000,000">$2,000,000</option>
+                                            </select>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Do you need MTC ?</label>
+                                            <select id="form_status" class="form-select" name="MTC"
+                                                required="">
+                                                <option value="N/A">N/A</option>
+                                                <option value="$25,000">$25,000</option>
+                                                <option value="$50,000">$50,000</option>
+                                                <option value="$100,000">$100,000</option>
+                                                <option value="$150,000">$150,000</option>
+                                                <option value="$200,000">$200,000</option>
+                                                <option value="$250,000">$250,000</option>
+                                                <option value="$300,000">$300,000</option>
+                                                <option value="$500,000">$500,000</option>
+                                            </select>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-7">
+                                        <div class="mb-3">
+                                            <label for="ForminputState" class="form-label">Trailer interchange</label>
+                                            <select id="form_status" class="form-select" name="interchange"
+                                                required="">
+                                                <option value="N/A">N/A</option>
+                                                <option value="$1,000">$1,000</option>
+                                                <option value="$2,500">$2,500</option>
+                                                <option value="$5,000">$5,000</option>
+                                                <option value="$10,000">$10,000</option>
+                                                <option value="$15,000">$15,000</option>
+                                                <option value="$25,000">$25,000</option>
+                                                <option value="$30,000">$30,000</option>
+                                                <option value="$40,000">$40,000</option>
+                                                <option value="$50,000">$50,000</option>
+                                                <option value="$60,000">$60,000</option>
+                                                <option value="$75,000">$75,000</option>
+                                                <option value="$100,000">$100,000</option>
+                                            </select>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" name="Physical" value="1"
+                                                    class="form-check-input">
+                                                Physical Damage
+                                            </label>
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" name="general" value="1"
+                                                    class="form-check-input">
+                                                General Liability
+                                            </label>
+                                        </div>
+                                    </div><!--end col-->
+                                    <hr />
+                                    <h5>Documents/Files</h5>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file1">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file2">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file3">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file4">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file5">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <input class="form-control" style="margin-left: 10px" type="file"
+                                                value="" name="file6">
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-lg-12">
+                                        <div class="text-end">
+                                            <div class="mt-4">
+                                                <div class="hstack gap-2 justify-content-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="btn btn-link link-danger fw-medium"
+                                                        data-bs-dismiss="modal"><i
+                                                            class="ri-close-line me-1 align-middle"></i>
+                                                        Close</a>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end col-->
+                                </div>
+                            </div>
+                        </div><!--end row-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- modal end --}}
+    <!--end page wrapper -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.update-status').on('click', function() {
+                var leadId = $(this).data('lead-id');
+                var status = $(this).data('status');
+                var managerfwd = $('#manager_id').val();
+                var $td = $(this).closest('td');
+
+                $.ajax({
+                    url: '{{ route('agent_status_update') }}',
+                    method: 'POST',
+                    data: {
+                        lead_id: leadId,
+                        status: status,
+                        mangerfwd: managerfwd,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $td.find('.btn')
+                            .text(response.status)
+                            .css('background-color', getStatusColor(response.status));
+
+                        function getStatusColor(status) {
+                            switch (status) {
+                                case 'Voice Mail':
+                                    return '#742dc1'; // Light green
+
+                                case 'Not Intrested':
+                                    return '#d91c1c'; // Black
+
+                                case 'Wrong Number':
+                                    return '#d91c1c';
+
+                                case 'DND':
+                                    return '#d91c1c'; // Red
+
+                                case 'Not Connected':
+                                    return '#e6ca00';
+
+                                case 'WON':
+                                    return '#00ff72';
+
+                                default:
+                                    return '#000'; // Default background color
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response if needed
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#exampleFullScreenModal').on('show.bs.modal', function(event) {
+                var modal = $(this);
+                var td = $(event.relatedTarget);
+
+                modal.find('#company_name').val(td.data('company-name'));
+                modal.find('#phone').val(td.data('phone'));
+                modal.find('#company_rep1').val(td.data('company-rep1'));
+                modal.find('#business_address').val(td.data('business-address'));
+                modal.find('#business_city').val(td.data('business-city'));
+                modal.find('#business_state').val(td.data('business-state'));
+                modal.find('#business_zip').val(td.data('business-zip'));
+                modal.find('#dot').val(td.data('dot'));
+                modal.find('#mc_docket').val(td.data('mc_docket'));
+                modal.find('#data_id').val(td.data('id'));
+                modal.find('#email').val(td.data('email'));
+                modal.find('#forword_id').val($('#manager_id').val());
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#form_status2').change(function() {
+                var isPipeline = $(this).val() === 'Pipeline';
+
+                // Toggle visibility of elements with class 'reminder'
+                $('.reminder').toggle(isPipeline);
+
+                // Define an array of IDs for fields to toggle 'required' attribute
+                var fieldIds = [
+                    '#exampleFullScreenModal #company_name', '#exampleFullScreenModal #phone',
+                    '#exampleFullScreenModal #company_rep1',
+                    '#exampleFullScreenModal #business_address',
+                    '#exampleFullScreenModal #business_city',
+                    '#exampleFullScreenModal #business_state', '#exampleFullScreenModal #business_zip',
+                    '#exampleFullScreenModal #dot', '#exampleFullScreenModal #vin',
+                    '#exampleFullScreenModal #driver_name', '#exampleFullScreenModal #driver_dob',
+                    '#exampleFullScreenModal #driver_license',
+                    '#exampleFullScreenModal #driver_license_state', '#exampleFullScreenModal #vin2',
+                    '#exampleFullScreenModal #driver_name2', '#exampleFullScreenModal #driver_dob2',
+                    '#exampleFullScreenModal #driver_license2',
+                    '#exampleFullScreenModal #driver_license_state2', '#exampleFullScreenModal #vin3',
+                    '#exampleFullScreenModal #driver_name3', '#exampleFullScreenModal #driver_dob3',
+                    '#exampleFullScreenModal #driver_license3',
+                    '#exampleFullScreenModal #driver_license_state3', '#exampleFullScreenModal #vin4',
+                    '#exampleFullScreenModal #driver_name4', '#exampleFullScreenModal #driver_dob4',
+                    '#exampleFullScreenModal #driver_license4',
+                    '#exampleFullScreenModal #driver_license_state4', '#exampleFullScreenModal #vin5',
+                    '#exampleFullScreenModal #driver_name5', '#exampleFullScreenModal #driver_dob5',
+                    '#exampleFullScreenModal #driver_license5',
+                    '#exampleFullScreenModal #driver_license_state5'
+                ];
+
+                // Set or remove 'required' attribute based on isPipeline
+                fieldIds.forEach(function(id) {
+                    var $field = $(id);
+                    if (isPipeline) {
+                        $field.removeAttr('required');
+                    } else {
+                        $field.attr('required', 'required');
+                    }
+                });
+            });
+        });
+    </script>
+    {{-- phone number copy --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var phoneCells = document.querySelectorAll('.phone_copy');
+
+            phoneCells.forEach(function(cell) {
+                cell.addEventListener('click', function() {
+                    var phoneNumber = this.innerText.trim();
+
+                    // Create a temporary input element
+                    var tempInput = document.createElement('input');
+                    tempInput.value = phoneNumber;
+                    document.body.appendChild(tempInput);
+
+                    // Select and copy the phone number from the temporary input element
+                    tempInput.select();
+                    document.execCommand('copy');
+
+                    // Remove the temporary input element
+                    document.body.removeChild(tempInput);
+
+                    // Show copy indicator
+                    var copyIndicator = event.target.querySelector('.copy-indicator');
+                    copyIndicator.style.display = 'inline'; // Make the indicator visible
+
+                    // Hide copy indicator after 2 seconds
+                    setTimeout(function() {
+                        copyIndicator.style.display = 'none'; // Hide the indicator
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+    {{-- phone number copy --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const unitSelect2 = document.getElementById("unit_owned2");
+
+            // Function to toggle 'required' attribute based on display status
+            function toggleRequiredBasedOnDisplay(elementId, isDisplayed) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const inputs = element.querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        // Check if the input is not one of the specific IDs to exclude
+                        if (input.id !== "vehicle_year5" && input.id !== "vehicle_make5" && input.id !==
+                            "stated_value5" && input.id !== "vehicle_year2" && input.id !==
+                            "vehicle_make2" && input.id !== "stated_value2" && input.id !==
+                            "vehicle_year3" && input.id !== "vehicle_make3" && input.id !==
+                            "stated_value3" && input.id !== "vehicle_year4" && input.id !==
+                            "vehicle_make4" && input.id !== "stated_value4") {
+                            if (isDisplayed) {
+                                input.setAttribute('required', 'required');
+                            } else {
+                                input.removeAttribute('required');
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Event listener for select change
+            unitSelect2.addEventListener("change", function() {
+                const selectedValue = parseInt(unitSelect2.value);
+
+                // Toggle display of elements based on selected value
+                document.getElementById("unit22").style.display = selectedValue >= 2 ? "" : "none";
+                document.getElementById("unit33").style.display = selectedValue >= 3 ? "" : "none";
+                document.getElementById("unit44").style.display = selectedValue >= 4 ? "" : "none";
+                document.getElementById("unit55").style.display = selectedValue >= 5 ? "" : "none";
+                document.getElementById("unit66").style.display = selectedValue >= 6 ? "" : "none";
+                document.getElementById("unit77").style.display = selectedValue >= 7 ? "" : "none";
+                document.getElementById("unit88").style.display = selectedValue >= 8 ? "" : "none";
+                document.getElementById("unit99").style.display = selectedValue >= 9 ? "" : "none";
+                document.getElementById("unit101").style.display = selectedValue >= 10 ? "" : "none";
+
+                // Toggle required attribute based on display status
+                toggleRequiredBasedOnDisplay("unit22", document.getElementById("unit22").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit33", document.getElementById("unit33").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit44", document.getElementById("unit44").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit55", document.getElementById("unit55").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit66", document.getElementById("unit66").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit77", document.getElementById("unit77").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit88", document.getElementById("unit88").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit99", document.getElementById("unit99").style.display !==
+                    "none");
+                toggleRequiredBasedOnDisplay("unit101", document.getElementById("unit101").style.display !==
+                    "none");
+            });
+
+            // Trigger change event on page load if needed
+            unitSelect2.dispatchEvent(new Event('change'));
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const unitSelect2 = document.getElementById("drivers_state2");
+
+            // Function to toggle 'required' attribute based on display status
+            function toggleRequiredBasedOnDisplay(elementId, isDisplayed) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const inputs = element.querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        // Check if the input is not one of the specific IDs to exclude
+                        if (input.id !== "vehicle_year5" && input.id !== "vehicle_make5" && input.id !==
+                            "stated_value5" && input.id !== "vehicle_year2" && input.id !==
+                            "vehicle_make2" && input.id !== "stated_value2" && input.id !==
+                            "vehicle_year3" && input.id !== "vehicle_make3" && input.id !==
+                            "stated_value3" && input.id !== "vehicle_year4" && input.id !==
+                            "vehicle_make4" && input.id !== "stated_value4") {
+                            if (isDisplayed) {
+                                input.setAttribute('required', 'required');
+                            } else {
+                                input.removeAttribute('required');
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Event listener for select change
+            unitSelect2.addEventListener("change", function() {
+                const selectedValue = parseInt(unitSelect2.value);
+
+                // Toggle display of elements based on selected value
+                document.getElementById("driver22").style.display = selectedValue >= 2 ? "" : "none";
+                document.getElementById("driver33").style.display = selectedValue >= 3 ? "" : "none";
+                document.getElementById("driver44").style.display = selectedValue >= 4 ? "" : "none";
+                document.getElementById("driver55").style.display = selectedValue >= 5 ? "" : "none";
+                document.getElementById("driver66").style.display = selectedValue >= 6 ? "" : "none";
+                document.getElementById("driver77").style.display = selectedValue >= 7 ? "" : "none";
+                document.getElementById("driver88").style.display = selectedValue >= 8 ? "" : "none";
+                document.getElementById("driver99").style.display = selectedValue >= 9 ? "" : "none";
+                document.getElementById("driver101").style.display = selectedValue >= 10 ? "" : "none";
+
+                // Toggle required attribute based on display status
+                toggleRequiredBasedOnDisplay("driver22", document.getElementById("driver22").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver33", document.getElementById("driver33").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver44", document.getElementById("driver44").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver55", document.getElementById("driver55").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver66", document.getElementById("driver66").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver77", document.getElementById("driver77").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver88", document.getElementById("driver88").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver99", document.getElementById("driver99").style
+                    .display !== "none");
+                toggleRequiredBasedOnDisplay("driver101", document.getElementById("driver101").style
+                    .display !== "none");
+            });
+
+            // Trigger change event on page load if needed
+            unitSelect2.dispatchEvent(new Event('change'));
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.btn-mail').click(function() {
+                var leadId = $(this).data('lead-id');
+                var status = 'Mail';
+                var managerfwd = $('#manager_id').val();
+                var $td = $(this).closest('tr');
+                sendRequest(leadId, status, managerfwd, $td);
+            });
+
+            $('.btn-message').click(function() {
+                var leadId = $(this).data('lead-id');
+                var status = 'Message';
+                var managerfwd = $('#manager_id').val();
+                var $td = $(this).closest('tr');
+                sendRequest(leadId, status, managerfwd, $td);
+            });
+
+            function sendRequest(leadId, status, managerfwd, $td) {
+                $.ajax({
+                    url: '{{ route('agent_mailstatus_update') }}',
+                    method: 'POST',
+                    data: {
+                        lead_id: leadId,
+                        status: status,
+                        mangerfwd: managerfwd,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $td.find('.btn')
+                            .text(response.status)
+                            .css('background-color', getStatusColor(response.status));
+
+                        function getStatusColor(status) {
+                            switch (status) {
+                                case 'Mail':
+                                    return '#742dc1'; // Light green
+
+                                case 'Message':
+                                    return '#742dc1'; // Black
+                                default:
+                                    return '#ffffff'; // Default background color
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response if needed
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    </script>
+    {{-- <script>
+            function setReminder() {
+                const dateInput = document.getElementById('dateInput').value;
+                const timeInput = document.getElementById('timeInput').value;
+                const currentDateTime = new Date();
+    
+                if (!dateInput && !timeInput) {
+                    alert('Please select a date or time for the reminder.');
+                    return;
+                }
+    
+                let reminderDateTime;
+    
+                if (dateInput && timeInput) {
+                    reminderDateTime = new Date(`${dateInput}T${timeInput}`);
+                } else if (dateInput) {
+                    reminderDateTime = new Date(dateInput);
+                } else if (timeInput) {
+                    const [hours, minutes] = timeInput.split(':');
+                    reminderDateTime = new Date();
+                    reminderDateTime.setHours(hours, minutes, 0, 0);
+                    if (reminderDateTime <= currentDateTime) {
+                        reminderDateTime.setDate(reminderDateTime.getDate() + 1);
+                    }
+                }
+    
+                if (reminderDateTime > currentDateTime) {
+                    document.cookie = `reminder=${reminderDateTime.toISOString()}; path=/`;
+                    alert('Reminder set successfully!');
+                } else {
+                    alert('Please select a future date and time for the reminder.');
+                }
+            }
+    
+            function checkReminders() {
+                const cookies = document.cookie.split('; ');
+                const reminderCookie = cookies.find(row => row.startsWith('reminder='));
+                if (reminderCookie) {
+                    const reminderDateTime = new Date(reminderCookie.split('=')[1]);
+                    const currentDateTime = new Date();
+    
+                    if (reminderDateTime <= currentDateTime) {
+                        round_success_noti('Reminder: It\'s time!', 1);
+                        document.cookie = 'reminder=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    }
+                }
+            }
+    
+            setInterval(checkReminders, 60000); // Check reminders every minute
+    
+            document.addEventListener('DOMContentLoaded', () => {
+                if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                    Notification.requestPermission();
+                }
+            });
+        </script> --}}
+    <script>
+        // Get references to the date input and time input fields
+        const dateInput = document.getElementById('dateInput1');
+        const timeInput = document.getElementById('timeInput1');
+        const reminderInput = document.getElementById('reminder1');
+
+        // Event listener to update the reminder input when either date or time changes
+        dateInput.addEventListener('input', updateReminder);
+        timeInput.addEventListener('input', updateReminder);
+
+        function updateReminder() {
+            // Get the value of date and time inputs
+            const dateValue = dateInput.value;
+            const timeValue = timeInput.value;
+
+            // Combine date and time values with a "/"
+            const reminderValue = `${dateValue} ${timeValue}`;
+
+            // Update the value of the reminder input
+            reminderInput.value = reminderValue;
+        }
+    </script>
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const startNumber = parseInt(document.getElementById('startNumber').value);
+            const endNumber = parseInt(document.getElementById('endNumber').value);
+
+            // Validate the input range
+            if (isNaN(startNumber) || isNaN(endNumber) || startNumber <= 0 || endNumber <= 0 || startNumber >
+                endNumber) {
+                alert('Please enter valid start and end numbers.');
+                return;
+            }
+
+            // Collect emails from table rows within the range
+            const tableRows = Array.from(document.querySelectorAll('#example tbody tr'));
+            const emailsToCopy = [];
+
+            tableRows.forEach((row, index) => {
+                const rowNumber = index + 1; // Table rows are 1-based
+                if (rowNumber >= startNumber && rowNumber <= endNumber) {
+                    const emailCell = row.querySelector('[data-email]');
+                    if (emailCell) {
+                        const email = emailCell.getAttribute(
+                        'data-email'); // Extract email from data-email attribute
+                        if (email) {
+                            emailsToCopy.push(email.trim());
+                        }
+                    }
+                }
+            });
+
+            // Check if any emails were found
+            if (emailsToCopy.length === 0) {
+                alert('No emails found in the specified range.');
+                return;
+            }
+
+            // Copy emails to clipboard
+            const emailsText = emailsToCopy.join('\n'); // Separate emails by newlines for Excel compatibility
+            navigator.clipboard.writeText(emailsText)
+                .then(() => {
+                    alert(`Copied ${emailsToCopy.length} emails successfully!`);
+                })
+                .catch(err => {
+                    console.error('Clipboard write failed:', err);
+                    alert('Failed to copy emails.');
+                });
+        });
+    </script>
+
+
+    <script src="https://ccapi.mightycall.com/v4/sdk/mightycall.webphone.sdk.js"></script>
+    <script>
+        class WebphoneManager {
+            constructor() {
+                this.ready = false;
+                this.activeCall = false;
+                this.callQueue = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    const config = {
+                        login: "{{ $apiKey }}",
+                        password: "{{ $secretKey }}",
+                        containerId: "myContainerId",
+                        autoRegister: true,
+                        enableDebug: true
+                    };
+
+                    MightyCallWebPhone.ApplyConfig(config);
+                    MightyCallWebPhone.Phone.Init("myContainerId");
+
+                    this.setupEventHandlers();
+                    await this.ensureReadyStatus();
+
+                } catch (error) {
+                    console.error("Initialization error:", error);
+                    setTimeout(() => this.init(), 3000);
+                }
+            }
+
+            setupEventHandlers() {
+                // Status change handlers
+                MightyCallWebPhone.Phone.OnReady.subscribe(() => this.handleReady());
+                MightyCallWebPhone.Phone.OnStatusChange.subscribe(status => this.handleStatusChange(status));
+                MightyCallWebPhone.Profile.OnStatusChange.subscribe(status => this.handleProfileStatusChange(status));
+
+                // Call lifecycle handlers
+                MightyCallWebPhone.Phone.OnCallStarted.subscribe(callInfo => this.handleCallStart(callInfo));
+                MightyCallWebPhone.Phone.OnCallCompleted.subscribe(callInfo => this.handleCallEnd(callInfo));
+                MightyCallWebPhone.Phone.OnCallIncoming.subscribe(callInfo => this.handleIncomingCall(callInfo));
+            }
+
+            async ensureReadyStatus() {
+                try {
+                    const currentStatus = await MightyCallWebPhone.Profile.GetUserStatus();
+                    if (currentStatus !== 'available') {
+                        await MightyCallWebPhone.Profile.SetUserStatus('available');
+                    }
+                    this.ready = true;
+                    this.processQueue();
+                } catch (error) {
+                    console.error("Status update failed:", error);
+                    setTimeout(() => this.ensureReadyStatus(), 2000);
+                }
+            }
+
+            async makeCall(phoneNumber) {
+                if (!this.ready || this.activeCall) {
+                    this.callQueue.push(phoneNumber);
+                    console.log("Call queued - Webphone not ready or active call");
+                    return;
+                }
+
+                const cleanedNumber = phoneNumber.replace(/\D/g, '');
+                if (!cleanedNumber) return;
+
+                try {
+                    this.activeCall = true;
+                    console.log("Initiating call to:", cleanedNumber);
+                    MightyCallWebPhone.Phone.Call(cleanedNumber);
+
+                } catch (error) {
+                    console.error("Call failed:", error);
+                    this.activeCall = false;
+                    this.callQueue.unshift(phoneNumber);
+                }
+            }
+
+            processQueue() {
+                if (this.ready && !this.activeCall && this.callQueue.length > 0) {
+                    this.makeCall(this.callQueue.shift());
+                }
+            }
+
+            // Event handlers
+            handleReady() {
+                console.log("Webphone is ready");
+                this.ready = true;
+                this.processQueue();
+            }
+
+            handleStatusChange(status) {
+                console.log("Webphone status changed to:", status);
+                if (status === 'registered') {
+                    this.ensureReadyStatus();
+                }
+            }
+
+            handleProfileStatusChange(status) {
+                console.log("Profile status changed to:", status);
+                if (status !== 'available') {
+                    this.ensureReadyStatus();
+                }
+            }
+
+            handleCallStart(callInfo) {
+                console.log("Call started with:", callInfo.To);
+                this.activeCall = true;
+            }
+
+            handleCallEnd(callInfo) {
+                console.log("Call ended with:", callInfo.To);
+                this.activeCall = false;
+                this.processQueue();
+            }
+
+            handleIncomingCall(callInfo) {
+                console.log("Incoming call from:", callInfo.From);
+                // Implement your incoming call handling logic here
+            }
+        }
+
+        // Initialize Webphone manager
+        const webphone = new WebphoneManager();
+
+        // Set up click handlers for call buttons
+        document.addEventListener('click', (e) => {
+            const callBtn = e.target.closest('.webphone-call-btn');
+            if (callBtn) {
+                e.preventDefault();
+                webphone.makeCall(callBtn.dataset.phone);
+            }
+        });
+
+        // Debugging interface
+        window.webphoneDebug = {
+            getStatus: async () => {
+                try {
+                    const phoneStatus = MightyCallWebPhone.Phone.Status();
+                    const userStatus = await MightyCallWebPhone.Profile.GetUserStatus();
+                    return {
+                        phoneStatus,
+                        userStatus,
+                        ready: webphone.ready,
+                        activeCall: webphone.activeCall,
+                        queuedCalls: webphone.callQueue.length
+                    };
+                } catch (error) {
+                    return {
+                        error: error.message
+                    };
+                }
+            },
+            forceReady: () => webphone.ensureReadyStatus(),
+            clearQueue: () => webphone.callQueue = []
+        };
+    </script>
+
+    <script>
+        class WebphoneModal {
+            constructor() {
+                this.modal = document.getElementById('webphoneModal');
+                this.header = this.modal.querySelector('.webphone-modal-header');
+                this.closeBtn = this.modal.querySelector('.webphone-modal-close');
+                this.isDragging = false;
+                this.offsetX = 0;
+                this.offsetY = 0;
+
+                this.init();
+            }
+
+            init() {
+                // Make modal draggable
+                this.header.addEventListener('mousedown', (e) => {
+                    if (e.target === this.closeBtn) return;
+
+                    this.isDragging = true;
+                    this.offsetX = e.clientX - this.modal.getBoundingClientRect().left;
+                    this.offsetY = e.clientY - this.modal.getBoundingClientRect().top;
+
+                    // Bring to front
+                    this.bringToFront();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!this.isDragging) return;
+
+                    const x = e.clientX - this.offsetX;
+                    const y = e.clientY - this.offsetY;
+
+                    // Constrain to viewport
+                    const maxX = window.innerWidth - this.modal.offsetWidth;
+                    const maxY = window.innerHeight - this.modal.offsetHeight;
+
+                    this.modal.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
+                    this.modal.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
+                });
+
+                document.addEventListener('mouseup', () => {
+                    this.isDragging = false;
+                });
+
+                // Close button
+                this.closeBtn.addEventListener('click', () => {
+                    this.hide();
+                });
+
+                // Prevent resize from making modal too small
+                const observer = new ResizeObserver(() => {
+                    if (this.modal.offsetWidth < 300) {
+                        this.modal.style.width = '300px';
+                    }
+                    if (this.modal.offsetHeight < 400) {
+                        this.modal.style.height = '400px';
+                    }
+                });
+                observer.observe(this.modal);
+            }
+
+            bringToFront() {
+                // Get all modals and set z-index
+                const allModals = document.querySelectorAll('.webphone-modal');
+                let maxZ = 0;
+                allModals.forEach(m => {
+                    const z = parseInt(m.style.zIndex || 10000);
+                    maxZ = Math.max(maxZ, z);
+                });
+                this.modal.style.zIndex = maxZ + 1;
+            }
+
+            show() {
+                this.modal.style.display = 'flex';
+                this.bringToFront();
+            }
+
+            hide() {
+                this.modal.style.display = 'none';
+            }
+
+            toggle() {
+                if (this.modal.style.display === 'flex') {
+                    this.hide();
+                } else {
+                    this.show();
+                }
+            }
+        }
+
+        // Initialize the modal when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.webphoneModal = new WebphoneModal();
+
+            // Modify your WebphoneManager to use the modal
+            class WebphoneManager {
+                // ... [previous WebphoneManager code] ...
+
+                async makeCall(phoneNumber) {
+                    if (!this.ready || this.activeCall) {
+                        this.callQueue.push(phoneNumber);
+                        console.log("Call queued - Webphone not ready or active call");
+                        return;
+                    }
+
+                    const cleanedNumber = phoneNumber.replace(/\D/g, '');
+                    if (!cleanedNumber) return;
+
+                    try {
+                        this.activeCall = true;
+                        console.log("Initiating call to:", cleanedNumber);
+
+                        // Show modal before making call
+                        window.webphoneModal.show();
+                        MightyCallWebPhone.Phone.Call(cleanedNumber);
+
+                    } catch (error) {
+                        console.error("Call failed:", error);
+                        this.activeCall = false;
+                        this.callQueue.unshift(phoneNumber);
+                    }
+                }
+
+                handleCallEnd(callInfo) {
+                    console.log("Call ended with:", callInfo.To);
+                    this.activeCall = false;
+                    this.processQueue();
+
+                    // Optionally hide modal when call ends
+                    // window.webphoneModal.hide();
+                }
+            }
+
+            // Initialize Webphone manager
+            window.webphone = new WebphoneManager();
+        });
+
+        // Update your call button event listener to show modal
+        document.addEventListener('click', (e) => {
+            const callBtn = e.target.closest('.webphone-call-btn');
+            if (callBtn) {
+                e.preventDefault();
+                window.webphoneModal.show(); // Show modal first
+                window.webphone.makeCall(callBtn.dataset.phone);
+            }
+        });
+    </script>
+
+
+
+@endsection
