@@ -165,6 +165,8 @@
            data-dot="{{ $data->dot }}"
            data-mc_docket="{{ $data->mc_docket }}"
            data-email="{{ $data->email }}"
+           data-mail_status="{{ $data->mail_status }}"
+
            data-bs-target="#exampleFullScreenModal"
            style="cursor:pointer">
 
@@ -1627,18 +1629,32 @@
  <div class="mt-2">
     <h6 class="mb-2">Form On</h6>
 
-    <div class="d-flex gap-3 align-items-center">
-        <div class="form-check d-flex align-items-center gap-2">
-            <input class="form-check-input" type="radio" name="contact_mode" id="callCheck" value="Call">
-            <label class="form-check-label" for="callCheck">Call</label>
-        </div>
+   <div class="d-flex gap-3 align-items-center">
 
-        <div class="form-check d-flex align-items-center gap-2">
-            <input class="form-check-input" type="radio" name="contact_mode" id="emailCheck" value="Email">
-            <label class="form-check-label" for="emailCheck">Email</label>
-        </div>
+    <div class="form-check d-flex align-items-center gap-2">
+        <input class="form-check-input" type="radio"
+               name="contact_mode"
+               id="callCheck"
+               value="Call"
+               {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'checked' : '' }}
+               required>
+        <label class="form-check-label" for="callCheck">Call</label>
     </div>
+
+    <div class="form-check d-flex align-items-center gap-2">
+        <input class="form-check-input" type="radio"
+               name="contact_mode"
+               id="emailCheck"
+               value="Email"
+               {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'checked' : '' }}
+               required>
+        <label class="form-check-label" for="emailCheck">Email</label>
+    </div>
+
 </div>
+
+</div>
+
 </div>
 
                                         </div>
@@ -1884,6 +1900,16 @@
                 modal.find('#data_id').val(td.data('id'));
                 modal.find('#email').val(td.data('email'));
                 modal.find('#forword_id').val($('#manager_id').val());
+                // 🔥🔥 RADIO BUTTON FIX (ADD THIS) 🔥🔥
+    modal.find('input[name="contact_mode"]').prop('checked', false);
+
+    if (td.data('mail_status') === 'Call') {
+        modal.find('#callCheck').prop('checked', true);
+    }
+
+    if (td.data('mail_status') === 'Mail') {
+        modal.find('#emailCheck').prop('checked', true);
+    }
             });
         });
     </script>
@@ -2333,6 +2359,28 @@ window.onclick = function(event) {
     }
 }
 </script>
+<script>
+    $(document).ready(function() {
+        $('#exampleFullScreenModal').on('show.bs.modal', function(event) {
+            var modal = $(this);
+            var td = $(event.relatedTarget);
+
+            modal.find('#company_name').val(td.data('company-name'));
+            modal.find('#phone').val(td.data('phone'));
+            modal.find('#company_rep1').val(td.data('company-rep1'));
+            modal.find('#business_address').val(td.data('business-address'));
+            modal.find('#business_city').val(td.data('business-city'));
+            modal.find('#business_state').val(td.data('business-state'));
+            modal.find('#business_zip').val(td.data('business-zip'));
+            modal.find('#dot').val(td.data('dot'));
+            modal.find('#mc_docket').val(td.data('mc_docket'));
+            modal.find('#data_id').val(td.data('id'));
+            modal.find('#email').val(td.data('email'));
+            modal.find('#forword_id').val($('#manager_id').val());
+        });
+    });
+</script>
+
 
 
 

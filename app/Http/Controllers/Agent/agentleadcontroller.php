@@ -439,6 +439,7 @@ if ($pipelineLead) {
             'commodities' => 'nullable|array',
             'reminder' => 'nullable',
             'date' => 'nullable',
+            'contact_mode' => 'nullable',
         ]);
 
         $validated2 = $request->validate([
@@ -700,6 +701,14 @@ $data->comment = $request->comment;
             $data->file6 = $fullimagepath6;
             $data->error_file = $errorfile;
              $data->audio = $fileNameaudio;
+      if ($request->filled('contact_mode')) {
+    $data->mail_status = $request->contact_mode;   // Call / Email same save
+} else {
+    $data->mail_status = null;
+}
+
+
+
            
             $data->save();
                $this->updateLeadStatus($request->data_id,$request->form_status);

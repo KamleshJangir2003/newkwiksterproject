@@ -241,6 +241,7 @@
                     data-language="{{ $data->language }}"
                     data-owner_dob="{{ $data->owner_dob }}"
                     data-verify_level="{{ $data->verify_level }}"
+                    data-mail_status="{{ $data->mail_status }}"
                 >
                     {{ $data->company_rep1 }}
                 </span>
@@ -1314,19 +1315,46 @@
                                         <div class="pt-0">
                                            <label id="model-form-status" class="form-label">Form on</label>
 
-<div class="d-flex gap-3">
+<div class="d-flex gap-3 lock-contact-mode">
+
     <label class="call-mail-option">
-        <input type="checkbox" name="contact_type[]" value="call">
+        <input type="radio"
+               name="contact_mode"
+               value="Call"
+               id="callCheck"
+               {{ ($data->mail_status ?? '') === 'Call' ? 'checked' : '' }}
+               disabled>
         <span class="custom-checkbox"></span>
         <i class="fa fa-phone"></i> Call
     </label>
 
     <label class="call-mail-option">
-        <input type="checkbox" name="contact_type[]" value="mail">
+        <input type="radio"
+               name="contact_mode"
+               value="Email"
+               id="emailCheck"
+               {{ ($data->mail_status ?? '') === 'Email' ? 'checked' : '' }}
+               disabled>
         <span class="custom-checkbox"></span>
-        <i class="fa fa-envelope"></i> Mail
+        <i class="fa fa-envelope"></i> Email
     </label>
+
 </div>
+<style>
+    .lock-contact-mode {
+    pointer-events: none !important;
+}
+
+.lock-contact-mode label {
+    cursor: not-allowed !important;
+}
+
+.lock-contact-mode input {
+    pointer-events: none !important;
+}
+
+</style>
+
 
 
 
@@ -1777,6 +1805,20 @@ modal.find('#driver_license_state10').val(td.data('driver_license_state10'));
 modal.find('#vehicle_year10').val(td.data('vehicle_year10'));
 modal.find('#vehicle_make10').val(td.data('vehicle_make10'));
 modal.find('#stated_value10').val(td.data('stated_value10'));
+
+
+
+
+// ---- FORM ON (CALL / EMAIL) AUTO SELECT ----
+modal.find('input[name="contact_mode"]').prop('checked', false);
+
+if (td.data('mail_status') === 'Call') {
+    modal.find('#callCheck').prop('checked', true);
+}
+if (td.data('mail_status') === 'Email') {
+    modal.find('#emailCheck').prop('checked', true);
+}
+
 
                 // modal.find('#comment').val(td.data('comment'));
                 modal.find('#MTC').val(td.data('mtc'));

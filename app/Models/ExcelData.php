@@ -40,6 +40,7 @@ class ExcelData extends Model
         'comment',
         'commodities',
         'batch_name',
+        'mail_status',
     ];
     public function managerfwd()
     {
