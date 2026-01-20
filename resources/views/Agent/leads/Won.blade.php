@@ -67,7 +67,13 @@
                                         @php $a++; @endphp
                                         <tr>
                                             @if($title !== 'Bind')
-                                            <th  onclick="window.location.href='{{ route('view_lead_history', base64_encode($data->id)) }}'" style="cursor: pointer;"><span style="background-color: green;color:white;padding:10px"> View</span></th>
+                                           <th style="cursor: pointer;">
+    <span 
+        style="background-color: green;color:white;padding:10px"
+        onclick="event.stopPropagation();"
+    >View</span>
+</th>
+
                                             @endif
                                             <th scope="row" class="<?php 
                                             if (!empty($data->red_mark)) {

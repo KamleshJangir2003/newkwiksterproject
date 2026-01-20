@@ -55,8 +55,13 @@
                         <li> <a href="#"><i class='bx bx-radio-circle'></i>Loss Runs
                                 Forms</a>
                         </li>
-                        <li> <a href="#"><i class='bx bx-radio-circle'></i>Live Transfer Form</a>
-                        </li>
+   <li>
+   <a href="{{ route('agent.live.transfer.index') }}">
+      <i class='bx bx-radio-circle'></i> Live Transfer Form
+   </a>
+</li>
+
+
                         <!-- <li> <a href="{{ route('show_email_inrsted') }}"><i class='bx bx-radio-circle'></i>Email Verified
                             Forms</a>
                     </li> -->
