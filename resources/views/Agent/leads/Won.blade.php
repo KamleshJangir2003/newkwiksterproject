@@ -49,7 +49,7 @@
                             <thead>
                                 <tr>
                                     @if($title !== 'Bind')
-                                    <th scope="col">History</th>
+                                    <!-- <th scope="col">History</th> -->
                                     @endif
                                     <th scope="col">#</th>
                                     <th scope="col">Company Name</th>
@@ -67,12 +67,12 @@
                                         @php $a++; @endphp
                                         <tr>
                                             @if($title !== 'Bind')
-                                           <th style="cursor: pointer;">
+                                           <!-- <th style="cursor: pointer;">
     <span 
         style="background-color: green;color:white;padding:10px"
         onclick="event.stopPropagation();"
     >View</span>
-</th>
+</th> -->
 
                                             @endif
                                             <th scope="row" class="<?php 
@@ -392,7 +392,7 @@
                             <tfoot>
                                 <tr>
                                     @if($title !== 'Bind')
-                                    <th scope="col">History</th>
+                                    <!-- <th scope="col">History</th> -->
                                     @endif
                                     <th scope="col">#</th>
                                     <th scope="col">Company Name</th>
