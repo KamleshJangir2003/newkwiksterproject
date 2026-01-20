@@ -13,7 +13,11 @@
 
         <h3 class="mb-3">Employees</h3>
 
-        <a href="#" class="btn btn-primary mb-3">+ Add Employee</a>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">+ Add Employee</a>
 
         <div class="card">
             <div class="card-body">
@@ -24,21 +28,31 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Phone</th>
                             <th>Role</th>
+                            <th>Designation</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($employees as $employee)
                         <tr>
-                            <td>1</td>
-                            <td>Rahul Sharma</td>
-                            <td>rahul@example.com</td>
-                            <td>Agent</td>
+                            <td>{{ $employee->id }}</td>
+                            <td>{{ $employee->name }}</td>
+                            <td>{{ $employee->email }}</td>
+                            <td>{{ $employee->phone }}</td>
+                            <td>{{ $employee->role == 0 ? 'Admin' : ($employee->role == 1 ? 'Agent' : 'Manager') }}</td>
+                            <td>{{ $employee->designation }}</td>
                             <td>
-                                <button class="btn btn-sm btn-warning">Edit</button>
-                                <button class="btn btn-sm btn-danger">Delete</button>
+                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
 

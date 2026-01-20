@@ -233,9 +233,9 @@ Route::get('/forward-change-status/{team}', [Leadcontroller::class, 'changeStatu
         Route::get('/statu_agent_task/{idd}', [agentbreakcontroller::class, 'statu_agent_task'])->name('statu_agent_task');
 
         //---------------------------------------loads leads--------------------------------------------------
-        Route::get('/view_load', [loadcontroller::class, 'view_load'])->name('view_load');
-        Route::get('/delete_load_leads/{id}', [loadcontroller::class, 'delete_load_leads'])->name('delete_load_leads');
-        Route::post('/store_load_lead', [loadcontroller::class, 'store_load_lead'])->name('store_load_lead');
+        Route::get('/view_load', [loadformscontroller::class, 'view_load'])->name('view_load');
+        Route::get('/delete_load_leads/{id}', [loadformscontroller::class, 'delete_load_leads'])->name('delete_load_leads');
+        Route::post('/store_load_lead', [loadformscontroller::class, 'store_load_lead'])->name('store_load_lead');
 
 
 
@@ -471,9 +471,12 @@ Route::get('/goals-target', function () {
     return view('admin.goals_target.goals');
 })->name('goals_target');
 
-Route::get('/employees', function () {
-    return view('admin.employees.index');
-})->name('employees');
+Route::get('/employees', [\App\Http\Controllers\Admin\EmployeeController::class, 'index'])->name('employees');
+Route::get('/employees/create', [\App\Http\Controllers\Admin\EmployeeController::class, 'create'])->name('employees.create');
+Route::post('/employees', [\App\Http\Controllers\Admin\EmployeeController::class, 'store'])->name('employees.store');
+Route::get('/employees/{id}/edit', [\App\Http\Controllers\Admin\EmployeeController::class, 'edit'])->name('employees.edit');
+Route::put('/employees/{id}', [\App\Http\Controllers\Admin\EmployeeController::class, 'update'])->name('employees.update');
+Route::delete('/employees/{id}', [\App\Http\Controllers\Admin\EmployeeController::class, 'destroy'])->name('employees.destroy');
 Route::get('/goals-target', [GoalController::class, 'index'])->name('goals_target');
 Route::post('/save-goal', [GoalController::class, 'store'])->name('goal.store');
 
