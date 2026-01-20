@@ -45,6 +45,9 @@ use App\Http\Controllers\forms\loadformcontroller;
 use Carbon\Carbon;
 use App\adminmodel\ExcelData;
 use App\Http\Controllers\Admin\GoalController;
+use App\Http\Controllers\Admin\LiveTransferController;
+
+
 
 
 
@@ -484,3 +487,5 @@ Route::post('/save-goal', [GoalController::class, 'store'])->name('goal.store');
 Route::get('/admin/zoom', function () {
     return view('admin.zoom');
 })->name('admin_zoom');
+Route::get('/admin/live-transfer', [LiveTransferController::class, 'index'])
+    ->name('live_transfer');
