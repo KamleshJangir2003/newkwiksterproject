@@ -1647,6 +1647,7 @@
                                                 <option value="Intrested">Intrested</option>
                                                 <option value="Pipeline">Pipeline</option>
                                             </select>
+                                            
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -1681,6 +1682,11 @@
 </div>
 
 </div>
+
+
+
+
+
 
 </div>
 

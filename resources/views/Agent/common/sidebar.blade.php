@@ -70,7 +70,7 @@
 
                         </li>
                         <li> <a href="#"><i class='bx bx-radio-circle'></i>Loss Runs
-                                Forms</a>
+                                Required</a>
                         </li>
    <li>
    <a href="{{ route('agent.live.transfer.index') }}">

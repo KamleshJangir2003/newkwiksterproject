@@ -487,7 +487,7 @@
 
 <div class="dash-card loss">
   <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
-  <h6>Loss Runs Pending / Success</h6>
+  <h6>Loss Runs Required / Not Required</h6>
   <h4>09</h4>
 </div>
 
@@ -642,6 +642,29 @@
 
 </style>
 <style>
+    .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.dash-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* horizontal center */
+    justify-content: center; /* vertical center */
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.dash-card .icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+</style>
+<style>
     .goal-graph-wrapper{
   display: flex;
   align-items: flex-start;
@@ -731,6 +754,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
   font-size: 22px;
 }
 
@@ -814,6 +838,7 @@ new Chart(ctx, {
   }
 });
 </script>
+
 
 
     <script>
