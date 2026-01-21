@@ -432,12 +432,14 @@
                                                                         data-vehicle_make5="{{ $unit->vehicle_make5 }}"
                                                                         data-stated_value5="{{ $unit->stated_value5 }}"
                                                                          data-redmark="{{ $data->red_mark }}"
+                                                                         data-mail_status="{{ $data->mail_status }}"
                                                                         data-bs-target="#exampleFullScreenModal">
                                                                         {{ $data->company_rep1 }}</td>
                                                                     <td>{{ $data->business_address }}</td>
                                                                     <td>{{ $data->business_city }}</td>
                                                                     <td>{{ $data->business_state }}</td>
                                                                     <td>{{ $data->business_zip }}</td>
+                                                                    
 
                                                                     @if ($data->form_status == 'NEW')
                                                                         <td>
@@ -1229,17 +1231,108 @@
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-6">
-                                                    <div class="pt-4">
-                                                        <label id="model-form-status" class="form-label">Intrested</label>
-                                                        <div class="progress animated-progress custom-progress mb-4"
-                                                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
-                                                            style="cursor:pointer;">
-                                                            <div class="progress-bar bg-info" role="progressbar" style="width:100%"
-                                                                ;="" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                                                id="progress-bar">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <div class="pt-0">
+                                           <label id="model-form-status" class="form-label">Form on</label>
+
+<div class="d-flex gap-3 lock-contact-mode">
+
+    <label class="call-mail-option">
+        <input type="radio"
+               name="contact_mode"
+               value="Call"
+               id="callCheck">
+        <span class="custom-checkbox"></span>
+         Call
+    </label>
+
+    <label class="call-mail-option">
+        <input type="radio"
+               name="contact_mode"
+               value="Email"
+               id="emailCheck">
+        <span class="custom-checkbox"></span>
+         Email
+    </label>
+
+</div>
+<style>
+    .call-mail-option {
+    display: flex;
+    align-items: center;
+   
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* hide default radio */
+.call-mail-option input[type="radio"] {
+    display: none;
+}
+
+/* custom checkbox */
+.custom-checkbox {
+    width: 22px;              /* size */
+    height: 22px;
+    border: 2px solid #bfbfbf;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+/* checked state */
+.call-mail-option input[type="radio"]:checked + .custom-checkbox {
+    background: #16a34a;
+    border-color: #16a34a;
+}
+
+/* check mark */
+.call-mail-option input[type="radio"]:checked + .custom-checkbox::after {
+    content: "✓";
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+}
+
+/* admin read-only */
+.lock-contact-mode {
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+</style>
+
+<style>
+    .lock-contact-mode {
+    pointer-events: none !important;
+}
+
+.lock-contact-mode label {
+    cursor: not-allowed !important;
+}
+
+.lock-contact-mode input {
+    pointer-events: none;
+    opacity: 1;   /* tick clearly dikhe */
+}
+.call-mail-option input[type="radio"] {
+    transform: scale(1.4);   /* size control */
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+
+
+</style>
+
+
+
+
+                                        </div>
                                                 </div><!--end col-->
                                                 <div class="col-6">
                                                     <div class="mb-3">
@@ -1591,6 +1684,25 @@ modal.find('#vehicle_year5').val(td.data('vehicle_year5'));
 modal.find('#vehicle_make5').val(td.data('vehicle_make5'));
 modal.find('#stated_value5').val(td.data('stated_value5'));
 
+
+// ---- FORM ON (CALL / EMAIL) AUTO SELECT ----
+modal.find('input[name="contact_mode"]').prop('checked', false);
+
+let mode = td.data('mail_status');
+
+if (mode) {
+    mode = mode.toString().trim().toLowerCase();
+
+    if (mode === 'call') {
+        modal.find('#callCheck').prop('checked', true);
+    }
+
+    if (mode === 'email') {
+        modal.find('#emailCheck').prop('checked', true);
+    }
+}
+
+
                 <!--modal.find('#comment').val(td.data('comment'));-->
                 modal.find('#MTC').val(td.data('mtc'));
                 modal.find('#Liability').val(td.data('liability'));
@@ -1817,4 +1929,20 @@ $('#commentsBody').html(commentsHtml);
             });
         });
     </script>
+ <script>
+document.querySelectorAll('.call-mail-option').forEach(label => {
+    label.addEventListener('click', function() {
+        // Pehle sabko uncheck karo
+        document.querySelectorAll('.call-mail-option').forEach(el => {
+            el.querySelector('input').checked = false;
+            el.classList.remove('checked');
+        });
+
+        // Ab sirf clicked wale ko check karo
+        const checkbox = this.querySelector('input');
+        checkbox.checked = true;
+        this.classList.add('checked');
+    });
+});
+</script>
 @endsection
