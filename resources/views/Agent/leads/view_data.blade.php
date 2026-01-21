@@ -1,5 +1,32 @@
 @extends('Agent.common.app')
 @section('main')
+<style>
+   .lead-status-dropdown .lead-status-menu {
+    position: fixed !important;
+
+    /* 🔥 SIZE FIX */
+    width: max-content;
+    min-width: 180px;
+    max-width: 220px;
+
+    padding: 6px 0;
+    background: #8a9abd;
+    border-radius: 8px;
+
+    max-height: 260px;
+    overflow-y: auto;
+
+    display: none;
+    z-index: 999999;
+}
+
+.lead-status-dropdown .lead-status-menu.show {
+    display: block;
+}
+
+
+
+</style>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -2379,6 +2406,40 @@ window.onclick = function(event) {
             modal.find('#forword_id').val($('#manager_id').val());
         });
     });
+</script>
+<script>
+$(document).on('click', '.lead-status-btn', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const $menu = $(this).next('.lead-status-menu');
+    $('.lead-status-menu').removeClass('show');
+
+    const rect = this.getBoundingClientRect();
+    const menuWidth = $menu.outerWidth(); // 🔥 dynamic width
+    const gap = 6;
+
+    // 🔥 button ke CENTER se align
+    let left = rect.left + (rect.width / 2) - (menuWidth / 2);
+
+    // safety
+    if (left + menuWidth > window.innerWidth - 16) {
+        left = window.innerWidth - menuWidth - 16;
+    }
+    if (left < 16) {
+        left = 16;
+    }
+
+    $menu.css({
+        position: 'fixed',
+        top: rect.bottom + gap + 'px',
+        left: left + 'px'
+    });
+
+    $menu.addClass('show');
+});
+
+
 </script>
 
 
