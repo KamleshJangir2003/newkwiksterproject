@@ -762,17 +762,45 @@ $data->comment = $request->comment;
         return redirect()->back();
     }
 }
-public function agent_intersted_data(){
-    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Intrested')->latest('updated_at')->get();
+public function agent_intersted_data($n = null){
 
-    return view('Agent/leads/intersted_data',compact('datas'));
-}
-public function agent_pipeline_data($n=''){
+    DB::table('users')
+        ->where('id', session('agent_id'))
+        ->update([
+            'last_verified_seen' => now()
+        ]);
+
     if(!empty($n)){
         $noti = Notification::where('id',$n)->first();
-        $noti->click_id = 2;
-        $noti->save();
+        if ($noti) {
+            $noti->click_id = 2;
+            $noti->save();
+        }
     }
+
+    $datas = ExcelData::where('click_id', session('agent_id'))
+        ->where('form_status','Intrested')
+        ->latest('updated_at')
+        ->get();
+
+    return view('Agent/leads/intersted_data', compact('datas'));
+}
+
+public function agent_pipeline_data($n=''){
+   DB::table('users')
+        ->where('id', session('agent_id'))
+        ->update([
+            'last_pipeline_seen' => now()
+        ]);
+
+    if(!empty($n)){
+        $noti = Notification::where('id',$n)->first();
+        if ($noti) {
+            $noti->click_id = 2;
+            $noti->save();
+        }
+    }
+
     $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Pipeline')->latest('updated_at')->get();
 
     return view('Agent/leads/pipelines',compact('datas'));

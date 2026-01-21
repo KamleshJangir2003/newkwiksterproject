@@ -40,16 +40,33 @@
                         <div class="menu-title">Leads</div>
                     </a>
                     <ul>
-                        <li> <a href="{{ route('agent_intersted_data') }}"><i class='bx bx-radio-circle'></i>Verified
-                                Forms</a>
-                        </li>
                        <li>
-   <a href="{{ route('agent_pipeline_data') }}" class="pipeline-link">
-      <i class='bx bx-radio-circle'></i>
-      Pipeline
-      <span class="pipeline-badge d-none">New</span>
-   </a>
+    <a href="{{ route('agent_intersted_data') }}">
+        <i class='bx bx-radio-circle'></i>
+        Verified Forms
+
+        @if(($verifiedNotificationCount ?? 0) > 0)
+            <span class="badge bg-danger ms-auto">
+                {{ $verifiedNotificationCount }}
+            </span>
+        @endif
+    </a>
 </li>
+
+<li>
+    <a href="{{ route('agent_pipeline_data') }}">
+        <i class='bx bx-radio-circle'></i>
+        Pipeline
+
+        @if(($pipelineNotificationCount ?? 0) > 0)
+            <span class="badge bg-warning text-dark ms-auto">
+                {{ $pipelineNotificationCount }}
+            </span>
+        @endif
+    </a>
+</li>
+
+
 
                         </li>
                         <li> <a href="#"><i class='bx bx-radio-circle'></i>Loss Runs
@@ -61,7 +78,19 @@
    </a>
 </li>
 
+<style>
+    .sidebar a {
+    display: flex;
+    align-items: center;
+}
 
+.sidebar .badge {
+    font-size: 11px;
+    padding: 4px 7px;
+    border-radius: 12px;
+}
+
+</style>
                         <!-- <li> <a href="{{ route('show_email_inrsted') }}"><i class='bx bx-radio-circle'></i>Email Verified
                             Forms</a>
                     </li> -->
