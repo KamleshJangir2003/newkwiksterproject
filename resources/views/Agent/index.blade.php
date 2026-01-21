@@ -5,139 +5,392 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        .agent-goal-box{
-  background:#ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  max-width: 420px;
-  height: ;
-  position: relative;
-  margin-left: 25px;
+     /* ============================================
+   🎨 COMPLETE MODERN DASHBOARD CSS
+   ============================================ */
+
+/* --- Time Zone Cards --- */
+.row-cols-1 .card {
+    background: #ffffff;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Left 2px strip (same as your cards) */
-.agent-goal-box::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:2px;
-  height:100%;
-  background:#1f6bff;
+.row-cols-1 .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.goal-header{
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  margin-bottom: 12px;
+.row-cols-1 .card .card-body {
+    padding: 20px;
 }
 
-.month{
-  font-size: 13px;
-  color:#777;
+/* Border colors with gradient effect */
+.card.radius-10::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    z-index: 1;
 }
 
-.goal-row{
-  display:flex;
-  justify-content: space-between;
-  margin: 6px 0;
+/* --- Dashboard Metric Cards --- */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 25px 0;
 }
 
-.achieved{ color:#2ecc71; }
-.remaining{ color:#e74c3c; }
-
-/* Progress bar */
-.progress-wrapper{
-  margin-top: 12px;
+.dash-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.progress-bar{
-  width:100%;
-  height:8px;
-  background:#eee;
-  border-radius: 10px;
-  overflow:hidden;
+.dash-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-.progress-fill{
-  height:100%;
-  background:#1f6bff;
-  border-radius:10px;
+/* Left border accent */
+.dash-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    transition: width 0.3s ease;
 }
 
-.progress-text{
-  text-align:right;
-  font-size: 12px;
-  margin-top:4px;
+.dash-card:hover::before {
+    width: 6px;
 }
+
+/* Border colors matching time zones */
+.dash-card.total::before { 
+    background: linear-gradient(180deg, #ff4500, #ff6347);
+}
+.dash-card.pipeline::before { 
+    background: linear-gradient(180deg, #28a745, #20c997);
+}
+.dash-card.live::before { 
+    background: linear-gradient(180deg, #ffc107, #fd7e14);
+}
+.dash-card.loss::before { 
+    background: linear-gradient(180deg, #dc3545, #e74c3c);
+}
+
+/* Subtle gradient backgrounds */
+.dash-card.total {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+}
+.dash-card.pipeline {
+    background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+}
+.dash-card.live {
+    background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+}
+.dash-card.loss {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+}
+
+/* Icon styling */
+.dash-card .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+.dash-card:hover .icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.dash-card.total .icon {
+    background: linear-gradient(135deg, #fff5f5, #ffe5e5);
+    color: #ff4500;
+}
+.dash-card.pipeline .icon {
+    background: linear-gradient(135deg, #f0fff4, #d4f4dd);
+    color: #28a745;
+}
+.dash-card.live .icon {
+    background: linear-gradient(135deg, #fffbf0, #ffeaa7);
+    color: #ffc107;
+}
+.dash-card.loss .icon {
+    background: linear-gradient(135deg, #fff5f5, #ffe5e5);
+    color: #dc3545;
+}
+
+.dash-card h6 {
+    margin: 8px 0;
+    font-weight: 600;
+    color: #555;
+    font-size: 14px;
+}
+
+.dash-card h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 28px;
+    color: #2c3e50;
+}
+
+/* --- Goal & Graph Wrapper --- */
+.goal-graph-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+/* --- Monthly Goal Box --- */
+.agent-goal-box {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 35%;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.agent-goal-box:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.agent-goal-box::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px 0 0 16px;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.goal-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.month {
+    font-size: 13px;
+    color: #7f8c8d;
+    font-weight: 600;
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Circle Progress */
+.goal-body {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.circle-progress {
+    position: relative;
+    width: 160px;
+    height: 160px;
+}
+
+.bg-circle {
+    fill: none;
+    stroke: #f0f0f0;
+    stroke-width: 12;
+}
+
+.progress-circle {
+    fill: none;
+    stroke-width: 12;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    stroke-linecap: round;
+}
+
+/* Multi-color progress */
+.step-1 { stroke: #dc3545; }
+.step-2 { stroke: #fd7e14; }
+.step-3 { stroke: #ffc107; }
+.step-4 { stroke: #28a745; }
+
+.circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.circle-text h3 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.circle-text p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+/* Goal Stats */
+.goal-stats {
+    flex: 1;
+}
+
+.goal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.goal-row:last-child {
+    border-bottom: none;
+}
+
+.goal-row span {
+    font-size: 14px;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.goal-row strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.goal-row .achieved {
+    color: #28a745;
+}
+
+.goal-row .remaining {
+    color: #dc3545;
+}
+
+/* --- Graph Box --- */
+.graph-box {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 65%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.graph-box:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.graph-box h5 {
+    margin: 0 0 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.graph-box canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1200px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .goal-graph-wrapper {
+        flex-direction: column;
+    }
+    
+    .agent-goal-box,
+    .graph-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Smooth Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dash-card,
+.agent-goal-box,
+.graph-box {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.dash-card:nth-child(1) { animation-delay: 0.1s; }
+.dash-card:nth-child(2) { animation-delay: 0.2s; }
+.dash-card:nth-child(3) { animation-delay: 0.3s; }
+.dash-card:nth-child(4) { animation-delay: 0.4s; }
+
+
+
 
     </style>
-    <style>
- .dash-card{
-  padding: 20px;
-  border-radius: 16px;
-  color: #333;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Top-left soft shine */
-.dash-card::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
-  opacity: 0.6;
-  z-index: 1;
-}
-
-/* Bottom-right soft shadow (inner depth) */
-.dash-card::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at bottom right, rgba(0,0,0,0.12), rgba(0,0,0,0));
-  opacity: 0.5;
-  z-index: 1;
-}
-
-/* Content ko upar lane ke liye */
-.dash-card *{
-  position: relative;
-  z-index: 2;
-}
-
-/* Your base gradients (same as before) */
-.dash-card.total{
-  background: linear-gradient(135deg, #e2e7fa, #bac9d4);
-}
-
-.dash-card.pipeline{
-  background: linear-gradient(135deg, #cce4ef, #f6e9e5);
-}
-
-.dash-card.live{
-  background: linear-gradient(135deg, #9dd5db, #ddeef0);
-}
-
-.dash-card.loss{
-  background: linear-gradient(135deg, #b9e6f6, #bcb9a5);
-}
-
-/* Icon center */
-.dash-card .icon{
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
-
-
-
-    </style>
+   
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">
@@ -228,13 +481,13 @@
 
 <div class="dash-card live">
   <div class="icon"><i class="fa-solid fa-headset"></i></div>
-  <h6>Live Transfer Pending</h6>
+  <h6>Live Transfer Pending / Success</h6>
   <h4>188</h4>
 </div>
 
 <div class="dash-card loss">
   <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
-  <h6>Loss Runs Pending</h6>
+  <h6>Loss Runs Pending / Success</h6>
   <h4>09</h4>
 </div>
 
@@ -433,7 +686,7 @@
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0,0,0,0.08);
 
-  width: 40%;        /* 👉 Aap change kar sakte ho */
+  width: 75%;        /* 👉 Aap change kar sakte ho */
   max-width: 900px;  /* graph box limit */
   min-width: 400px;  /* minimum size */
 
