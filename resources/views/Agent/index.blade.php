@@ -490,7 +490,7 @@
   <h6>Loss Runs Required</h6>
 <h3>{{ $lossRunsRequired }}</h3>
 
-<h6>Loss Runs Not Required</h6>
+<h6> Not Required</h6>
 <h3>{{ $lossRunsNotRequired }}</h3>
 
 </div>
@@ -557,10 +557,10 @@
 
 
   <!-- Graph Box -->
-  <div class="graph-box">
+  <!-- <div class="graph-box">
     <h5>📊 Performance Overview</h5>
     <canvas id="dashboardChart"></canvas>
-  </div>
+  </div> -->
 
 </div>
 <style>
