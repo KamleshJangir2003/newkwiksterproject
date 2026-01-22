@@ -66,13 +66,19 @@
     </a>
 </li>
 
+        <li>
+    <a href="{{ route('agent.leads', ['loss_runs' => 'yes']) }}" class="position-relative">
+        <i class='bx bx-radio-circle'></i>
+        Loss Runs Required
 
+        @if(isset($lossRunsCount) && $lossRunsCount > 0)
+            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                {{ $lossRunsCount }}
+            </span>
+        @endif
+    </a>
+</li>
 
-                        </li>
-                        <li> <a href="#"><i class='bx bx-radio-circle'></i>Loss Runs
-                                Required</a>
-                        </li>
-   <li>
    <a href="{{ route('agent.live.transfer.index') }}">
       <i class='bx bx-radio-circle'></i> Live Transfer Form
    </a>

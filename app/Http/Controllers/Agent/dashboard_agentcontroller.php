@@ -325,7 +325,32 @@ foreach ($teamAgents as $id => $name) {
         }
         return redirect()->back();
     }
-    public function comming_soon(){
+      public function comming_soon(){
         return view('Agent.comming_soon');
     }
+
+    // ✅ YAHI ADD KARNA HAI (Loss Runs Leads)
+public function agent_leads(Request $request)
+{
+    $agentId = session('agent_id');
+
+    // 🔔 Notification count (Loss Runs = yes)
+    $lossRunsCount = DB::table('excel_data')
+        ->where('click_id', $agentId)
+        ->where('loss_runs', 'yes')
+        ->count();
+
+    // 📋 Page data (Loss Runs list)
+    $datas = DB::table('excel_data')
+        ->where('click_id', $agentId)
+        ->where('loss_runs', 'yes')
+        ->orderBy('id', 'desc')
+        ->get();
+
+    return view('Agent.leads.lossruns', compact('datas', 'lossRunsCount'));
 }
+
+
+
+}
+

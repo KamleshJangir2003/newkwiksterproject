@@ -495,3 +495,11 @@ Route::get('/agent/live-transfer', function () {
 
     return view('Agent.live_transfer.index', compact('transfers'));
 })->name('agent.live.transfer.index');
+
+
+Route::get('agent/leads', [dashboard_agentcontroller::class, 'agent_leads'])
+    ->name('agent.leads');
+    Route::get(
+    'agent/loss-runs-required',
+    [App\Http\Controllers\Agent\dashboard_agentcontroller::class, 'lossRunsLeads']
+)->name('agent.lossruns');
