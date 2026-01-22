@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
 
 
 
+
 class Leadcontroller extends Controller
 {
     public function all_tab_view(){
@@ -1362,10 +1363,19 @@ if(!empty($req->assign_leads)){
         return redirect()->back();
     }
       public function intrested_check(Request $req){
+       
+         // ✅ VALIDATION — YAHI ADD KARO (TOP PE)
+    $req->validate([
+        'data_id'   => 'required|exists:excel_data,id',
+        'loss_runs' => 'required|in:yes,no',
+    ]);
 
     $id = $req->data_id;
     $comment = $req->comment;
     $exceldata = ExcelData::where('id',$id)->first();
+  
+
+ 
     $fullimagepath = $exceldata->error_file;
     if (!empty($req->errorfile)) {
         $allowedFormats = ['jpeg', 'jpg', 'pdf'];
@@ -1469,6 +1479,9 @@ $this->storeComment($id, $comment);
   event(new UserNotification($data));
     }
 }
+ // 🔥 FINAL PLACE — END OF FUNCTION
+    $exceldata->loss_runs = $req->loss_runs;
+    $exceldata->save();
     return redirect()->back();
 
     }

@@ -487,8 +487,12 @@
 
 <div class="dash-card loss">
   <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
-  <h6>Loss Runs Required / Not Required</h6>
-  <h4>09</h4>
+  <h6>Loss Runs Required</h6>
+<h3>{{ $lossRunsRequired }}</h3>
+
+<h6>Loss Runs Not Required</h6>
+<h3>{{ $lossRunsNotRequired }}</h3>
+
 </div>
 
 

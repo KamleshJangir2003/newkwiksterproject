@@ -24,6 +24,22 @@ class dashboard_agentcontroller extends Controller
     $date = $currentDate->format('Y-m-d');
 
     $agentId = session('agent_id');
+    // ================= LIVE TRANSFER (LOSS RUNS) =================
+
+/// ================= LOSS RUNS REQUIRED / NOT REQUIRED =================
+
+// Required = loss_runs = yes
+$lossRunsRequired = DB::table('excel_data')
+    ->where('click_id', $agentId)
+    ->where('loss_runs', 'yes')
+    ->count();
+
+// Not Required = loss_runs = no
+$lossRunsNotRequired = DB::table('excel_data')
+    ->where('click_id', $agentId)
+    ->where('loss_runs', 'no')
+    ->count();
+
 
     $startOfMonth = $currentDate->copy()->startOfMonth()->format('Y-m-d');
     $endOfMonth = $currentDate->copy()->endOfMonth()->format('Y-m-d');
@@ -172,11 +188,16 @@ foreach ($teamAgents as $id => $name) {
     'achievedLeads',
     'remainingLeads',
     'goalPercent',
+    'lossRunsRequired',
+    'lossRunsNotRequired',
     // 👉 TEAM CHART VARIABLES
     'teamLabels',
     'teamTotalForms',
     'teamPipeline',
-    'teamLossRuns'
+    'teamLossRuns',
+   
+  
+
         
     ));
 }

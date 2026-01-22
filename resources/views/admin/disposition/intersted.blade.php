@@ -433,6 +433,8 @@
                                                                         data-stated_value5="{{ $unit->stated_value5 }}"
                                                                          data-redmark="{{ $data->red_mark }}"
                                                                          data-mail_status="{{ $data->mail_status }}"
+                                                                        data-loss-runs="{{ $data->loss_runs }}"
+
                                                                         data-bs-target="#exampleFullScreenModal">
                                                                         {{ $data->company_rep1 }}</td>
                                                                     <td>{{ $data->business_address }}</td>
@@ -1334,22 +1336,106 @@
 
                                         </div>
                                                 </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" name="redmark" id="coverwell" value="2" class="form-check-input" onclick="toggleCheckbox('coverwell', 'redmark')">
-                                                            Good Form
-                                                        </label>
-                                                    </div>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" name="redmark" id="redmark" value="1" class="form-check-input" onclick="toggleCheckbox('redmark', 'coverwell')">
-                                                           Bad Form
-                                                        </label>
-                                                    </div>
-                                                </div><!--end col-->
+                                               <!-- Good / Bad Form -->
+<div class="col-6">
+    <div class="mb-3">
+        <label class="form-check-label">
+            <input type="checkbox" name="redmark" id="coverwell" value="2"
+                   class="form-check-input"
+                   onclick="toggleCheckbox('coverwell', 'redmark')">
+            Good Form
+        </label>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="mb-3">
+        <label class="form-check-label">
+            <input type="checkbox" name="redmark" id="redmark" value="1"
+                   class="form-check-input"
+                   onclick="toggleCheckbox('redmark', 'coverwell')">
+            Bad Form
+        </label>
+    </div>
+</div>
+
+<!-- ✅ LOSS RUNS ADDED HERE -->
+<div class="col-6">
+    <div class="mb-3">
+        <label class="form-label">
+            Loss Runs <span class="text-danger">*</span>
+        </label>
+
+        <div class="d-flex gap-3">
+<label class="loss-option">
+    <input type="radio" name="loss_runs" value="yes">
+    <span class="custom-checkbox"></span>
+    Yes
+</label>
+
+<label class="loss-option">
+    <input type="radio" name="loss_runs" value="no">
+    <span class="custom-checkbox"></span>
+    No
+</label>
+
+
+
+
+        </div>
+
+        <!-- ✅ VALIDATION ERROR MESSAGE (YAHI SHOW HOGA) -->
+        @error('loss_runs')
+            <small class="text-danger d-block mt-1">
+                {{ $message }}
+            </small>
+        @enderror
+    </div>
+</div>
+
+</div>
+<style>
+.loss-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* hide default radio */
+.loss-option input[type="radio"] {
+    display: none;
+}
+
+/* box */
+.loss-option .custom-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #bfbfbf;
+    border-radius: 4px;
+    position: relative;
+}
+
+/* checked */
+.loss-option input[type="radio"]:checked + .custom-checkbox {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+/* tick */
+.loss-option input[type="radio"]:checked + .custom-checkbox::after {
+    content: "✓";
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+}
+</style>
+
                                                 <div class="col-6 reminder" style="display: none;">
                                                     <div class="pb-4">
                                                         <label for="dateInput" class="form-label">Date</label>
@@ -1624,6 +1710,19 @@
             $('#exampleFullScreenModal').on('show.bs.modal', function(event) {
                 var modal = $(this);
                 var td = $(event.relatedTarget);
+                  // 🔥 LOSS RUNS AUTO SET
+    modal.find('input[name="loss_runs"]').prop('checked', false);
+
+   let lossRuns = td.data('lossRuns'); // camelCase
+
+
+    if (lossRuns === 'yes') {
+        modal.find('input[name="loss_runs"][value="yes"]').prop('checked', true);
+    }
+
+    if (lossRuns === 'no') {
+        modal.find('input[name="loss_runs"][value="no"]').prop('checked', true);
+    }
                
                 modal.find('#company_name').val(td.data('company-name'));
                 modal.find('#phone').val(td.data('phone'));

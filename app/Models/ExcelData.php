@@ -41,6 +41,7 @@ class ExcelData extends Model
         'commodities',
         'batch_name',
         'mail_status',
+        'loss_runs',
     ];
     public function managerfwd()
     {
