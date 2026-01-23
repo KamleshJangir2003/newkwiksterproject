@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edtim Global Insurance CRM | Login</title>
+    <title>Kwikster Insurance CRM | Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
+        
         :root {
             --primary-blue: #0066cc;
             --secondary-yellow: #ffd700;
@@ -473,6 +475,16 @@
             animation: spin 1s ease-in-out infinite;
             margin-right: 8px;
         }
+        .logo {
+    text-align: center;
+}
+
+.logo-icon img {
+    width: 220px;      /* size adjust kar sakte ho */
+    height: auto;
+    
+}
+
     </style>
 </head>
 
@@ -490,12 +502,14 @@
         <div class="shield"></div>
 
         <div class="logo">
-            <div class="logo-icon">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <h1>Edtim <span>Global</span> CRM</h1>
-            <p>Insurance Management System</p>
-        </div>
+    <div class="logo-icon">
+        <img src="{{ asset('Admin/kwikster-logo.png') }}" alt="Edtim Global CRM">
+    </div>
+
+    <h1><span>Kwikster</span> CRM</h1>
+    <p>Insurance Management System</p>
+</div>
+
 
         <form id="loginForm" action="{{ route('ajent_login_process') }}" method="POST">
             @csrf
@@ -543,7 +557,7 @@
 
         <div class="footer">
             <p>Need help? Contact <a href="#">IT Support</a></p>
-            <p>© 2025 Edtim Global Insurance CRM. All rights reserved.</p>
+            <p>© 2025 Kwikster CRM. All rights reserved.</p>
         </div>
     </div>
 

@@ -1,4 +1,63 @@
 @extends('Agent.common.app')
+<style>
+.lead-card{
+    background:#fff;
+    border-radius:14px;
+    border-left:5px solid #dc3545; /* Failed = red */
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    padding:16px;
+    transition:all .25s ease;
+    height:100%;
+}
+
+.lead-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,0.15);
+}
+
+.lead-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.lead-header h6{
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+}
+
+.lead-badge{
+    background:#dc3545;
+    color:#fff;
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:20px;
+}
+
+.lead-body p{
+    margin:4px 0;
+    font-size:14px;
+    color:#6c757d;
+}
+
+.lead-body i{
+    margin-right:6px;
+    color:#0d6efd;
+}
+
+.lead-footer{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+}
+
+.lead-footer button{
+    flex:1;
+}
+</style>
+
 
 @section('main')
 <div class="page-content">
@@ -6,42 +65,71 @@
         <div class="card-body">
             <div class="d-lg-flex align-items-center mb-4 gap-3">
                 <div class="position-relative">
-                    <input type="text" class="form-control ps-5 radius-30" placeholder="Search Live Transfer Leads" id="searchInput">
-                    <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+                   <h5>Live Transfer Leads</h5>
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table mb-0" id="leadsTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Company Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Live Transfer</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($transfers as $transfer)
-                        <tr>
-                            <td>{{ $transfer->id }}</td>
-                            <td>{{ $transfer->company_name ?? 'N/A' }}</td>
-                            <td>{{ $transfer->phone ?? 'N/A' }}</td>
-                            <td>{{ $transfer->email ?? 'N/A' }}</td>
-                            <td>
-                                <span class="badge bg-danger">Failed</span>
-                            </td>
-                            <td>{{ $transfer->date ?? 'N/A' }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="viewLead('{{ $transfer->id }}', '{{ addslashes($transfer->comment ?? 'No reason provided') }}')">View</button>
-                                <button class="btn btn-success btn-sm ms-1" onclick="resubmitTransfer({{ $transfer->id }})">Re-submit</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+               <div class="row" id="leadsContainer">
+    @foreach($transfers as $transfer)
+       <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+    <div class="lead-card">
+
+        <!-- HEADER -->
+        <div class="lead-header">
+            <h6>{{ $transfer->company_name ?? 'N/A' }}</h6>
+            <span class="lead-badge">Failed</span>
+        </div>
+
+        <!-- BODY -->
+       <div class="lead-body">
+    <p>
+        <i class="bx bx-user"></i>
+        <strong>Rep:</strong>
+        {{ $transfer->company_rep1 ?? 'N/A' }}
+    </p>
+
+    <p>
+        <i class="bx bx-phone"></i>
+        {{ $transfer->phone ?? 'N/A' }}
+    </p>
+
+    <p>
+        <i class="bx bx-envelope"></i>
+        {{ $transfer->email ?? 'N/A' }}
+    </p>
+
+    <p>
+        <i class="bx bx-calendar"></i>
+        {{ $transfer->date ?? 'N/A' }}
+    </p>
+</div>
+
+
+        <!-- FOOTER -->
+        <div class="lead-footer">
+    <button 
+        class="btn btn-outline-primary btn-sm"
+        onclick="viewLead(
+            '{{ $transfer->id }}',
+            '{{ addslashes($transfer->comment ?? 'No reason provided') }}'
+        )">
+        View
+    </button>
+
+    <button 
+        class="btn btn-success btn-sm"
+        onclick="resubmitTransfer({{ $transfer->id }})">
+        Re-submit
+    </button>
+</div>
+
+
+    </div>
+</div>
+
+    @endforeach
+</div>
+
             </div>
         </div>
     </div>
@@ -154,6 +242,17 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function () {
+    let value = this.value.toLowerCase();
+    document.querySelectorAll('.lead-card').forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(value)
+            ? 'block'
+            : 'none';
+    });
+});
+</script>
+
 
 <!-- View Lead Modal -->
 <div class="modal fade" id="viewLeadModal" tabindex="-1" aria-labelledby="viewLeadModalLabel" aria-hidden="true">
