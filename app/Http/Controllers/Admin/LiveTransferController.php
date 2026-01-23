@@ -74,8 +74,13 @@ class LiveTransferController extends Controller
             $datas->whereBetween('date', [$date1, $date2]);
         }
 
-        // Apply default conditions (is_cover_well, is_submit)
-        $datas->where('is_cover_well', null)->where('is_submit', null);
+        // Apply default conditions (is_cover_well, is_submit) and exclude failed live transfers
+        $datas->where('is_cover_well', null)
+              ->where('is_submit', null)
+              ->where(function($query) {
+                  $query->whereNull('live_transfer')
+                        ->orWhere('live_transfer', '!=', 'no');
+              });
 
         // Fetch paginated results
         $datas = $datas->latest('date')->paginate($pagination);
