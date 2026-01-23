@@ -19,44 +19,33 @@ class chatboxcontroller extends Controller
 {
 
     public function agent_chat(){
-        $users = User::whereIn('status', [1, 3])->where('is_active', 1)->get();
-       
-       $ID = User::where('team_id', session('admin_id'))->first();
+        // Get all users for admin chat
+        $users = User::all();
+        $filtered_groups = Groups_chat::all();
+        $ID = (object)['id' => 1, 'name' => 'Admin']; // Dummy admin for testing
 
-// Fallback: agar session ya agent user na mile to bhi page load hone do
-$agent_id = $ID->id ?? 0;
-
-$groups = Groups_chat::all();
-
-// Filter the groups safely
-$filtered_groups = $groups->filter(function($group) use ($agent_id) {
-    $user_ids_array = json_decode($group->user_ids, true) ?? [];
-    return $group->created_by == $agent_id || in_array($agent_id, $user_ids_array);
-});
-
-return view('admin.chat.view_chat', compact('users', 'filtered_groups', 'ID'));
-
-
+        return view('admin.chat.view_chat', compact('users', 'filtered_groups', 'ID'));
     }
     public function sendMessage(Request $request)
 {
     $request->validate([
         'file' => 'nullable|file|max:5120',
-        'to_id' => 'nullable|integer', // This can be null if sending to a group
-        'group_id' => 'nullable|integer', // Add group_id validation
-        'body' => 'string'
+        'to_id' => 'nullable|integer',
+        'group_id' => 'nullable|integer',
+        'body' => 'nullable|string'
     ]);
 
-    $ID = User::where('team_id',session('admin_id'))->first();
+    // Use dummy admin ID for testing
+    $ID = (object)['id' => 1, 'name' => 'Admin'];
 
     $seen = [$ID->id];
     $message = new ChMessage();
     $message->from_id = $ID->id;
     $message->to_id = $request->to_id;
-    $message->group_id = $request->group_id; // Store the group ID if provided
-    $message->body = $request->body ? nl2br(e($request->body)) : nl2br(e($request->groupbody));
+    $message->group_id = $request->group_id;
+    $message->body = $request->body ? $request->body : ($request->groupbody ?? '');
     $message->reply_id = $request->replyId;
-    $message->seen = json_encode($seen);
+    $message->seen = $request->to_id ? 0 : json_encode($seen);
 
     $fullimagepath = '';
     if (!empty($request->file)) {
@@ -67,35 +56,8 @@ return view('admin.chat.view_chat', compact('users', 'filtered_groups', 'ID'));
     }
     $message->attachment = $fullimagepath;
     $message->save();
-    $rmessage = ChMessage::where('id',$request->replyId)->first();
-    $reply_message = '';
-    If(!empty($rmessage))
-   { if(!empty($rmessage->body))
-    {$reply_message = $rmessage->body;}
-    else{
-        $reply_message = '<img src="' . asset($rmessage->attachment) . '"
-                      alt="Attachment" width="100px"
-                      height="100px" style="margin-bottom: 10px">';
-    }}
-    $data = [
-        'body' => $message->body,
-        'to_id' => $request->to_id,
-        'group_id' => $request->group_id, // Include group_id in the event data
-        'reply_id' => $request->replyId, 
-        'reply_message' => $reply_message, 
-        'from_id' => $ID->id,
-        'from_name' => $ID->name,
-        'attachment' => $fullimagepath,
-        'created_at' => $message->created_at,
-    ];
-     $notification = [
-        'massage'=>'New Chat From '. session('admin_name'),
-        'user_id'=>$request->to_id,
-    ];
-
-  event(new UserNotification($notification));
-    event(new Chatnotification($data));
-    return response()->json(['success' => true, 'message' => 'Message sent successfully','reply' => $reply_message]);
+    
+    return response()->json(['success' => true, 'message' => 'Message sent successfully']);
 }
 
     public function createChat(Request $request){
@@ -222,29 +184,31 @@ return view('admin.chat.view_chat', compact('users', 'filtered_groups', 'ID'));
         $id = $request->group_id;
         $user_id = $request->user_id;
         $ID = User::where('team_id',session('admin_id'))->first();
+        
+        if (!$ID) {
+            return response()->json(['success' => false, 'message' => 'User not found']);
+        }
+        
         $agentId = $ID->id;
     
-       
-       if(!empty($id)){
-        $messages = ChMessage::where('group_id', $id)->get();
-        foreach ($messages as $message) {
-            if ($message->seen == 0) {
-                $agents = [$agentId]; 
-                $message->seen = json_encode($agents); 
-                $message->save();
-            } else {
-                $seens = json_decode($message->seen, true);
-             
-              if (!in_array($agentId, $seens)) {
-                  // Add the agent ID to the array
-                  $seens[] = $agentId;
-            
-                  $message->seen = json_encode($seens);
-                  $message->save(); 
-              }
+        if(!empty($id)){
+            $messages = ChMessage::where('group_id', $id)->get();
+            foreach ($messages as $message) {
+                if ($message->seen == 0) {
+                    $agents = [$agentId]; 
+                    $message->seen = json_encode($agents); 
+                    $message->save();
+                } else {
+                    $seens = json_decode($message->seen, true);
+                 
+                  if (!in_array($agentId, $seens)) {
+                      $seens[] = $agentId;
+                      $message->seen = json_encode($seens);
+                      $message->save(); 
+                  }
+                }
             }
-        }}
-        else{
+        } else {
             $messages = ChMessage::where('from_id', $user_id)->where('to_id', $agentId)->get();
             foreach ($messages as $message) {
                $message->seen = 1;

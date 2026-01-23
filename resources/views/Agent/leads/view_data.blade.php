@@ -180,7 +180,7 @@
 
     <div class="col-12 col-md-6 col-lg-4 d-flex mb-3">
       <div class="card w-100 border-0 shadow-sm rounded-4 {{ $cardClass }} lead-card"
-           data-bs-toggle="modal"
+           
            data-company-name="{{ $data->company_name }}"
            data-phone="{{ $data->phone }}"
            data-id="{{ $data->id }}"
@@ -231,7 +231,27 @@
     </div>
 </div>
 
-<p class="mb-1"><strong>Company -</strong> {{ $data->company_name }}</p>
+<p class="mb-1"
+   style="cursor:pointer; color:#0d6efd;"
+   data-bs-toggle="modal"
+   data-bs-target="#exampleFullScreenModal"
+
+   data-company-name="{{ $data->company_name }}"
+   data-phone="{{ $data->phone }}"
+   data-id="{{ $data->id }}"
+   data-company-rep1="{{ $data->company_rep1 }}"
+   data-business-address="{{ $data->business_address }}"
+   data-business-city="{{ $data->business_city }}"
+   data-business-state="{{ $data->business_state }}"
+   data-business-zip="{{ $data->business_zip }}"
+   data-dot="{{ $data->dot }}"
+   data-mc_docket="{{ $data->mc_docket }}"
+   data-email="{{ $data->email }}"
+   data-mail_status="{{ $data->mail_status }}"
+>
+    <strong>Company -</strong> {{ $data->company_name }}
+</p>
+
 <p class="mb-1"><strong>Date -</strong> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-m-y') }}</p>
 <p class="mb-1"><strong>Location -</strong> {{ $data->business_city }}, {{ $data->business_state }}</p>
 <p class="mb-1"><strong>Phone -</strong> {{ $data->phone }}</p>
@@ -2447,6 +2467,7 @@ $(document).on('click', '.lead-status-btn', function (e) {
 
 
 </script>
+
 
 
 

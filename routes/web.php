@@ -411,7 +411,7 @@ Route::post('/edit_salary_datas',[Attendencecontroller::class, 'edit_salary_data
  //----------------------------------- Chat box-------------------------------------------------------------
  Route::get('/chat_box', [chatboxcontroller::class, 'agent_chat'])->name('admin_chat');
  Route::get('/admin/chat_box/load-chat/{id}', [chatboxcontroller::class, 'loadChat']);
- Route::post('/send-message', [chatboxcontroller::class, 'sendMessage'])->name('admin_sendmessage');
+ Route::post('/send-message', [chatboxcontroller::class, 'sendMessage'])->name('admin_send.message');
  Route::post('/create_group', [chatboxcontroller::class, 'create_group'])->name('admin_create_group');
  Route::post('/edit_group', [chatboxcontroller::class, 'edit_group'])->name('admin_edit_group');
  Route::get('/delete_group/{id}', [chatboxcontroller::class, 'delete_group'])->name('admin_delete_group');

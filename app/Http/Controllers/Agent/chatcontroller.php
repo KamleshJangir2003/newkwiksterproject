@@ -19,37 +19,32 @@ class chatcontroller extends Controller
 {
 
     public function agent_chat(){
-       
-        $users = User::whereIn('status', [1, 3])->where('is_active',1)->get();
-       
-$agent_id = session('agent_id');
-$groups = Groups_chat::all();
+        // Get all users for agent chat
+        $users = User::all();
+        $filtered_groups = Groups_chat::all();
+        $agent_id = 2; // Dummy agent ID for Kamlesh
 
-// Filter the groups
-$filtered_groups = $groups->filter(function($group) use ($agent_id) {
-    $user_ids_array = json_decode($group->user_ids, true);
-    return $group->created_by == $agent_id || in_array($agent_id, $user_ids_array);
-});
-
-
-        return view('Agent.chat-box.view_chat',compact('users', 'filtered_groups'));
+        return view('Agent.chat-box.view_chat',compact('users', 'filtered_groups'))->with('agent_id', $agent_id);
     }
     public function sendMessage(Request $request)
 {
     $request->validate([
         'file' => 'nullable|file|max:5120',
-        'to_id' => 'nullable|integer', // This can be null if sending to a group
-        'group_id' => 'nullable|integer', // Add group_id validation
-        'body' => 'string'
+        'to_id' => 'nullable|integer',
+        'group_id' => 'nullable|integer',
+        'body' => 'nullable|string'
     ]);
-    $seen = [session('agent_id')];
+    
+    $agent_id = 2; // Use dummy agent ID for testing
+    
+    $seen = [$agent_id];
     $message = new ChMessage();
-    $message->from_id = session('agent_id');
+    $message->from_id = $agent_id;
     $message->to_id = $request->to_id;
-    $message->group_id = $request->group_id; // Store the group ID if provided
-    $message->body = $request->body ? nl2br(e($request->body)) : nl2br(e($request->groupbody));
+    $message->group_id = $request->group_id;
+    $message->body = $request->body ? $request->body : ($request->groupbody ?? '');
     $message->reply_id = $request->replyId;
-    $message->seen = json_encode($seen);
+    $message->seen = $request->to_id ? 0 : json_encode($seen);
 
     $fullimagepath = '';
     if (!empty($request->file)) {
@@ -59,35 +54,36 @@ $filtered_groups = $groups->filter(function($group) use ($agent_id) {
         $fullimagepath = 'uploads/image/chat_file/' . $file;
     }
     $message->attachment = $fullimagepath;
-
     $message->save();
+    
     $rmessage = ChMessage::where('id',$request->replyId)->first();
     $reply_message = '';
-    If(!empty($rmessage))
-   { if(!empty($rmessage->body))
-    {$reply_message = $rmessage->body;}
-    else{
-        $reply_message = '<img src="' . asset($rmessage->attachment) . '"
-                      alt="Attachment" width="100px"
-                      height="100px" style="margin-bottom: 10px">';
-    }}
+    if(!empty($rmessage)) {
+        if(!empty($rmessage->body)) {
+            $reply_message = $rmessage->body;
+        } else {
+            $reply_message = '<img src="' . asset($rmessage->attachment) . '" alt="Attachment" width="100px" height="100px" style="margin-bottom: 10px">';
+        }
+    }
+    
     $data = [
         'body' => $message->body,
         'to_id' => $request->to_id,
-        'group_id' => $request->group_id, // Include group_id in the event data
+        'group_id' => $request->group_id,
         'reply_id' => $request->replyId, 
         'reply_message' => $reply_message, 
-        'from_id' => session('agent_id'),
-        'from_name' => session('agent_alise_name'),
+        'from_id' => $agent_id,
+        'from_name' => session('agent_alise_name') ?? 'Agent',
         'attachment' => $fullimagepath,
         'created_at' => $message->created_at,
     ];
-     $notification = [
-        'massage'=>'New Chat From '. session('agent_alise_name'),
+    
+    $notification = [
+        'massage'=>'New Chat From '. (session('agent_alise_name') ?? 'Agent'),
         'user_id'=>$request->to_id,
     ];
 
-  event(new UserNotification($notification));
+    event(new UserNotification($notification));
     event(new Chatnotification($data));
     return response()->json(['success' => true, 'message' => 'Message sent successfully','reply' => $reply_message]);
 }

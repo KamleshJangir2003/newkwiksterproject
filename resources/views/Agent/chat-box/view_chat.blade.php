@@ -1061,6 +1061,7 @@ input[type="checkbox"] {
 
                                     @if (!empty($users))
                                         @foreach ($users as $user)
+                                            @if ($user->id != 2) {{-- Filter out agent (ID=2) --}}
                                             @php
                                                 $details = App\adminmodel\Users_detailsModal::where(
                                                     'ajent_id',
@@ -1069,8 +1070,10 @@ input[type="checkbox"] {
                                                 $name = !empty($details->alise_name)
                                                     ? $details->alise_name
                                                     : $user->name;
-                                                if ($user->id == session('agent_id')) {
+                                                if ($user->id == 2) {
                                                     $name = 'You';
+                                                } elseif ($user->id == 1) {
+                                                    $name = 'Admin';
                                                 }
                                                 $image = !empty($user->image)
                                                     ? asset($user->image)
@@ -1079,12 +1082,12 @@ input[type="checkbox"] {
                                                 $message = App\Models\ChMessage::where(function ($query) use ($user) {
                                                     $query
                                                         ->where('to_id', $user->id)
-                                                        ->where('from_id', session('agent_id'));
+                                                        ->where('from_id', 2); // Use dummy agent ID 2
                                                 })
                                                     ->orWhere(function ($query) use ($user) {
                                                         $query
                                                             ->where('from_id', $user->id)
-                                                            ->where('to_id', session('agent_id'));
+                                                            ->where('to_id', 2); // Use dummy agent ID 2
                                                     })
                                                     ->orderBy('created_at', 'desc')
                                                     ->latest()
@@ -1199,7 +1202,7 @@ input[type="checkbox"] {
                                                             $timeDiff .= $diffMinutes . 'm';
                                                         }
 
-                                                        $unreaduserCount = App\Models\ChMessage::where('from_id', $user->id)->where('to_id',session('agent_id'))->where('seen',0)
+                                                        $unreaduserCount = App\Models\ChMessage::where('from_id', $user->id)->where('to_id', 2)->where('seen',0)
                                                     ->count();
                                                    
                                                         
@@ -1211,6 +1214,7 @@ input[type="checkbox"] {
                                                     @endif
                                                 </div>
                                             </a>
+                                            @endif
                                         @endforeach
                                     @endif
                                 </div>
@@ -1224,10 +1228,10 @@ input[type="checkbox"] {
                     @foreach ($users as $user)
                         @php
                             $messages = App\Models\ChMessage::where(function ($query) use ($user) {
-                                $query->where('to_id', $user->id)->where('from_id', session('agent_id'));
+                                $query->where('to_id', $user->id)->where('from_id', 2); // Use dummy agent ID 2
                             })
                                 ->orWhere(function ($query) use ($user) {
-                                    $query->where('from_id', $user->id)->where('to_id', session('agent_id'));
+                                    $query->where('from_id', $user->id)->where('to_id', 2); // Use dummy agent ID 2
                                 })
                                 ->orderBy('created_at', 'asc')
                                 ->get();
@@ -1344,7 +1348,7 @@ input[type="checkbox"] {
                             </div>
                             <div class="chat-content" id="chat-content-{{ $user->id }}">
                                 @foreach ($messages as $message)
-                                    @if ($message->from_id == session('agent_id'))
+                                    @if ($message->from_id == 2)
                                         <div class="chat-content-rightside">
                                             <div class="d-flex ms-auto">
                                                 <div class="flex-grow-1 me-2">
@@ -2237,6 +2241,12 @@ input[type="checkbox"] {
     <script src="{{ asset('Agent/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
     <script src="{{ asset('Agent/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
     <script src="{{ asset('Agent/assets/plugins/chartjs/js/chart.js') }}"></script>
+    <script>
+        // Prevent Chart.js errors on chat page
+        if (typeof Chart !== 'undefined') {
+            Chart.defaults.global = Chart.defaults.global || {};
+        }
+    </script>
     <script src="{{ asset('Agent/assets/js/index.js') }}"></script>
     <!--app JS-->
     <script src="{{ asset('Agent/assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
@@ -2246,6 +2256,20 @@ input[type="checkbox"] {
     <script src="{{ asset('Agent/assets/plugins/notifications/js/notifications.min.js') }}"></script>
     <script src="{{ asset('Agent/assets/plugins/notifications/js/notification-custom-script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Prevent getContext errors
+        (function() {
+            const originalGetContext = HTMLCanvasElement.prototype.getContext;
+            HTMLCanvasElement.prototype.getContext = function(contextType, contextAttributes) {
+                try {
+                    return originalGetContext.call(this, contextType, contextAttributes);
+                } catch (e) {
+                    console.warn('Canvas getContext error prevented:', e);
+                    return null;
+                }
+            };
+        })();
+    </script>
     <script>
         $(document).ready(function() {
             // Function to hide all chat content containers
@@ -2487,8 +2511,8 @@ channel.bind('my-chat-event', function(data) {
     var reply_id = data.message.reply_id;
     var file_image = "{{ asset('') }}" + attachment;
     var isImage = false;
-    var isOwnMessage = (fromId == '{{ session('agent_id') }}');
-    var isReceiver = (toId == '{{ session('agent_id') }}'); // <-- check if current user is receiver
+    var isOwnMessage = (fromId == '2'); // Use dummy agent ID 2
+    var isReceiver = (toId == '2'); // Use dummy agent ID 2
 
     // Check if there's an attachment and determine if it's an image
     if (attachment && attachment.trim() !== '') {

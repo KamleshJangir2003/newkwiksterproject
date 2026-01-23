@@ -44,6 +44,817 @@
         });
     </script>
     <style>
+        /* ==================== WHATSAPP WEB UI - COMPLETE CSS ==================== */
+
+/* Root Variables - Exact WhatsApp Colors */
+:root {
+    --wa-green: #00A884;
+    --wa-green-dark: #008069;
+    --wa-teal-dark: #111B21;
+    --wa-teal: #202C33;
+    --wa-teal-light: #2A3942;
+    --wa-incoming-msg: #202C33;
+    --wa-outgoing-msg: #005C4B;
+    --wa-panel-bg: #0B141A;
+    --wa-border: #2A3942;
+    --wa-text-primary: #E9EDEF;
+    --wa-text-secondary: #8696A0;
+    --wa-text-tertiary: #667781;
+    --wa-hover: #2A3942;
+    --wa-active: #2A3942;
+    --wa-online: #00A884;
+    --wa-unread: #25D366;
+    --wa-shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--wa-panel-bg) !important;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif !important;
+    color: var(--wa-text-primary) !important;
+    overflow: hidden;
+}
+
+/* ==================== PAGE STRUCTURE ==================== */
+.page-content {
+    background: var(--wa-panel-bg) !important;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Chat Wrapper */
+.chat-wrapper {
+    display: flex;
+    height: 100vh;
+    max-height: 100vh;
+    background: var(--wa-panel-bg);
+    overflow: hidden;
+}
+
+/* ==================== SIDEBAR ==================== */
+.chat-sidebar {
+    width: 420px;
+    background: var(--wa-teal-dark);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--wa-border);
+    height: 100vh;
+    position: relative;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+/* Sidebar Header */
+.chat-sidebar-header {
+    padding: 10px 16px;
+    background: var(--wa-teal);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    min-height: 60px;
+}
+
+.chat-sidebar-header .d-flex {
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.chat-sidebar-header .flex-grow-1 p {
+    color: var(--wa-text-primary) !important;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.chat-sidebar-header .btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--wa-text-secondary) !important;
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.chat-sidebar-header .btn:hover {
+    background: var(--wa-hover) !important;
+}
+
+.chat-sidebar-header .btn i {
+    font-size: 22px;
+}
+
+/* User Avatar */
+.chat-user-online {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.chat-user-online img {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chat-user-online::before {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: var(--wa-online);
+    border: 2px solid var(--wa-teal);
+    border-radius: 50%;
+}
+
+.chat-user-online.inactive::before {
+    background: #8696A0;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+}
+
+/* Search Box */
+.mb-3 {
+    margin-bottom: 8px !important;
+}
+
+.input-group-sm {
+    background: var(--wa-teal);
+    border-radius: 8px;
+    overflow: hidden;
+    border: none;
+}
+
+.input-group-sm .form-control {
+    background: var(--wa-teal-light) !important;
+    border: none !important;
+    color: var(--wa-text-primary) !important;
+    font-size: 14px;
+    padding: 8px 12px;
+    height: 36px;
+    border-radius: 8px;
+    outline: none;
+}
+
+.input-group-sm .form-control::placeholder {
+    color: var(--wa-text-tertiary) !important;
+}
+
+.input-group-sm .form-control:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    background: var(--wa-teal-light) !important;
+    border-color: var(--wa-green) !important;
+}
+
+.input-group-sm .input-group-text {
+    border: none !important;
+    background: transparent !important;
+    color: var(--wa-text-secondary) !important;
+    padding: 0 12px;
+}
+
+/* Sidebar Content */
+.chat-sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 10px;
+    background: var(--wa-teal-dark);
+}
+
+.chat-sidebar-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-sidebar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+}
+
+/* Meeting Button / New Chat */
+.meeting-button {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--wa-border);
+}
+
+.meeting-button .btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--wa-text-primary) !important;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.meeting-button .btn:hover {
+    background: var(--wa-hover) !important;
+    border-radius: 8px;
+}
+
+.meeting-button .btn i {
+    color: var(--wa-green) !important;
+    margin-right: 8px;
+}
+
+/* Dropdown */
+.dropdown a {
+    font-size: 13px;
+    color: var(--wa-text-secondary) !important;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 8px 16px;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    background: var(--wa-teal) !important;
+    border: none !important;
+    box-shadow: 0 2px 5px var(--wa-shadow);
+}
+
+.dropdown-item {
+    color: var(--wa-text-primary) !important;
+    padding: 10px 20px;
+}
+
+.dropdown-item:hover {
+    background: var(--wa-hover) !important;
+    color: var(--wa-text-primary) !important;
+}
+
+/* Chat List */
+.chat-list {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.chat-list .list-group-item {
+    background: transparent !important;
+    color: var(--wa-text-primary) !important;
+    border: none !important;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    position: relative;
+}
+
+.chat-list .list-group-item:hover {
+    background: var(--wa-hover) !important;
+}
+
+.chat-list .list-group-item.active {
+    background: var(--wa-active) !important;
+}
+
+.chat-list .list-group-item .d-flex {
+    align-items: flex-start;
+    width: 100%;
+    gap: 12px;
+}
+
+/* Chat Title & Message */
+.chat-title {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: var(--wa-text-primary) !important;
+    margin-bottom: 4px !important;
+    line-height: 1.2;
+}
+
+.chat-msg {
+    font-size: 14px !important;
+    color: var(--wa-text-secondary) !important;
+    margin: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 250px;
+    line-height: 1.2;
+}
+
+.chat-time {
+    font-size: 12px !important;
+    color: var(--wa-text-tertiary) !important;
+    white-space: nowrap;
+    margin-left: auto;
+    padding-left: 10px;
+}
+
+/* Unread Badge */
+.badge_seen {
+    background: var(--wa-unread) !important;
+    color: #000 !important;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 12px;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 12px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ==================== CHAT WINDOW ==================== */
+.chat-window {
+    flex: 1;
+    background: var(--wa-panel-bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* WhatsApp Background Pattern */
+.chat-window::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83zM32 0l12.142 12.142-1.414 1.414L30 .828 17.272 13.556 15.858 12.14 28 0h4zM.284 0l28 28-1.414 1.414L0 2.544V0h.284zM0 5.373l25.456 25.455-1.414 1.415L0 7.816V5.374zm0 5.656L22.627 33.86l-1.414 1.414L0 13.86v-2.83zm0 5.656l19.8 19.8-1.415 1.413L0 19.514v-2.83zm0 5.657l16.97 16.97-1.414 1.415L0 25.172v-2.83zM0 28l14.142 14.142-1.414 1.414L0 30.828V28zm0 5.657L11.314 44.97 9.9 46.386l-9.9-9.9v-2.828zm0 5.657L8.485 47.8 7.07 49.212 0 42.143v-2.83zm0 5.657l5.657 5.657-1.414 1.415L0 47.8v-2.83zm0 5.657l2.828 2.83-1.414 1.413L0 53.456v-2.83zM54.627 60L30 35.373 5.373 60H8.2L30 38.2 51.8 60h2.827zm-5.656 0L30 41.03 11.03 60h2.828L30 43.858 46.142 60h2.83zm-5.656 0L30 46.686 16.686 60h2.83L30 49.515 40.485 60h2.83zm-5.657 0L30 52.343 22.343 60h2.83L30 55.172 34.828 60h2.83zM32 60l-2-2-2 2h4zM59.716 0l-28 28 1.414 1.414L60 2.544V0h-.284zM60 5.373L34.544 30.828l1.414 1.415L60 7.816V5.374zm0 5.656L37.373 33.86l1.414 1.414L60 13.86v-2.83zm0 5.656l-19.8 19.8 1.415 1.413L60 19.514v-2.83zm0 5.657l-16.97 16.97 1.414 1.415L60 25.172v-2.83zM60 28L45.858 42.142l1.414 1.414L60 30.828V28zm0 5.657L48.686 44.97l1.415 1.415 9.9-9.9v-2.828zm0 5.657L51.515 47.8l1.414 1.413 7.07-7.07v-2.83zm0 5.657l-5.657 5.657 1.414 1.415L60 47.8v-2.83zm0 5.657l-2.828 2.83 1.414 1.413L60 53.456v-2.83z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Chat Content Container */
+.chat-content-container {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* Chat Header */
+.chat-header {
+    background: var(--wa-teal) !important;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--wa-border);
+    color: var(--wa-text-primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 60px;
+    position: relative;
+    z-index: 10;
+}
+
+.chat-toggle-btn {
+    display: none;
+    font-size: 24px;
+    color: var(--wa-text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.chat-toggle-btn:hover {
+    background: var(--wa-hover);
+}
+
+.chat-header .chat-user-online img {
+    width: 40px !important;
+    height: 40px !important;
+    cursor: pointer;
+}
+
+.chat-header p {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: var(--wa-text-primary) !important;
+    margin: 0 !important;
+}
+
+.list-inline {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-inline-item {
+    font-size: 13px !important;
+    color: var(--wa-text-secondary) !important;
+    text-decoration: none !important;
+}
+
+.chart-online {
+    color: var(--wa-online) !important;
+    font-size: 10px !important;
+    margin-right: 4px !important;
+}
+
+/* Chat Content */
+.chat-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 4%;
+    background: transparent;
+    max-height: none !important;
+    margin-top: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    position: relative;
+    z-index: 1;
+}
+
+.chat-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+}
+
+/* Chat Messages */
+.chat-content-leftside,
+.chat-content-rightside {
+    display: flex;
+    margin-bottom: 8px;
+    animation: fadeIn 0.3s ease;
+    clear: both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-content-rightside {
+    justify-content: flex-end;
+}
+
+/* Message Bubbles */
+.chat-left-msg,
+.chat-right-msg {
+    padding: 6px 7px 8px 9px !important;
+    border-radius: 7.5px !important;
+    max-width: 65% !important;
+    word-wrap: break-word;
+    position: relative;
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.3) !important;
+    font-size: 14.2px !important;
+    line-height: 19px !important;
+}
+
+.chat-left-msg {
+    background: var(--wa-incoming-msg) !important;
+    color: var(--wa-text-primary) !important;
+    border-radius: 0 7.5px 7.5px 7.5px !important;
+    float: left;
+    clear: both;
+}
+
+.chat-right-msg {
+    background: var(--wa-outgoing-msg) !important;
+    color: var(--wa-text-primary) !important;
+    border-radius: 7.5px 0 7.5px 7.5px !important;
+    float: right;
+    clear: both;
+}
+
+.chat-time {
+    font-size: 11px !important;
+    color: var(--wa-text-tertiary) !important;
+    margin-bottom: 2px !important;
+    font-weight: 400 !important;
+}
+
+/* Reply Box */
+.box-span {
+    display: block !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    padding: 6px 10px !important;
+    border-left: 3px solid var(--wa-green) !important;
+    border-radius: 4px !important;
+    margin-bottom: 6px !important;
+    font-size: 13px !important;
+    color: var(--wa-text-secondary) !important;
+    cursor: pointer;
+    max-width: 100% !important;
+    word-wrap: break-word;
+}
+
+.box-span:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    position: absolute;
+    right: -35px;
+    top: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+    text-align: right;
+    text-decoration: none;
+}
+
+.chat-left-msg:hover .dropdown-container,
+.chat-right-msg:hover .dropdown-container {
+    opacity: 1;
+}
+
+.dropdown-container .dropdown-toggle {
+    padding: 5px 8px;
+    background: var(--wa-teal) !important;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px var(--wa-shadow);
+    border: none !important;
+}
+
+.dropdown-container .dropdown-toggle::after {
+    display: none;
+}
+
+/* Chat Footer */
+.chat-footer {
+    background: var(--wa-teal) !important;
+    padding: 8px 16px;
+    border-top: 1px solid var(--wa-border);
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+}
+
+.chat-footer .input-group {
+    margin-bottom: 0 !important;
+}
+
+.chat-footer .form-control,
+.chat-footer textarea {
+    background: var(--wa-teal-light) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 15px !important;
+    resize: none !important;
+    min-height: 42px !important;
+    max-height: 120px !important;
+    line-height: 20px !important;
+    color: var(--wa-text-primary) !important;
+    overflow: hidden !important;
+}
+
+.chat-footer .form-control::placeholder,
+.chat-footer textarea::placeholder {
+    color: var(--wa-text-tertiary) !important;
+}
+
+.chat-footer .form-control:focus,
+.chat-footer textarea:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    border-color: var(--wa-green) !important;
+}
+
+.chat-footer .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 8px;
+    cursor: pointer;
+    color: var(--wa-text-secondary) !important;
+    font-size: 26px !important;
+}
+
+.chat-footer .input-group-text:hover {
+    color: var(--wa-text-primary) !important;
+}
+
+/* Emoji Picker */
+.emoji-picker {
+    display: none;
+    position: absolute;
+    bottom: 60px;
+    left: 16px;
+    background: var(--wa-teal) !important;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 10px var(--wa-shadow);
+    max-width: 360px;
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 1000;
+    border: 1px solid var(--wa-border);
+}
+
+.emoji-picker.active {
+    display: block;
+}
+
+.emoji {
+    font-size: 28px !important;
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px;
+    transition: transform 0.2s ease;
+}
+
+.emoji:hover {
+    transform: scale(1.2);
+    background: var(--wa-hover);
+}
+
+/* Chat Footer Menu */
+.chat-footer-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-footer-menu a,
+.chat-footer-menu i {
+    color: var(--wa-text-secondary) !important;
+    font-size: 26px !important;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.chat-footer-menu a:hover,
+.chat-footer-menu i:hover {
+    background: var(--wa-hover) !important;
+    color: var(--wa-text-primary) !important;
+}
+
+.bx-send {
+    color: var(--wa-green) !important;
+    font-size: 30px !important;
+}
+
+/* Reply Input Box */
+[class^="input-reply-"] {
+    background: var(--wa-teal-light) !important;
+    border-left: 4px solid var(--wa-green) !important;
+    padding: 10px 12px !important;
+    margin-bottom: 8px !important;
+}
+
+[class^="input-reply-"] p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: var(--wa-text-secondary) !important;
+}
+
+/* Overlay */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Highlighted Messages */
+.highlighted,
+.highlight {
+    background-color: rgba(0, 168, 132, 0.2) !important;
+    animation: highlight 1s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(0, 168, 132, 0.4); }
+    100% { background-color: rgba(0, 168, 132, 0.2); }
+}
+
+/* Modal Improvements */
+.modal-content {
+    background: var(--wa-teal) !important;
+    color: var(--wa-text-primary) !important;
+    border: none !important;
+}
+
+.modal-header {
+    background: var(--wa-teal-light) !important;
+    border-bottom: 1px solid var(--wa-border) !important;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+/* Form Controls in Modals */
+.modal .form-control {
+    background: var(--wa-teal-light) !important;
+    border-color: var(--wa-border) !important;
+    color: var(--wa-text-primary) !important;
+}
+
+.modal .form-control:focus {
+    background: var(--wa-teal-light) !important;
+    border-color: var(--wa-green) !important;
+    color: var(--wa-text-primary) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--wa-green) !important;
+    border-color: var(--wa-green) !important;
+}
+
+.btn-primary:hover {
+    background: var(--wa-green-dark) !important;
+    border-color: var(--wa-green-dark) !important;
+}
+
+/* Checkboxes */
+input[type="checkbox"] {
+    accent-color: var(--wa-green);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+    .chat-sidebar {
+        width: 360px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-sidebar {
+        position: absolute;
+        width: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+
+    .chat-sidebar.active {
+        transform: translateX(0);
+    }
+
+    .chat-toggle-btn {
+        display: block !important;
+    }
+
+    .chat-content {
+        padding: 20px 4%;
+    }
+
+    .chat-left-msg,
+    .chat-right-msg {
+        max-width: 85% !important;
+    }
+}
+
         .chat-content {
             max-height: 440px;
             /* Adjust the height as needed */
@@ -250,7 +1061,7 @@
                                 alt="" />
                         </div>
                         <div class="flex-grow-1 ms-2">
-    <p class="mb-0">{{ $ID->name ?? 'N/A' }}</p>
+    <p class="mb-0">{{ $ID ? $ID->name : 'N/A' }}</p>
 </div>
 
                         <button type="button" onclick="window.location.href='{{ route('admin_index') }}'"
@@ -275,10 +1086,9 @@
                                             data-bs-toggle="dropdown" data-display="static"><i
                                                 class='bx bxs-edit me-2'></i>New Chat<i
                                                 class='bx bxs-chevron-down ms-2'></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right"> <a class="dropdown-item"
-                                                href="#" data-bs-toggle="modal" data-bs-target="#create_group">New
-                                                Group Chat</a>
-                                            <a class="dropdown-item" href="#">New Chat</a>
+                                        <div class="dropdown-menu dropdown-menu-right"> 
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#create_group">New Group Chat</a>
+                                            <a class="dropdown-item" href="#" onclick="startNewChat()">New Chat</a>
                                         </div>
                                     </div>
                                 </div>
@@ -384,17 +1194,19 @@
                                                             $group->id,
                                                         )->get();
                                                         $unreadCount = 0;
-                                                        foreach ($check_seen as $item) {
-                                                            if ($item) {
-                                                                // Decode 'seen' JSON array if it exists
-                                                                if ($item->seen == 0) {
-                                                                    $unreadCount++;
-                                                                } else {
-                                                                    $seen = json_decode($item->seen ?? '[]', true);
-
-                                                                    // Check if session agent ID is not in 'seen'
-                                                                    if (!in_array($ID->id, $seen)) {
+                                                        if (!empty($ID)) {
+                                                            foreach ($check_seen as $item) {
+                                                                if ($item) {
+                                                                    // Decode 'seen' JSON array if it exists
+                                                                    if ($item->seen == 0) {
                                                                         $unreadCount++;
+                                                                    } else {
+                                                                        $seen = json_decode($item->seen ?? '[]', true);
+
+                                                                        // Check if session agent ID is not in 'seen'
+                                                                        if (!in_array($ID->id, $seen)) {
+                                                                            $unreadCount++;
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -549,6 +1361,8 @@
                                                             $timeDiff .= $diffMinutes . 'm';
                                                         }
 
+                                                    $unreaduserCount = 0;
+                                                    if (!empty($ID)) {
                                                         $unreaduserCount = App\Models\ChMessage::where(
                                                             'from_id',
                                                             $user->id,
@@ -556,6 +1370,7 @@
                                                             ->where('to_id', $ID->id)
                                                             ->where('seen', 0)
                                                             ->count();
+                                                    }
                                                     @endphp
 
                                                     <div class="chat-time">{{ $timeDiff }}</div>
@@ -1825,7 +2640,7 @@
                 var reply_id = data.message.reply_id;
                 var file_image = "{{ asset('') }}" + attachment;
                 var isImage = false;
-                var isOwnMessage = (fromId == '{{ $ID->id }}');
+                            var isOwnMessage = (fromId == '{{ $ID ? $ID->id : 0 }}');
                 // Check if there's an attachment and determine if it's an image
                 if (attachment && attachment.trim() !== '') {
                     var fileExtension = attachment.split('.').pop().toLowerCase();
@@ -2307,6 +3122,49 @@
 
                 reader.readAsDataURL(file);
             }
+        }
+    </script>
+
+    <script>
+        function startNewChat() {
+            // Show a simple prompt to select user for new chat
+            var userList = '';
+            @if (!empty($users) && count($users) > 0)
+                @foreach ($users as $user)
+                    userList += '<option value="{{ $user->id }}">{{ $user->name }}</option>';
+                @endforeach
+            @else
+                userList += '<option value="">No users available</option>';
+            @endif
+            
+            console.log('Users available:', '{{ count($users ?? []) }}');
+            
+            var selectHtml = '<select id="newChatUser" class="form-control"><option value="">Select User</option>' + userList + '</select>';
+            
+            // Create a simple modal-like dialog
+            var dialog = $('<div class="modal fade" id="newChatModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Start New Chat</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">' + selectHtml + '</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-primary" onclick="createNewChat()">Start Chat</button></div></div></div></div>');
+            
+            $('body').append(dialog);
+            $('#newChatModal').modal('show');
+            
+            // Remove modal after hiding
+            $('#newChatModal').on('hidden.bs.modal', function() {
+                $(this).remove();
+            });
+        }
+        
+        function createNewChat() {
+            var userId = $('#newChatUser').val();
+            if (!userId) {
+                alert('Please select a user');
+                return;
+            }
+            
+            // Close modal
+            $('#newChatModal').modal('hide');
+            
+            // Simulate clicking on the user to start chat
+            $('.user-item[data-user-id="' + userId + '"]').click();
         }
     </script>
 

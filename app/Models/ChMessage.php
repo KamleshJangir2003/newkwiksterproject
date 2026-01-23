@@ -15,6 +15,37 @@ class ChMessage extends Model
         'body',
         'attachment',
         'seen',
+        'reply_id',
+        'forward',
+        'deleted',
     ];
+
+    protected $casts = [
+        'seen' => 'array',
+        'forward' => 'boolean',
+        'deleted' => 'boolean',
+    ];
+
     use HasFactory;
+
+    // Relationships
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'from_id');
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'to_id');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Groups_chat::class, 'group_id');
+    }
+
+    public function replyTo()
+    {
+        return $this->belongsTo(ChMessage::class, 'reply_id');
+    }
 }
