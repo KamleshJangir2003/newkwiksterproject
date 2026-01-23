@@ -1886,6 +1886,9 @@
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Close dropdown immediately
+                $('.lead-status-menu').removeClass('show');
+                
                 var leadId = $(this).data('lead-id');
                 var status = $(this).data('status');
                 var managerfwd = $('#manager_id').val();
