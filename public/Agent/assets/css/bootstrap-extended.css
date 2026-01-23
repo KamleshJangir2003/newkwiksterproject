@@ -119,19 +119,19 @@ a {
 
 .btn-success {
 	color: #fff;
-	background-color: #15ca20;
-	border-color: #15ca20
+	background-color: #FFA500;
+	border-color: #FFA500
 }
 .btn-success:hover {
 	color: #fff;
-	background-color: #0eb018;
-	border-color: #0eb018
+	background-color: #FFA500;
+	border-color: #FFA500
 }
 .btn-check:focus+.btn-success, .btn-success:focus {
 	color: #fff;
-	background-color: #0eb018;
-	border-color: #0eb018;
-	box-shadow: 0 0 0 .25rem rgb(23 160 14 / 52%)
+	background-color: #FFA500;
+	border-color: #FFA500;
+	box-shadow: 0 0 0 .25rem #FFA500
 }
 .btn-check:active+.btn-success, .btn-check:checked+.btn-success, .btn-success.active, .btn-success:active, .show>.btn-success.dropdown-toggle {
 	color: #fff;

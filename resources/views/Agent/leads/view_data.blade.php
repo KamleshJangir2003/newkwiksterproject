@@ -2303,39 +2303,30 @@
             const startNumber = parseInt(document.getElementById('startNumber').value);
             const endNumber = parseInt(document.getElementById('endNumber').value);
 
-            // Validate the input range
-            if (isNaN(startNumber) || isNaN(endNumber) || startNumber <= 0 || endNumber <= 0 || startNumber >
-                endNumber) {
+            if (isNaN(startNumber) || isNaN(endNumber) || startNumber <= 0 || endNumber <= 0 || startNumber > endNumber) {
                 alert('Please enter valid start and end numbers.');
                 return;
             }
 
-            // Collect emails from table rows within the range
-            const tableRows = Array.from(document.querySelectorAll('#example tbody tr'));
+            const leadCards = Array.from(document.querySelectorAll('.lead-card'));
             const emailsToCopy = [];
 
-            tableRows.forEach((row, index) => {
-                const rowNumber = index + 1; // Table rows are 1-based
-                if (rowNumber >= startNumber && rowNumber <= endNumber) {
-                    const emailCell = row.querySelector('[data-email]');
-                    if (emailCell) {
-                        const email = emailCell.getAttribute(
-                            'data-email'); // Extract email from data-email attribute
-                        if (email) {
-                            emailsToCopy.push(email.trim());
-                        }
+            leadCards.forEach((card, index) => {
+                const cardNumber = index + 1;
+                if (cardNumber >= startNumber && cardNumber <= endNumber) {
+                    const email = card.getAttribute('data-email');
+                    if (email && email.trim()) {
+                        emailsToCopy.push(email.trim());
                     }
                 }
             });
 
-            // Check if any emails were found
             if (emailsToCopy.length === 0) {
                 alert('No emails found in the specified range.');
                 return;
             }
 
-            // Copy emails to clipboard
-            const emailsText = emailsToCopy.join('\n'); // Separate emails by newlines for Excel compatibility
+            const emailsText = emailsToCopy.join('\n');
             navigator.clipboard.writeText(emailsText)
                 .then(() => {
                     alert(`Copied ${emailsToCopy.length} emails successfully!`);
