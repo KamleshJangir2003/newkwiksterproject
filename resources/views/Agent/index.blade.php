@@ -480,22 +480,47 @@
 
 
 <div class="dash-card live">
-  <div class="icon"><i class="fa-solid fa-headset"></i></div>
-  <h6>Live Transfer Success</h6>
- <h4>{{ $liveTransferSuccess }}</h4>
-  
-  
+    <div class="icon">
+        <i class="fa-solid fa-headset"></i>
+    </div>
+
+    <h6>Live Transfer</h6>
+
+    <div class="d-flex justify-content-center mt-3">
+    <div class="text-center me-5">
+        <small class="text-success fw-bold">Success</small>
+        <h4>{{ $liveTransferSuccess }}</h4>
+    </div>
+
+    <div class="text-center">
+        <small class="text-danger fw-bold">Failed</small>
+        <h4>{{ $liveTransferPending }}</h4>
+    </div>
 </div>
+
+</div>
+
 
 <div class="dash-card loss">
-  <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
-  <h6>Loss Runs Required</h6>
-<h3>{{ $lossRunsRequired }}</h3>
+    <div class="icon">
+        <i class="fa-solid fa-folder-open"></i>
+    </div>
 
-<h6> Not Required</h6>
-<h3>{{ $lossRunsNotRequired }}</h3>
+    <h6>Loss Runs Required</h6>
 
+    <div class="d-flex justify-content-center gap-5 mt-2">
+        <div class="text-center">
+            <small class="fw-bold">Required</small>
+            <h3 class="mb-0">{{ $lossRunsRequired }}</h3>
+        </div>
+
+        <div class="text-center">
+            <small class="fw-bold">Not Required</small>
+            <h3 class="mb-0">{{ $lossRunsNotRequired }}</h3>
+        </div>
+    </div>
 </div>
+
 
 
 </div>

@@ -53,11 +53,14 @@ $liveTransferSuccess = DB::table('excel_data')
 
 $totalLiveTransfer = $liveTransferPending + $liveTransferSuccess;
 
-// Live transfer count for sidebar notification (only failed ones - NO)
+    // Live transfer count for sidebar notification (only failed ones - NO)
 $liveTransferFailedCount = DB::table('excel_data')
     ->where('click_id', $agentId)
     ->where('live_transfer', 'no')
     ->count();
+
+// Live transfer success count for sidebar notification
+$liveTransferSuccessCount = $liveTransferSuccess;
 
 // Loss runs count for sidebar notification  
 $lossRunsCount = $lossRunsRequired;
@@ -217,6 +220,7 @@ foreach ($teamAgents as $id => $name) {
     'liveTransferPending',
     'liveTransferSuccess',
     'liveTransferFailedCount',
+    'liveTransferSuccessCount',
     // 👉 TEAM CHART VARIABLES
     'teamLabels',
     'teamTotalForms',
