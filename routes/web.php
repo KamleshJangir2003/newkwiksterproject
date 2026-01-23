@@ -489,12 +489,10 @@ Route::get('/admin/zoom', function () {
 })->name('admin_zoom');
 Route::get('/admin/live-transfer', [LiveTransferController::class, 'index'])
     ->name('live_transfer');
-Route::get('/agent/live-transfer', function () {
-
-    $transfers = [];   // खाली array (अभी dummy data)
-
-    return view('Agent.live_transfer.index', compact('transfers'));
-})->name('agent.live.transfer.index');
+Route::post('/admin/update-live-transfer', [LiveTransferController::class, 'updateLiveTransfer'])
+    ->name('update_live_transfer');
+Route::get('/agent/live-transfer', [dashboard_agentcontroller::class, 'agent_live_transfer'])
+    ->name('agent.live.transfer.index');
 
 
 Route::get('agent/leads', [dashboard_agentcontroller::class, 'agent_leads'])

@@ -40,6 +40,28 @@ $lossRunsNotRequired = DB::table('excel_data')
     ->where('loss_runs', 'no')
     ->count();
 
+// ================= LIVE TRANSFER COUNT =================
+$liveTransferPending = DB::table('excel_data')
+    ->where('click_id', $agentId)
+    ->where('live_transfer', 'no')
+    ->count();
+
+$liveTransferSuccess = DB::table('excel_data')
+    ->where('click_id', $agentId)
+    ->where('live_transfer', 'yes')
+    ->count();
+
+$totalLiveTransfer = $liveTransferPending + $liveTransferSuccess;
+
+// Live transfer count for sidebar notification
+$liveTransferCount = DB::table('excel_data')
+    ->where('click_id', $agentId)
+    ->whereIn('live_transfer', ['yes', 'no'])
+    ->count();
+
+// Loss runs count for sidebar notification  
+$lossRunsCount = $lossRunsRequired;
+
 
     $startOfMonth = $currentDate->copy()->startOfMonth()->format('Y-m-d');
     $endOfMonth = $currentDate->copy()->endOfMonth()->format('Y-m-d');
@@ -190,6 +212,11 @@ foreach ($teamAgents as $id => $name) {
     'goalPercent',
     'lossRunsRequired',
     'lossRunsNotRequired',
+    'lossRunsCount',
+    'totalLiveTransfer',
+    'liveTransferPending',
+    'liveTransferSuccess',
+    'liveTransferCount',
     // 👉 TEAM CHART VARIABLES
     'teamLabels',
     'teamTotalForms',
@@ -348,6 +375,19 @@ public function agent_leads(Request $request)
         ->get();
 
     return view('Agent.leads.lossruns', compact('datas', 'lossRunsCount'));
+}
+public function agent_live_transfer(Request $request)
+{
+    $agentId = session('agent_id');
+
+    // Get live transfer leads for this agent
+    $transfers = DB::table('excel_data')
+        ->where('click_id', $agentId)
+        ->whereIn('live_transfer', ['yes', 'no'])
+        ->orderBy('id', 'desc')
+        ->get();
+
+    return view('Agent.live_transfer.index', compact('transfers'));
 }
 
 

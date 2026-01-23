@@ -1481,6 +1481,7 @@ $this->storeComment($id, $comment);
 }
  // 🔥 FINAL PLACE — END OF FUNCTION
     $exceldata->loss_runs = $req->loss_runs;
+    $exceldata->live_transfer = $req->live_transfer;
     $exceldata->save();
     return redirect()->back();
 
