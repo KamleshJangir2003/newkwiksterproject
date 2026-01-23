@@ -81,11 +81,11 @@
 
 <li>
    <a href="{{ route('agent.live.transfer.index') }}">
-      <i class='bx bx-radio-circle'></i> Live Transfer Form
+      <i class='bx bx-radio-circle'></i> Live Transfer Failed Forms
       
-      @if(isset($liveTransferCount) && $liveTransferCount > 0)
-          <span class="badge bg-success ms-auto">
-              {{ $liveTransferCount }}
+      @if(isset($liveTransferFailedCount) && $liveTransferFailedCount > 0)
+          <span class="badge bg-danger ms-auto">
+              {{ $liveTransferFailedCount }}
           </span>
       @endif
    </a>

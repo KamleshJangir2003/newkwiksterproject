@@ -481,10 +481,10 @@
 
 <div class="dash-card live">
   <div class="icon"><i class="fa-solid fa-headset"></i></div>
-  <h6>Live Transfer Pending</h6>
-  <h4>{{ $liveTransferPending }}</h4>
-  <h6>Success</h6>
-  <h4>{{ $liveTransferSuccess }}</h4>
+  <h6>Live Transfer Success</h6>
+ <h4>{{ $liveTransferSuccess }}</h4>
+  
+  
 </div>
 
 <div class="dash-card loss">

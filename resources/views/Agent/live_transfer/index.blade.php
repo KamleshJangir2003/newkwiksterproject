@@ -31,11 +31,7 @@
                             <td>{{ $transfer->phone ?? 'N/A' }}</td>
                             <td>{{ $transfer->email ?? 'N/A' }}</td>
                             <td>
-                                @if($transfer->live_transfer == 'yes')
-                                    <span class="badge bg-success">Success</span>
-                                @else
-                                    <span class="badge bg-warning">Pending</span>
-                                @endif
+                                <span class="badge bg-danger">Failed</span>
                             </td>
                             <td>{{ $transfer->date ?? 'N/A' }}</td>
                             <td>
