@@ -240,6 +240,12 @@ Route::get('/forward-change-status/{team}', [Leadcontroller::class, 'changeStatu
         Route::get('/delete_load_leads/{id}', [loadformscontroller::class, 'delete_load_leads'])->name('delete_load_leads');
         Route::post('/store_load_lead', [loadformscontroller::class, 'store_load_lead'])->name('store_load_lead');
 
+        //---------------------------------------live transfer--------------------------------------------------
+        Route::get('/live-transfer', [dashboard_agentcontroller::class, 'agent_live_transfer'])
+            ->name('agent.live.transfer.index');
+        Route::post('/resubmit-transfer', [dashboard_agentcontroller::class, 'resubmitTransfer'])
+            ->name('agent.resubmit.transfer');
+
 
 
 
@@ -491,8 +497,6 @@ Route::get('/admin/live-transfer', [LiveTransferController::class, 'index'])
     ->name('live_transfer');
 Route::post('/admin/update-live-transfer', [LiveTransferController::class, 'updateLiveTransfer'])
     ->name('update_live_transfer');
-Route::get('/agent/live-transfer', [dashboard_agentcontroller::class, 'agent_live_transfer'])
-    ->name('agent.live.transfer.index');
 
 
 Route::get('agent/leads', [dashboard_agentcontroller::class, 'agent_leads'])

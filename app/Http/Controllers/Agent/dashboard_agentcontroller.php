@@ -390,6 +390,31 @@ public function agent_live_transfer(Request $request)
     return view('Agent.live_transfer.index', compact('transfers'));
 }
 
+public function resubmitTransfer(Request $request)
+{
+    $leadId = $request->lead_id;
+    $agentId = session('agent_id');
+    
+    // Simple update without validation
+    $updated = \DB::table('excel_data')
+        ->where('id', $leadId)
+        ->where('click_id', $agentId)
+        ->where('live_transfer', 'no')
+        ->update(['live_transfer' => null]);
+    
+    if ($updated) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Form re-submitted successfully'
+        ]);
+    }
+    
+    return response()->json([
+        'success' => false,
+        'message' => 'Lead not found or already processed'
+    ]);
+}
+
 
 
 }
