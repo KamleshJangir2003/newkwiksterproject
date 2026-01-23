@@ -1882,11 +1882,44 @@
 
     <script>
         $(document).ready(function() {
-            $('.update-status').on('click', function() {
+            $('.update-status').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
                 var leadId = $(this).data('lead-id');
                 var status = $(this).data('status');
                 var managerfwd = $('#manager_id').val();
-                var $td = $(this).closest('td');
+                var $clickedItem = $(this);
+                var $button = $clickedItem.closest('.lead-status-dropdown').find('.lead-status-btn');
+
+                // Immediate UI update
+                $button.text(status);
+                
+                var color = '#119711';
+                var textColor = '#fff';
+                
+                switch (status) {
+                    case 'Voice Mail':
+                        color = '#742dc1';
+                        break;
+                    case 'Not Intrested':
+                    case 'Wrong Number':
+                    case 'DND':
+                        color = '#d91c1c';
+                        break;
+                    case 'Not Connected':
+                        color = '#e6ca00';
+                        textColor = '#000';
+                        break;
+                    case 'WON':
+                        color = '#00ff72';
+                        break;
+                    case 'Insured Leads':
+                        color = '#17a2b8';
+                        break;
+                }
+                
+                $button.attr('style', `background:${color};color:${textColor};padding:3px 15px;border:none;border-radius:20px;font-size:13px;`);
 
                 $.ajax({
                     url: '{{ route('agent_status_update') }}',
@@ -1898,33 +1931,20 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        $td.find('.btn')
-                            .text(response.status)
-                            .css('background-color', getStatusColor(response.status));
-
-                        function getStatusColor(status) {
-                            switch (status) {
-                                case 'Voice Mail':
-                                    return '#742dc1'; // Light green
-
-                                case 'Not Intrested':
-                                    return '#d91c1c'; // Black
-
-                                case 'Wrong Number':
-                                    return '#d91c1c';
-
-                                case 'DND':
-                                    return '#d91c1c'; // Red
-
-                                case 'Not Connected':
-                                    return '#e6ca00';
-
-                                case 'WON':
-                                    return '#00ff72';
-
-                                default:
-                                    return '#000'; // Default background color
-                            }
+                        // Status to route mapping
+                        const statusRoutes = {
+                            'Voice Mail': 'VoiceMail',
+                            'Not Intrested': 'NotInterested', 
+                            'Not Connected': 'NotConnected',
+                            'Wrong Number': 'WrongNumber',
+                            'WON': 'WON',
+                            'DND': 'DND',
+                            'Insured Leads': 'InsuredLeads'
+                        };
+                        
+                        if (statusRoutes[status]) {
+                            const redirectUrl = '{{ url("/agent") }}/' + statusRoutes[status] + '/leads';
+                            window.location.href = redirectUrl;
                         }
                     },
                     error: function(xhr, status, error) {
