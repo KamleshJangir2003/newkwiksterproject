@@ -208,7 +208,7 @@
           
         <div class="lead-name-row">
     <p class="mb-1 lead-name">
-        <strong>Name -</strong> {{ $data->company_rep1 }}
+        <strong>Company -</strong> {{ $data->company_name }}
     </p>
 
     <div class="btn-group lead-status-dropdown">
@@ -256,7 +256,7 @@
    data-email="{{ $data->email }}"
    data-mail_status="{{ $data->mail_status }}"
 >
-    <strong>Company -</strong> {{ $data->company_name }}
+    <strong>Name -</strong> {{ $data->company_rep1 }}
 </p>
 
 <p class="mb-1"><strong>Date -</strong> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-m-y') }}</p>

@@ -116,16 +116,16 @@
                 <div class="col-md-2" style="margin-left: 50px">
                     <div class="single-input" style="display: flex; align-items: center;">
                         <!-- Red indicator for Duplicate -->
-                        <div id="duplicateIndicator" style="width: 20px; height: 20px; background-color: red; border-radius: 50%;  margin-right: 10px;"></div>
-                        <span>Duplicate Entry</span>
+                        <!-- <div id="duplicateIndicator" style="width: 20px; height: 20px; background-color: red; border-radius: 50%;  margin-right: 10px;"></div> -->
+                        <!-- <span>Duplicate Entry</span> -->
                     </div>
                 </div>
                 
                 <div class="col-md-3">
                     <div class="single-input" style="display: flex; align-items: center;">
                         <!-- Orange indicator for Error -->
-                        <div id="errorIndicator" style="width: 20px; height: 20px; background-color: orange; border-radius: 50%; margin-right: 10px;"></div>
-                        <span>Error Detected</span>
+                        <!-- <div id="errorIndicator" style="width: 20px; height: 20px; background-color: orange; border-radius: 50%; margin-right: 10px;"></div>
+                        <span>Error Detected</span> -->
                     </div>
                 </div>
             </div>
@@ -255,17 +255,27 @@
 
             <!-- STATUS DROPDOWN (SAME WORKING) -->
             <div class="btn-group stop-click">
-                <button class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                    {{ $data->form_status }}
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="NEW">NEW</a>
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="Voice Mail">Voice Mail</a>
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="Not Connected">Not Connected</a>
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="Wrong Number">Wrong Number</a>
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="WON">WON</a>
-                    <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="DND">DND</a>
-                </div>
+               <button class="btn btn-sm dropdown-toggle status-btn"
+        data-bs-toggle="dropdown">
+    {{ $data->form_status }}
+</button>
+<style>
+    .status-btn{
+    background-color: #198754 !important; /* Bootstrap green */
+    color: #fff !important;
+    border: none;
+}
+
+</style>
+               <div class="dropdown-menu disable-click">
+    <a class="dropdown-item">NEW</a>
+    <a class="dropdown-item">Voice Mail</a>
+    <a class="dropdown-item">Not Connected</a>
+    <a class="dropdown-item">Wrong Number</a>
+    <a class="dropdown-item">WON</a>
+    <a class="dropdown-item">DND</a>
+</div>
+
             </div>
 
             <!-- ACTION ICONS (SAME WORKING) -->
@@ -278,9 +288,9 @@
                 </a>
                 @endif
 
-                <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
+                <!-- <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
                     <i class="lni lni-bubble"></i>
-                </a>
+                </a> -->
             </div>
 
         </div>
