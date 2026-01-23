@@ -196,21 +196,26 @@ public function viewDataTimezone(Request $req, $timezone, $id)
         'WV' => 'Eastern Time', 'DC' => 'Eastern Time',
     ];
 
-    // Fetch all data for given lead IDs
-    $datasexcel = ExcelData::whereIn('id', $lead_ids_array)->get();
-
-    // Filter data by timezone (invalid/empty states → Pacific Time)
-    $datas = $datasexcel->filter(function ($data) use ($timezone, $stateTimezones) {
-        $state = strtoupper(trim($data->business_state ?? ''));
-
-        // If empty or invalid state → treat as Pacific Time
-        if (!isset($stateTimezones[$state])) {
-            return $timezone === 'Pacific Time';
+    // Build query for timezone filtering
+    $query = ExcelData::whereIn('id', $lead_ids_array);
+    
+    // Apply timezone filter
+    $query->where(function($q) use ($timezone, $stateTimezones) {
+        foreach ($stateTimezones as $state => $tz) {
+            if ($tz === $timezone) {
+                $q->orWhere('business_state', $state);
+            }
         }
-
-        // Normal check for matching timezone
-        return $stateTimezones[$state] === $timezone;
+        // Handle empty/invalid states as Pacific Time
+        if ($timezone === 'Pacific Time') {
+            $q->orWhereNull('business_state')
+              ->orWhere('business_state', '')
+              ->orWhereNotIn('business_state', array_keys($stateTimezones));
+        }
     });
+
+    // Add pagination - 25 leads per page
+    $datas = $query->paginate(25);
 
     // Define which agent IDs should use MightyCall view
     $mightyCallUserIds = [1]; // Replace with your specific agent IDs

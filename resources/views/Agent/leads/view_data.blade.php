@@ -452,6 +452,11 @@
 @endif
 </div>
 
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center mt-4">
+    {{ $datas->appends(request()->query())->links() }}
+</div>
+
 <style>
 .black-row { background:#1a1a1a !important; color:white !important; }
 .green-row { background:#e8f8e8 !important; border-left:5px solid #119711 !important; }
