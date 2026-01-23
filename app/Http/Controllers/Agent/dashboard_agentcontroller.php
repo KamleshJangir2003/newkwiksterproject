@@ -393,16 +393,43 @@ public function agent_live_transfer(Request $request)
 public function resubmitTransfer(Request $request)
 {
     $leadId = $request->lead_id;
+    $reason = $request->reason;
     $agentId = session('agent_id');
+    $agentName = session('agent_name') ?? 'Agent';
     
-    // Simple update without validation
-    $updated = \DB::table('excel_data')
+    // Get current lead
+    $lead = \DB::table('excel_data')
         ->where('id', $leadId)
         ->where('click_id', $agentId)
         ->where('live_transfer', 'no')
-        ->update(['live_transfer' => null]);
+        ->first();
     
-    if ($updated) {
+    if ($lead) {
+        // Parse existing comments
+        $comments = [];
+        if ($lead->comment) {
+            try {
+                $comments = json_decode($lead->comment, true) ?: [];
+            } catch (Exception $e) {
+                $comments = [];
+            }
+        }
+        
+        // Add agent's resubmit reason
+        $comments[] = [
+            'agent_name' => $agentName,
+            'comment' => 'Resubmit Reason: ' . $reason,
+            'created_at' => now()->format('Y-m-d H:i:s')
+        ];
+        
+        // Update lead
+        \DB::table('excel_data')
+            ->where('id', $leadId)
+            ->update([
+                'live_transfer' => null,
+                'comment' => json_encode($comments)
+            ]);
+        
         return response()->json([
             'success' => true,
             'message' => 'Form re-submitted successfully'
