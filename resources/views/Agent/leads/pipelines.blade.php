@@ -308,9 +308,9 @@
         </a>
         @endif
 
-        <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
+        <!-- <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
           <i class="lni lni-bubble"></i>
-        </a>
+        </a> -->
       </div>
 
     </div>
@@ -319,6 +319,11 @@
 
 @endforeach
 @endif
+</div>
+
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center mt-4">
+    {{ $datas->links() }}
 </div>
 
                             <tfoot>

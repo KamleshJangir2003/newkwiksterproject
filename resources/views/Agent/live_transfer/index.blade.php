@@ -122,6 +122,14 @@
         Re-submit
     </button>
 </div>
+<style>
+    .btn-success{
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #fff !important;
+}
+
+</style>
 
 
     </div>
@@ -141,9 +149,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="resubmitModalLabel">Re-submit Live Transfer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -152,7 +160,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
                 <button type="button" class="btn btn-success" onclick="submitResubmit()">Re-submit</button>
             </div>
         </div>
@@ -273,7 +282,8 @@ document.getElementById('searchInput').addEventListener('keyup', function () {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
             </div>
         </div>
     </div>

@@ -786,7 +786,7 @@ public function agent_intersted_data($n = null){
     $datas = ExcelData::where('click_id', session('agent_id'))
         ->where('form_status','Intrested')
         ->latest('updated_at')
-        ->get();
+        ->paginate(25);
 
     return view('Agent/leads/intersted_data', compact('datas'));
 }
@@ -806,7 +806,7 @@ public function agent_pipeline_data($n=''){
         }
     }
 
-    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Pipeline')->latest('updated_at')->get();
+    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Pipeline')->latest('updated_at')->paginate(25);
 
     return view('Agent/leads/pipelines',compact('datas'));
 }

@@ -300,6 +300,11 @@
 @endforeach
 </div>
 
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center mt-4">
+    {{ $datas->links() }}
+</div>
+
                             <tfoot>
                                 <!-- <tr>
                                     <th scope="col">#</th>

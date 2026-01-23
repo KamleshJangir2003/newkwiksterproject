@@ -376,7 +376,7 @@ public function agent_leads(Request $request)
         ->where('click_id', $agentId)
         ->where('loss_runs', 'yes')
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(25);
 
     return view('Agent.leads.lossruns', compact('datas', 'lossRunsCount'));
 }
@@ -389,7 +389,7 @@ public function agent_live_transfer(Request $request)
         ->where('click_id', $agentId)
         ->where('live_transfer', 'no')
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(25);
 
     return view('Agent.live_transfer.index', compact('transfers'));
 }
