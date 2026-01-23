@@ -276,9 +276,9 @@
                 </a>
                 @endif
 
-                <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
+                <!-- <a href="#" class="btn-message" data-lead-id="{{ $data->id }}">
                     <i class="lni lni-bubble"></i>
-                </a>
+                </a> -->
             </div>
 
         </div>
