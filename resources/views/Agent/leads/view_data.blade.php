@@ -1,10 +1,17 @@
 @extends('Agent.common.app')
 @section('main')
 <style>
-   .lead-status-dropdown .lead-status-menu {
-    position: fixed !important;
+   .lead-card {
+    position: relative !important;
+    overflow: visible !important;
+}
 
-    /* 🔥 SIZE FIX */
+.lead-status-dropdown .lead-status-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 999999 !important;
+    
     width: max-content;
     min-width: 180px;
     max-width: 220px;
@@ -17,7 +24,7 @@
     overflow-y: auto;
 
     display: none;
-    z-index: 999999;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .lead-status-dropdown .lead-status-menu.show {
@@ -385,11 +392,11 @@
 .lead-status-dropdown .lead-status-menu {
     display: none;
     position: absolute;
-    /* top: 100%; */
+    top: 100%;
 
-    /* 🔥 RIGHT se hata ke LEFT align */
-    right: 0;
-    left: auto;
+    /* 🔥 LEFT align instead of RIGHT */
+    left: 0;
+    right: auto;
 
     min-width: 240px;
     background: #8a9abd;
@@ -410,12 +417,7 @@
     padding: 8px 15px;
     font-size: 14px;
 }
-.lead-status-dropdown .lead-status-menu {
-    position: fixed !important;
-    max-height: 280px;
-    overflow-y: auto;
-    z-index: 999999;
-}
+
 
 
 
@@ -454,6 +456,19 @@
 .black-row { background:#1a1a1a !important; color:white !important; }
 .green-row { background:#e8f8e8 !important; border-left:5px solid #119711 !important; }
 .lead-card:hover { transform:translateY(-3px); transition:0.2s; }
+
+/* Lead Card Container - Set to relative positioning */
+.lead-card {
+    position: relative !important;
+}
+
+/* Dropdown Menu - Absolute positioning with high z-index */
+.lead-status-dropdown .lead-status-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+}
 </style>
 
                             <!-- <tfoot>
@@ -2456,40 +2471,7 @@ window.onclick = function(event) {
         });
     });
 </script>
-<script>
-$(document).on('click', '.lead-status-btn', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
 
-    const $menu = $(this).next('.lead-status-menu');
-    $('.lead-status-menu').removeClass('show');
-
-    const rect = this.getBoundingClientRect();
-    const menuWidth = $menu.outerWidth(); // 🔥 dynamic width
-    const gap = 6;
-
-    // 🔥 button ke CENTER se align
-    let left = rect.left + (rect.width / 2) - (menuWidth / 2);
-
-    // safety
-    if (left + menuWidth > window.innerWidth - 16) {
-        left = window.innerWidth - menuWidth - 16;
-    }
-    if (left < 16) {
-        left = 16;
-    }
-
-    $menu.css({
-        position: 'fixed',
-        top: rect.bottom + gap + 'px',
-        left: left + 'px'
-    });
-
-    $menu.addClass('show');
-});
-
-
-</script>
 
 
 
