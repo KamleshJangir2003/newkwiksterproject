@@ -49,10 +49,53 @@
       </script>
       <style>
         .theme4 {
-    /* Your custom styles for theme4 */
     background-color:#0098b6 !important;
     color: black !important;
-    /* Add other styles as needed */
+}
+/* Force sidebar visibility */
+.pcoded-navbar {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    margin: 10px 0 !important;
+}
+.pcoded-inner-navbar {
+    display: block !important;
+    width: 100% !important;
+    padding: 10px 20px !important;
+}
+.pcoded-item {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.pcoded-item > li {
+    display: inline-block !important;
+    margin: 0 10px !important;
+    position: relative !important;
+}
+.pcoded-item > li > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 8px 15px !important;
+    background: #007bff !important;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 4px !important;
+    margin: 2px !important;
+}
+.pcoded-item > li > a:hover {
+    background: #0056b3 !important;
+}
+.pcoded-mtext {
+    margin-left: 5px !important;
 }
       </style>
       <style>

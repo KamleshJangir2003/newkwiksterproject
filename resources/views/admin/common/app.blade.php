@@ -1,4 +1,8 @@
 @include('admin.common.header')
 @include('admin.common.sidebar')
-@yield('main')
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        @yield('main')
+    </div>
+</div>
 @include('admin.common.footer')
