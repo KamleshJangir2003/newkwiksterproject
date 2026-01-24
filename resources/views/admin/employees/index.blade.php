@@ -2,9 +2,7 @@
 
 @section('main')
 <style>
-    .content-wrapper {
-    margin-left: 220px; /* jitna chaho badha sakte ho */
-}
+  
 
 </style>
 
