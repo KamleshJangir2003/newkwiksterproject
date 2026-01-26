@@ -544,13 +544,13 @@
 
 
     
-  <!-- <div class="goal-graph-wrapper">
+  <div class="goal-graph-wrapper">
 
  <div class="agent-goal-box goal-circle-style">
   <div class="goal-header">
     <h5>🎯 Monthly Goal Target</h5>
     <span class="month">
-      {{ $latestGoal ? \Carbon\Carbon::parse($latestGoal->target_month)->format('F Y') : 'N/A' }}
+      {{ $agentGoal ? \Carbon\Carbon::parse($agentGoal->target_month)->format('F Y') : 'No Target Set' }}
     </span>
   </div>
 
@@ -591,8 +591,11 @@
   </div>
 </div>
 
-</div> -->
-<!-- <style>
+</div>
+<style>
+    
+</style>
+<style>
    .agent-goal-box.goal-circle-style {
   background: #ffffff;
   border-radius: 16px;
@@ -673,7 +676,7 @@
 .achieved { color: #16a34a; }
 .remaining { color: #dc2626; }
 
-</style> -->
+</style>
 <style>
     .dashboard-cards {
     display: grid;
@@ -1062,11 +1065,11 @@ new Chart(ctx, {
             month_won: {{ $totalmonth_call }}
         };
     </script>
-    <!-- <script>
-  let target = 500;
-  let achieved = 320;
+    <script>
+  let target = {{ $targetValue ?? 0 }};
+  let achieved = {{ $achievedLeads ?? 0 }};
   let remaining = target - achieved;
-  let percent = Math.round((achieved / target) * 100);
+  let percent = target > 0 ? Math.round((achieved / target) * 100) : 0;
 
   document.getElementById("goalPercent").innerText = percent + "%";
   document.getElementById("targetVal").innerText = target;
@@ -1090,7 +1093,7 @@ new Chart(ctx, {
     let offset = circumference - (circumference * percent) / 100;
     steps[Math.min(Math.floor(percent / 25), 3)].style.strokeDashoffset = offset;
   }
-</script> -->
+</script>
 
     
 @endsection

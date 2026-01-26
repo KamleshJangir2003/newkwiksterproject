@@ -310,6 +310,7 @@ Route::post('/update_current_ajent', [Ajentcontroller::class, 'update_current_aj
 Route::post('/update_identety_ajent', [Ajentcontroller::class, 'update_identety_ajent'])->name('update_identety_ajent');
 Route::post('/update_salary_ajent', [Ajentcontroller::class, 'update_salary_ajent'])->name('update_salary_ajent');
 Route::post('/update_bank_ajent', [Ajentcontroller::class, 'update_bank_ajent'])->name('update_bank_ajent');
+Route::post('/update_target_ajent', [Ajentcontroller::class, 'update_target_ajent'])->name('update_target_ajent');
 Route::get('/editAgent/{id}', [Ajentcontroller::class, 'edit_agent'])->name('edit_agent');
 Route::post('/editAgent_store/{id}', [Ajentcontroller::class, 'edit_agent_store'])->name('edit_agent_store');
 

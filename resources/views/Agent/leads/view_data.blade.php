@@ -408,7 +408,7 @@
     right: auto;
 
     min-width: 240px;
-    background: #8a9abd;
+    background: #d3d8d6;
     border-radius: 6px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     white-space: normal;
@@ -791,6 +791,16 @@
                                                 id="mc_docket" name="mc_docket"required>
                                         </div>
                                     </div><!--end col-->
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
+                                       
                                     <div class="col-12 mb-3">
                                         <h5>Commodities</h5>
                                         <div class="row">
@@ -1704,14 +1714,14 @@
     
 
 <div class="mt-2">
-     <label for="ForminputState" class="form-label">Mode On<span
+     <label for="ForminputState" class="form-label">Mode<span
                                                     class="text-danger">*</span></label>
 
     <select name="contact_mode" class="form-select" required>
        
         <option value="Call"
             {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'selected' : '' }}>
-            Call
+            Voice
         </option>
         <option value="Email"
             {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'selected' : '' }}>
@@ -1807,33 +1817,21 @@
                                             </select>
                                         </div>
                                     </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label class="form-check-label">
-                                                <input type="checkbox" name="Physical" value="1"
-                                                    class="form-check-input">
-                                                Physical Damage
-                                            </label>
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label class="form-check-label">
-                                                <input type="checkbox" name="general" value="1"
-                                                    class="form-check-input">
-                                                General Liability
-                                            </label>
-                                        </div>
-                                          <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner DOB <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                placeholder="Enter driver dob" id="owner_dob"
-                                                name="owner_dob">
-                                        </div>
-                                    </div><!--end col-->
-                                    </div><!--end col-->
+                                    <div class="col-12">
+    <div class="mb-3 d-flex gap-4 align-items-center">
+
+        <label class="form-check-label d-flex align-items-center gap-2">
+            <input type="checkbox" name="Physical" value="1" class="form-check-input">
+            Physical Damage
+        </label>
+
+        <label class="form-check-label d-flex align-items-center gap-2">
+            <input type="checkbox" name="general" value="1" class="form-check-input">
+            General Liability
+        </label>
+
+    </div>
+</div><!--end col-->
                                     <hr />
                                    <h5 class="mb-3">Loss Runs / Docs Files <br>
                                 <small style="color:red;">

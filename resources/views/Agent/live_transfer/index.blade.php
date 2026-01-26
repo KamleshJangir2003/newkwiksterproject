@@ -477,13 +477,13 @@
                                                 </div><!--end col-->
                                                 <div class="col-6">
     <div class="pt-0">
-        <label class="form-label">Mode on</label>
+        <label class="form-label">Mode</label>
 
         <select name="contact_mode"
                 class="form-select lock-contact-mode"
                 disabled>
             <option value="">Select Mode</option>
-            <option value="Call" selected>Call</option>
+            <option value="Call" selected>Voice</option>
             <option value="Email">Email</option>
         </select>
     </div>

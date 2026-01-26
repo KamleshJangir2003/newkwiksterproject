@@ -170,23 +170,16 @@
     <div class="lead-card {{ $data->red_mark == 1 ? 'red-card' : ($data->red_mark == 3 ? 'violet-card' : '') }}">
 
         <!-- HEADER -->
-        <div class="lead-header">
-            <h5>{{ $data->company_name }}</h5>
-
-            @if(!empty($data->mail_status))
-                @if($data->mail_status == 'Mail')
-                    <i class="lni lni-envelope text-danger"></i>
-                @elseif($data->mail_status == 2)
-                    <i class="lni lni-envelope text-danger"></i>
-                    <i class="lni lni-bubble text-danger"></i>
-                @else
-                    <i class="lni lni-bubble text-danger"></i>
-                @endif
-            @endif
-        </div>
+   
 
         <!-- BODY -->
         <div class="lead-body">
+            <p>
+                <strong>Company:</strong> 
+                <span class="phone_copy" onclick="copyPhoneNumber()">
+                    {{ $data->company_name }}
+                </span>
+            </p>
 
             <p>
                 <strong>Phone:</strong> 
@@ -421,6 +414,15 @@
                                                 id="mc_docket" name="mc_docket">
                                         </div>
                                     </div><!--end col-->
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
                                     <div class="col-12 mb-3">
                                         <h5>Commodities</h5>
                                         <div class="row">
@@ -1465,15 +1467,7 @@
                                         </div>
                                     </div><!--end col-->
                                     <hr/>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner DOB <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                placeholder="Enter driver dob" id="owner_dob"
-                                                name="owner_dob">
-                                        </div>
-                                    </div><!--end col-->
+                                   
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-check-label">

@@ -128,10 +128,11 @@ $lossRunsCount = $lossRunsRequired;
 
     // =================== GOALS DATA FOR AGENT ===================
 
-// Latest target set by Admin
-$latestGoal = Goal::latest()->first();
+// Get agent's specific target
+$agentGoal = Goal::where('agent_id', $agentId)->first();
 
-$targetValue = $latestGoal->target_value ?? 0;
+$targetValue = $agentGoal->target_value ?? 0;
+$targetMonth = $agentGoal->target_month ?? null;
 
 // Agent ka achieved (Interested leads of this agent)
 $achievedLeads = \DB::table('excel_data')
@@ -208,11 +209,12 @@ foreach ($teamAgents as $id => $name) {
         'month_forms',
         'totalmonth_call',
         'total_all_forms',
-        'latestGoal',
-    'targetValue',
-    'achievedLeads',
-    'remainingLeads',
-    'goalPercent',
+        'agentGoal',
+        'targetValue',
+        'targetMonth',
+        'achievedLeads',
+        'remainingLeads',
+        'goalPercent',
     'lossRunsRequired',
     'lossRunsNotRequired',
     'lossRunsCount',

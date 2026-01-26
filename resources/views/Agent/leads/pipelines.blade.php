@@ -185,35 +185,17 @@
   <div class="lead-card {{ $rowClass }} {{ $data->red_mark == 1 ? 'red-card' : ($data->red_mark == 3 ? 'violet-card' : '') }}">
 
     <!-- HEADER -->
-    <div class="lead-header">
-        <div>
-            <h5 class="mb-0">{{ $data->company_name }}</h5>
-
-            @if($is_intrested == 1)
-              <p class="mb-0 text-success">Won by {{ $intre_agent_id }}</p>
-            @endif
-
-            @if(!empty($data->pipeline_updated) && $data->pipeline_updated == 1)
-              <span class="badge bg-warning text-dark mt-1">Updated</span>
-            @endif
-        </div>
-
-        <div>
-        @if(!empty($data->mail_status))
-            @if($data->mail_status == 'Mail')
-                <i class="lni lni-envelope text-danger"></i>
-            @elseif($data->mail_status == 2)
-                <i class="lni lni-envelope text-danger"></i>
-                <i class="lni lni-bubble text-danger"></i>
-            @else
-                <i class="lni lni-bubble text-danger"></i>
-            @endif
-        @endif
-        </div>
-    </div>
+   
 
     <!-- BODY -->
     <div class="lead-body">
+         <p>
+        <strong>Company:</strong>
+        <span class="phone_copy" onclick="copyPhoneNumber()"
+          style="{{ !empty($data->red_mark) ? 'background:#ff6666;padding:3px;' : '' }}">
+          {{ $data->company_name }}
+        </span>
+      </p>
 
       <p>
         <strong>Phone:</strong>
@@ -449,6 +431,15 @@
                                                 id="mc_docket" name="mc_docket">
                                         </div>
                                     </div><!--end col-->
+                                     <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner Dob <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
                                     <div class="col-12 mb-3">
                                         <h5>Commodities</h5>
                                         <div class="row">
@@ -1481,15 +1472,7 @@
                                         </div>
                                     </div><!--end col-->
                                     <hr/>
-                                     <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner Dob <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                placeholder="Enter driver dob" id="owner_dob"
-                                                name="owner_dob">
-                                        </div>
-                                    </div><!--end col-->
+                                    <!--end col-->
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-check-label">

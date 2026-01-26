@@ -532,7 +532,7 @@
                                                                                 </li>
                                                                                  <li class="nav-item">
                                                                                     <a href="#" class="nav-link"
-                                                                                        data-tab="#bank_details">Monthly
+                                                                                        data-tab="#monthly_target">Monthly
                                                                                         Target</a>
                                                                                 </li>
                                                                             </ul>
@@ -1232,6 +1232,74 @@
                                                                             <!-- end #profile-about tab -->
 
 
+                                                                        </div>
+                                                                        <!-- end tab-content -->
+                                                                    </div>
+
+                                                                    <div class="profile-content" id="monthly_target">
+                                                                        <!-- begin tab-content -->
+                                                                        <div class="tab-content p-0">
+                                                                            <!-- begin #profile-about tab -->
+                                                                            <div class="tab-pane fade in active show">
+                                                                                <!-- begin table -->
+                                                                                <div class="table-responsive">
+                                                                                    <form
+                                                                                        action="{{ route('update_target_ajent') }}"
+                                                                                        method="post"
+                                                                                        enctype="multipart/form-data">
+                                                                                        @csrf
+                                                                                        <div class="form-group row">
+                                                                                            <div class="col-sm-4">
+                                                                                                <div class="form-floating">
+                                                                                                    <label>Target Month</label>
+                                                                                                    <input type="month"
+                                                                                                        class="form-control"
+                                                                                                        value="{{ $goal->target_month ?? '' }}"
+                                                                                                        name="target_month"
+                                                                                                        placeholder="Select Month"
+                                                                                                        required>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-4">
+                                                                                                <div class="form-floating">
+                                                                                                    <label>Target Value</label>
+                                                                                                    <input
+                                                                                                        class="form-control"
+                                                                                                        type="number"
+                                                                                                        value="{{ $goal->target_value ?? '' }}"
+                                                                                                        name="target_value"
+                                                                                                        placeholder="Enter Target Value"
+                                                                                                        required>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-4">
+                                                                                                <div class="form-floating">
+                                                                                                    <label>Notes</label>
+                                                                                                    <textarea
+                                                                                                        class="form-control"
+                                                                                                        name="notes"
+                                                                                                        placeholder="Enter Notes">{{ $goal->notes ?? '' }}</textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <input type="hidden"
+                                                                                            name="id"
+                                                                                            value="{{ $id }}">
+                                                                                        <div class="form-group"
+                                                                                            style="margin-left:50px">
+                                                                                            <div class="w-100 text-center">
+                                                                                                <button type="submit"
+                                                                                                    class="btn btn-primary width-150">Update</button>
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-white btn-white-without-border width-150 m-l-5"onclick="window.location.href='{{ route('view_ajent') }}'">Cancel</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                                <!-- end table -->
+                                                                            </div>
+                                                                            <!-- end #profile-about tab -->
                                                                         </div>
                                                                         <!-- end tab-content -->
                                                                     </div>

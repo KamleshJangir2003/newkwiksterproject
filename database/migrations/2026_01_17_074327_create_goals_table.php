@@ -13,10 +13,13 @@ return new class extends Migration
 {
     Schema::create('goals', function (Blueprint $table) {
         $table->id();
+        $table->unsignedBigInteger('agent_id');
         $table->string('target_month');
         $table->decimal('target_value', 15, 2);
         $table->text('notes')->nullable();
         $table->timestamps();
+        
+        $table->foreign('agent_id')->references('id')->on('users')->onDelete('cascade');
     });
 }
 

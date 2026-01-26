@@ -18,6 +18,7 @@ use App\Models\Leaves;
 use App\adminmodel\Current_employ;
 use App\adminmodel\IdentityModal;
 use App\adminmodel\SalaryModal;
+use App\Models\Goal;
 
 
 class Ajentcontroller extends Controller
@@ -139,10 +140,11 @@ class Ajentcontroller extends Controller
         $salary = SalaryModal::where('ajent_id', $id)->first();
         $profile = User::where('id', $id)->first();
         $bank = bank::where('agent_id', $id)->first();
+        $goal = Goal::where('agent_id', $id)->first();
 
    
 
-        return view('admin/Ajent/update',compact('profile_data','id','profile','current','identety','salary','bank'));
+        return view('admin/Ajent/update',compact('profile_data','id','profile','current','identety','salary','bank','goal'));
     }
     public function update_ajent_process(Request $req){
         $admin_id = $req->session()->get('admin_id');
@@ -379,5 +381,27 @@ $verify = null;
 		return redirect()->route('view_ajent');
 
 	}
+
+    public function update_target_ajent(Request $req){
+        $admin_id = $req->session()->get('admin_id');
+        $id = $req->id;
+
+        $goalInfo = [
+            'agent_id' => $id,
+            'target_month' => $req->input('target_month'),
+            'target_value' => $req->input('target_value'),
+            'notes' => $req->input('notes')
+        ];
+
+        $data = Goal::where('agent_id', $id)->first();
+
+        if(empty($data)) {
+            Goal::create($goalInfo);
+            return Redirect()->back()->with('success', 'Monthly Target Added Successfully.');
+        } else {
+            $data->update($goalInfo);
+            return Redirect()->back()->with('success', 'Monthly Target Updated Successfully.');
+        }
+    }
 
 }

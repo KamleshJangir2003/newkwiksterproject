@@ -175,20 +175,18 @@
     <div class="lead-card {{ $data->red_mark == 1 ? 'red-card' : ($data->red_mark == 3 ? 'violet-card' : '') }}">
 
         <!-- HEADER -->
-       <div class="lead-header">
-    <h5 class="company-name" title="{{ $data->company_name }}">
-        {{ $data->company_name }}
-    </h5>
-
-    @if(!empty($data->mail_status))
-        <i class="lni lni-envelope text-danger"></i>
-    @endif
-</div>
+     
 
 
         <!-- BODY -->
         <div class="lead-body">
-
+             
+            <p>
+                <strong>Company:</strong> 
+                <span class="phone_copy" onclick="copyPhoneNumber()">
+                    {{ $data->company_name }}
+                </span>
+            </p>
             <p>
                 <strong>Phone:</strong> 
                 <span class="phone_copy" onclick="copyPhoneNumber()">
@@ -198,7 +196,7 @@
 
             <!-- 👉 YAHI AAPKA PURANA WORKING TRIGGER (same data attributes) -->
             <p>
-                <strong>Rep:</strong>
+                <strong>Name:</strong>
                 <span 
                     class="open-modal text-primary"
                     style="cursor:pointer;"
@@ -258,9 +256,24 @@
 
             <!-- STATUS DROPDOWN (SAME WORKING) -->
             <div class="btn-group stop-click">
-                <button class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                    {{ $data->form_status }}
-                </button>
+               <button class="btn btn-sm dropdown-toggle green-btn"
+        data-bs-toggle="dropdown">
+    {{ $data->form_status }}
+</button>
+
+<style>
+.green-btn{
+    background:#198754; /* bootstrap success green */
+    color:#fff;
+    border:1px solid #198754;
+}
+.green-btn:hover,
+.green-btn:focus{
+    background:#157347;
+    color:#fff;
+}
+</style>
+
                 <div class="dropdown-menu">
                     <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="NEW">NEW</a>
                     <a class="dropdown-item update-status" data-lead-id="{{ $data->id }}" data-status="Voice Mail">Voice Mail</a>
@@ -405,6 +418,15 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Enter MC"
                                                 id="mc_docket" name="mc_docket">
+                                        </div>
+                                    </div><!--end col-->
+                                     <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-12 mb-3">
@@ -1447,15 +1469,7 @@
                                         </div>
                                     </div><!--end col-->
                                     <hr/>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner DOB <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                placeholder="Enter driver dob" id="owner_dob"
-                                                name="owner_dob">
-                                        </div>
-                                    </div><!--end col-->
+                                   
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-check-label">
