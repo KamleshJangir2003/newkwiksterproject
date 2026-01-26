@@ -545,136 +545,231 @@
 
     
   <div class="goal-graph-wrapper">
+  <div class="agent-goal-box goal-ultra">
 
- <div class="agent-goal-box goal-circle-style">
-  <div class="goal-header">
-    <h5>🎯 Monthly Goal Target</h5>
-    <span class="month">
-      {{ $agentGoal ? \Carbon\Carbon::parse($agentGoal->target_month)->format('F Y') : 'No Target Set' }}
-    </span>
-  </div>
-
-  <div class="goal-body">
-    <div class="circle-progress">
-      <svg width="160" height="160" viewBox="0 0 160 160">
-        <circle cx="80" cy="80" r="70" class="bg-circle"/>
-
-        <circle cx="80" cy="80" r="70" class="progress-circle step-1"/>
-        <circle cx="80" cy="80" r="70" class="progress-circle step-2"/>
-        <circle cx="80" cy="80" r="70" class="progress-circle step-3"/>
-        <circle cx="80" cy="80" r="70" class="progress-circle step-4"/>
-      </svg>
-
-      <div class="circle-text">
-        <h3 id="goalPercent">{{ $goalPercent ?? 0 }}%</h3>
-        <p>Completed</p>
+    <div class="goal-header">
+      <div class="title">
+        <h5>🎯 Monthly Performance</h5>
+        <small>
+          {{ $agentGoal ? \Carbon\Carbon::parse($agentGoal->target_month)->format('F Y') : 'No Target Set' }}
+        </small>
       </div>
+      <div class="goal-pill">Goal Tracker</div>
     </div>
 
-    <div class="goal-stats">
-  <div class="goal-row">
-    <span>Target</span>
-    <strong id="targetVal">{{ (int) $targetValue }}</strong>
-  </div>
+    <div class="goal-body">
 
-  <div class="goal-row">
-    <span>Achieved</span>
-    <strong class="achieved" id="achievedVal">{{ $achievedLeads }}</strong>
-  </div>
+      <div class="circle-progress glow">
+        <svg width="170" height="170" viewBox="0 0 170 170">
+          <defs>
+            <linearGradient id="ultraGradient" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#22c55e"/>
+              <stop offset="50%" stop-color="#3b82f6"/>
+              <stop offset="100%" stop-color="#a855f7"/>
+            </linearGradient>
+          </defs>
 
-  <div class="goal-row">
-    <span>Remaining</span>
-    <strong class="remaining" id="remainingVal">{{ (int) $remainingLeads }}</strong>
+          <circle cx="85" cy="85" r="72" class="bg-circle"/>
+          <circle cx="85" cy="85" r="72" class="progress-circle"
+            style="stroke-dashoffset: {{ 452 - (452 * ($goalPercent ?? 0) / 100) }};
+                   stroke:url(#ultraGradient);" />
+        </svg>
+
+        <div class="circle-text">
+          <h3>{{ $goalPercent ?? 0 }}%</h3>
+          <p>Completed</p>
+        </div>
+      </div>
+
+      <div class="goal-stats">
+        <div class="stat-card">
+          <i class="lni lni-target"></i>
+          <span>Target</span>
+          <strong>{{ (int)$targetValue }}</strong>
+        </div>
+
+        <div class="stat-card success">
+          <i class="lni lni-checkmark-circle"></i>
+          <span>Achieved</span>
+          <strong>{{ $achievedLeads }}</strong>
+        </div>
+
+        <div class="stat-card danger">
+          <i class="lni lni-warning"></i>
+          <span>Remaining</span>
+          <strong>{{ (int)$remainingLeads }}</strong>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-  </div>
-</div>
 
-</div>
+
 <style>
-    
-</style>
-<style>
-   .agent-goal-box.goal-circle-style {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    .goal-graph-wrapper{
+  padding: 20px 24px;
 }
 
-.goal-circle-style .goal-header {
+ .goal-ultra{
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.goal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.goal-header h5{
+  margin:0;
+  font-weight:800;
+  font-size:18px;
+}
+
+.goal-header small{
+  color:#6b7280;
+  font-size:13px;
+}
+
+.goal-pill{
+  background:linear-gradient(135deg,#6366f1,#a855f7);
+  color:#fff;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.goal-body{
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+
+.circle-progress{
+  position:relative;
+  width:170px;
+  height:170px;
+}
+
+.glow{
+  filter:drop-shadow(0 0 18px rgba(99,102,241,0.45));
+}
+
+.bg-circle{
+  fill:none;
+  stroke:#e5e7eb;
+  stroke-width:14;
+}
+
+.progress-circle{
+  fill:none;
+  stroke-width:14;
+  stroke-dasharray:452;
+  transform:rotate(-90deg);
+  transform-origin:50% 50%;
+  transition:1.2s cubic-bezier(.4,0,.2,1);
+}
+
+.circle-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+
+.circle-text h3{
+  font-size:30px;
+  font-weight:900;
+  margin:0;
+}
+
+.circle-text p{
+  font-size:13px;
+  color:#6b7280;
+  margin:0;
+}
+
+.goal-stats{
+  flex:1;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.stat-card{
+  background:#fff;
+  border-radius:16px;
+  padding:14px;
+  text-align:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  transition:.25s ease;
+}
+
+.stat-card:hover{
+  transform:translateY(-4px);
+}
+
+.stat-card i{
+  font-size:20px;
+  margin-bottom:6px;
+  display:block;
+  color:#6366f1;
+}
+
+.stat-card span{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.stat-card strong{
+  display:block;
+  font-size:20px;
+  margin-top:4px;
+}
+
+.stat-card.success i{ color:#22c55e; }
+.stat-card.danger i{ color:#ef4444; }
+
+/* Mobile */
+@media(max-width:768px){
+  .goal-body{
+    flex-direction:column;
+  }
+  .goal-stats{
+    grid-template-columns:1fr;
+    width:100%;
+  }
+}
+
+/* FIX stats overflow issue */
+.goal-stats{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.goal-body {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+/* each stat card responsive */
+.stat-card{
+  flex: 1 1 100px;
+  min-width: 90px;
 }
 
-/* ---- CIRCLE BASE ---- */
-.circle-progress {
-  position: relative;
-  width: 160px;
-  height: 160px;
+/* safety – card ke bahar kuch na nikle */
+.goal-ultra{
+  overflow: hidden;
 }
 
-.bg-circle {
-  fill: none;
-  stroke: #e6e6e6;
-  stroke-width: 10;
-}
-
-/* Common for all progress circles */
-.progress-circle {
-  fill: none;
-  stroke-width: 10;
-  stroke-dasharray: 440;
-  stroke-dashoffset: 440;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-  transition: 1s ease-in-out;
-}
-
-/* ---- 4 COLOR STEPS ---- */
-.step-1 { stroke: #ef4444; } /* Red */
-.step-2 { stroke: #f97316; } /* Orange */
-.step-3 { stroke: #3b82f6; } /* Blue */
-.step-4 { stroke: #16a34a; } /* Green */
-
-/* Center text */
-.circle-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.circle-text h3 {
-  margin: 0;
-  font-size: 26px;
-  font-weight: 700;
-}
-
-/* ---- STATS ---- */
-.goal-stats {
-  flex: 1;
-}
-
-.goal-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.achieved { color: #16a34a; }
-.remaining { color: #dc2626; }
 
 </style>
 <style>
