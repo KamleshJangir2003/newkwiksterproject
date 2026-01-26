@@ -98,6 +98,15 @@
 }
 
     </style>
+    <style>
+        .company-name {
+    max-width: 100%;
+    white-space: nowrap;        /* ek line me rakhe */
+    overflow: hidden;           /* bahar ka text hide */
+    text-overflow: ellipsis;    /* ... laga de */
+}
+
+    </style>
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">
@@ -166,20 +175,16 @@
     <div class="lead-card {{ $data->red_mark == 1 ? 'red-card' : ($data->red_mark == 3 ? 'violet-card' : '') }}">
 
         <!-- HEADER -->
-        <div class="lead-header">
-            <h5>{{ $data->company_name }}</h5>
+       <div class="lead-header">
+    <h5 class="company-name" title="{{ $data->company_name }}">
+        {{ $data->company_name }}
+    </h5>
 
-            @if(!empty($data->mail_status))
-                @if($data->mail_status == 'Mail')
-                    <i class="lni lni-envelope text-danger"></i>
-                @elseif($data->mail_status == 2)
-                    <i class="lni lni-envelope text-danger"></i>
-                    <i class="lni lni-bubble text-danger"></i>
-                @else
-                    <i class="lni lni-bubble text-danger"></i>
-                @endif
-            @endif
-        </div>
+    @if(!empty($data->mail_status))
+        <i class="lni lni-envelope text-danger"></i>
+    @endif
+</div>
+
 
         <!-- BODY -->
         <div class="lead-body">

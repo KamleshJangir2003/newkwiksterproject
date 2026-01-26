@@ -57,6 +57,16 @@
     flex:1;
 }
 </style>
+<style>
+    .company-name{
+    max-width: 180px;   /* apne UI ke hisaab se adjust kar lo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+</style>
 
 
 @section('main')

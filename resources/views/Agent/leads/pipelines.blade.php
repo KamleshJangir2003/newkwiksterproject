@@ -91,6 +91,15 @@
 }
 
     </style>
+    <style>
+        .company-name{
+    max-width: 260px;   /* adjust as per layout */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    </style>
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">

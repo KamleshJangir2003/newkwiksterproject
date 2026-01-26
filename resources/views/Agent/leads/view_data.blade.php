@@ -210,6 +210,15 @@
     <p class="mb-1 lead-name">
         <strong>Company -</strong> {{ $data->company_name }}
     </p>
+   <style>
+    .lead-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+   </style>
 
     <div class="btn-group lead-status-dropdown">
         <button type="button"
@@ -1695,7 +1704,7 @@
     
 
  <div class="mt-2">
-    <h6 class="mb-2">Form On</h6>
+    <h6 class="mb-2">Mode On</h6>
 
    <div class="d-flex gap-3 align-items-center">
 
@@ -1828,7 +1837,7 @@
                                         </div>
                                           <div class="col-12">
                                         <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner Dob <span
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
                                                     class="text-danger">*</span></label>
                                             <input type="date" class="form-control"
                                                 placeholder="Enter driver dob" id="owner_dob"
@@ -1837,43 +1846,34 @@
                                     </div><!--end col-->
                                     </div><!--end col-->
                                     <hr />
-                                    <h5>Loss Runs/Docs Files</h5>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file1">
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file2">
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file3">
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file4">
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file5">
-                                        </div>
-                                    </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <input class="form-control" style="margin-left: 10px" type="file"
-                                                value="" name="file6">
-                                        </div>
-                                    </div><!--end col-->
+                                   <h5 class="mb-3">Loss Runs/Docs Files</h5>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file1">
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file2">
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file3">
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file4">
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file5">
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <input class="form-control" type="file" name="file6">
+    </div>
+</div>
+
                                     <div class="col-lg-12">
                                         <div class="text-end">
                                             <div class="mt-4">

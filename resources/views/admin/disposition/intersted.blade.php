@@ -331,10 +331,10 @@
                                                             <th scope="col">Company Name</th>
                                                             <th scope="col">Phone</th>
                                                             <th scope="col">Company Rep1</th>
-                                                            <th scope="col">Business Address</th>
+                                                            <!-- <th scope="col">Business Address</th>
                                                             <th scope="col">Business City</th>
                                                             <th scope="col">Business State</th>
-                                                            <th scope="col">Business Zip</th>
+                                                            <th scope="col">Business Zip</th> -->
                                                             <th scope="col">Status</th>
                                                             <th scope="col"> Date</th>
                                                             <th scope="col">Action</th>
@@ -437,10 +437,7 @@
 
                                                                         data-bs-target="#exampleFullScreenModal">
                                                                         {{ $data->company_rep1 }}</td>
-                                                                    <td>{{ $data->business_address }}</td>
-                                                                    <td>{{ $data->business_city }}</td>
-                                                                    <td>{{ $data->business_state }}</td>
-                                                                    <td>{{ $data->business_zip }}</td>
+                                                                   
                                                                     
 
                                                                     @if ($data->form_status == 'NEW')
