@@ -52,7 +52,7 @@ class Scriptcontroller extends Controller
 		 if(empty($report)){
             $reportdata = new dayendreport();
 
-            $lead_data = ExcelData::where('click_id',session('agent_id'))->where('date',$date)->get();
+            $lead_data = ExcelData::where('click_id',session('agent_id'))->where('date',$date)->limit(300)->get();
             $total_call = $lead_data->count();
             $intrested_call = $lead_data->where('form_status','Intrested')->where('red_mark',null)->count();
             $pipeline_call = $lead_data->where('form_status','Pipeline')->count();
@@ -623,9 +623,10 @@ $totalsalary = $holidaysalary +$presentsalary + $extralevesalary + $halfdayssala
         $batch_id = Tab_view_lead::where('id', $check->tab_view_ids)->first();
         $batch_name = $batch_id->batch;
        
-        // Fetch the first 100 ExcelData records that are NOT 'forwarded'
+        // Fetch the first 100 ExcelData records that are NOT 'forwarded' with 300 limit
         $excelDatas = ExcelData::where('status', 'not_forwarded')->where('batch_name',$batch_name)
             ->take(100) // Limit the selection to 100 records
+            ->limit(300) // Additional 300 limit for agents
             ->get();
         // Extract the IDs of the ExcelData records into an array
         $leadIds = $excelDatas->pluck('id')->toArray();

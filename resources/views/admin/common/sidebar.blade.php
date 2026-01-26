@@ -78,7 +78,7 @@
         ?>
     </div>
 </div>
-<style>
+
     <style>
 .admin-btn{
     background: #007bff;
@@ -107,7 +107,7 @@
 }
 </style>
 
-</style>
+
 
 <script>
 function showDropdown(element) {

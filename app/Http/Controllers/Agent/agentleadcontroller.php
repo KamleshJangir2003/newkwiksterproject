@@ -42,8 +42,8 @@ class agentleadcontroller extends Controller
             $lead_ids_array = explode(',', $lead_ids_string);
         
             if ($lead_ids && is_array($lead_ids)) {
-                // Retrieve ExcelData records based on the array of lead IDs
-                $datas = ExcelData::whereIn('id', $lead_ids_array)->get();
+                // Retrieve ExcelData records based on the array of lead IDs with 300 limit
+                $datas = ExcelData::whereIn('id', $lead_ids_array)->limit(300)->get();
                 return view('Agent/leads/view_data',compact('datas','id'));	
             } else {
                 return redirect()->back();
@@ -214,6 +214,9 @@ public function viewDataTimezone(Request $req, $timezone, $id)
         }
     });
 
+    // Add 300 data limit for agents
+    $query->limit(300);
+    
     // Add pagination - 25 leads per page
     $datas = $query->paginate(25);
 
@@ -786,6 +789,7 @@ public function agent_intersted_data($n = null){
     $datas = ExcelData::where('click_id', session('agent_id'))
         ->where('form_status','Intrested')
         ->latest('updated_at')
+        ->limit(300)
         ->paginate(25);
 
     return view('Agent/leads/intersted_data', compact('datas'));
@@ -806,12 +810,12 @@ public function agent_pipeline_data($n=''){
         }
     }
 
-    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Pipeline')->latest('updated_at')->paginate(25);
+    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','Pipeline')->latest('updated_at')->limit(300)->paginate(25);
 
     return view('Agent/leads/pipelines',compact('datas'));
 }
 public function agent_won_data(){
-    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','WON')->latest()->get();
+    $datas = ExcelData::where('click_id',session('agent_id'))->where('form_status','WON')->latest()->limit(300)->get();
     $title = "Bind";
     return view('Agent/leads/Won',compact('datas','title'));
 }
@@ -832,12 +836,13 @@ public function agent_voicemail_data($n = '')
         ->where('form_status', 'Voice Mail')
         ->whereBetween('updated_at', [$fourDaysAgo, $today])
         ->latest('updated_at')
+        ->limit(300)
         ->get();
 
     return view('Agent/leads/voicemail', compact('datas'));
 }
 public function agent_search_data($id,$n=''){
-    $datas = ExcelData::where('id',$id)->get();
+    $datas = ExcelData::where('id',$id)->limit(300)->get();
     if(!empty($n)){
         $noti = Notification::where('id',$n)->first();
         $noti->click_id = 2;
@@ -1281,8 +1286,8 @@ public function getVerifiedLeadsagent(Request $request)
         $query->whereBetween('date', [$date1, $date2]);
     }
 
-    // Execute the query and get the results
-    $leads = $query->get();
+    // Execute the query and get the results with 300 limit
+    $leads = $query->limit(300)->get();
 
     // Return the filtered data as JSON
     return response()->json($leads);

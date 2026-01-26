@@ -320,10 +320,11 @@ foreach ($teamAgents as $id => $name) {
     public function agent_global_search(Request $req){
         $searchTerm = $req->search;
 
-        // Perform the search query
+        // Perform the search query with 300 limit
         $results = ExcelData::orWhere('company_name', 'like', "%$searchTerm%")
                             ->orWhere('phone', 'like', "%$searchTerm%")
                             ->orWhere('email', 'like', "%$searchTerm%")
+                            ->limit(300)
                             ->get();
     
         return response()->json($results);
@@ -371,11 +372,12 @@ public function agent_leads(Request $request)
         ->where('loss_runs', 'yes')
         ->count();
 
-    // 📋 Page data (Loss Runs list)
+    // 📋 Page data (Loss Runs list) with 300 limit
     $datas = DB::table('excel_data')
         ->where('click_id', $agentId)
         ->where('loss_runs', 'yes')
         ->orderBy('id', 'desc')
+        ->limit(300)
         ->paginate(25);
 
     return view('Agent.leads.lossruns', compact('datas', 'lossRunsCount'));
@@ -384,11 +386,12 @@ public function agent_live_transfer(Request $request)
 {
     $agentId = session('agent_id');
 
-    // Get only failed live transfer leads (NO) for this agent
+    // Get only failed live transfer leads (NO) for this agent with 300 limit
     $transfers = DB::table('excel_data')
         ->where('click_id', $agentId)
         ->where('live_transfer', 'no')
         ->orderBy('id', 'desc')
+        ->limit(300)
         ->paginate(25);
 
     return view('Agent.live_transfer.index', compact('transfers'));
