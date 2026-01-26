@@ -78,6 +78,36 @@
         ?>
     </div>
 </div>
+<style>
+    <style>
+.admin-btn{
+    background: #007bff;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.admin-btn:hover{
+    background: #0056b3;
+}
+
+.dropdown-menu a{
+    color:#333;
+}
+
+.dropdown-menu a:hover{
+    background:#f2f2f2;
+}
+</style>
+
+</style>
 
 <script>
 function showDropdown(element) {

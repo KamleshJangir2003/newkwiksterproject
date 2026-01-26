@@ -526,6 +526,11 @@
 </div>
 
 </div>
+<div style="text-align:center;">
+    <img src="{{ asset('Agent/assets/images/StateCoverage-1.png') }}" 
+         alt="State Coverage Map" 
+         style="width:80%;">
+</div>
 
 
 
@@ -533,7 +538,13 @@
 
         </div>
     </div>
-  <div class="goal-graph-wrapper">
+
+
+
+
+
+    
+  <!-- <div class="goal-graph-wrapper">
 
  <div class="agent-goal-box goal-circle-style">
   <div class="goal-header">
@@ -580,17 +591,8 @@
   </div>
 </div>
 
-
-
-
-  <!-- Graph Box -->
-  <!-- <div class="graph-box">
-    <h5>📊 Performance Overview</h5>
-    <canvas id="dashboardChart"></canvas>
-  </div> -->
-
-</div>
-<style>
+</div> -->
+<!-- <style>
    .agent-goal-box.goal-circle-style {
   background: #ffffff;
   border-radius: 16px;
@@ -671,7 +673,7 @@
 .achieved { color: #16a34a; }
 .remaining { color: #dc2626; }
 
-</style>
+</style> -->
 <style>
     .dashboard-cards {
     display: grid;
@@ -1003,7 +1005,7 @@ new Chart(ctx, {
                 "Thursday",
                 "Friday",
                 "Saturday"
-            ];
+            ]; Monthly Goal Target
 
             // Create a new Date object
             var d = new Date();
