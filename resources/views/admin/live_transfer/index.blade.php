@@ -26,6 +26,39 @@
         .pagination nav div p {
             display: none;
         }
+    .live-transfer-box {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px;
+    transition: all 0.3s ease;
+}
+
+.live-transfer-box:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.12);
+}
+
+.live-label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.live-select {
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.live-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
     </style>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -329,10 +362,10 @@
                                                             <th scope="col">Company Name</th>
                                                             <th scope="col">Phone</th>
                                                             <th scope="col">Company Rep1</th>
-                                                            <th scope="col">Business Address</th>
+                                                            <!-- <th scope="col">Business Address</th>
                                                             <th scope="col">Business City</th>
                                                             <th scope="col">Business State</th>
-                                                            <th scope="col">Business Zip</th>
+                                                            <th scope="col">Business Zip</th> -->
                                                             <th scope="col">Status</th>
                                                             <th scope="col"> Date</th>
                                                             <th scope="col">Action</th>
@@ -435,10 +468,10 @@
 
                                                                         data-bs-target="#exampleFullScreenModal">
                                                                         {{ $data->company_rep1 }}</td>
-                                                                    <td>{{ $data->business_address }}</td>
+                                                                    <!-- <td>{{ $data->business_address }}</td>
                                                                     <td>{{ $data->business_city }}</td>
                                                                     <td>{{ $data->business_state }}</td>
-                                                                    <td>{{ $data->business_zip }}</td>
+                                                                    <td>{{ $data->business_zip }}</td> -->
                                                                     @if ($data->form_status == 'NEW')
                                                                         <td>
                                                                             <button class="custom-button"
@@ -886,23 +919,7 @@
                                                 </div><!--end col-->
                                                 
                                                 <!-- Live Transfer Option -->
-                                                <div class="col-12">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Live Transfer <span class="text-danger">*</span></label>
-                                                        <div class="d-flex gap-3">
-                                                            <label class="live-transfer-option">
-                                                                <input type="radio" name="live_transfer" value="yes" class="live-transfer-radio">
-                                                                <span class="custom-checkbox"></span>
-                                                                Yes
-                                                            </label>
-                                                            <label class="live-transfer-option">
-                                                                <input type="radio" name="live_transfer" value="no" class="live-transfer-radio">
-                                                                <span class="custom-checkbox"></span>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div><!--end col-->
+                                             
 
 <style>
 .live-transfer-option {
@@ -988,109 +1005,30 @@ $(document).on('change', '.live-transfer-radio', function() {
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-6">
-                                                    <div class="pt-0">
-                                           <label id="model-form-status" class="form-label">Form on</label>
+    <div class="pt-0">
+        <label class="form-label">Mode on</label>
 
-<div class="d-flex gap-3 lock-contact-mode">
-
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Call"
-               id="callCheck">
-        <span class="custom-checkbox"></span>
-         Call
-    </label>
-
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Email"
-               id="emailCheck">
-        <span class="custom-checkbox"></span>
-         Email
-    </label>
-
+        <select name="contact_mode"
+                class="form-select lock-contact-mode"
+                disabled>
+            <option value="">Select Mode</option>
+            <option value="Call" selected>Call</option>
+            <option value="Email">Email</option>
+        </select>
+    </div>
 </div>
+
+
 <style>
-    .call-mail-option {
-    display: flex;
-    align-items: center;
-   
-    cursor: pointer;
-    font-size: 14px;
-}
-
-/* hide default radio */
-.call-mail-option input[type="radio"] {
-    display: none;
-}
-
-/* custom checkbox */
-.custom-checkbox {
-    width: 22px;              /* size */
-    height: 22px;
-    border: 2px solid #bfbfbf;
-    border-radius: 4px;
-    display: inline-block;
-    position: relative;
-    transition: all 0.2s ease;
-}
-
-/* checked state */
-.call-mail-option input[type="radio"]:checked + .custom-checkbox {
-    background: #16a34a;
-    border-color: #16a34a;
-}
-
-/* check mark */
-.call-mail-option input[type="radio"]:checked + .custom-checkbox::after {
-    content: "✓";
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -55%);
-}
-
-/* admin read-only */
+/* locked dropdown */
 .lock-contact-mode {
-    pointer-events: none;
-    opacity: 0.95;
+    background-color: #f3f4f6;
+    color: #111827;
+    cursor: not-allowed;
+    opacity: 1;
 }
-
 </style>
 
-<style>
-    .lock-contact-mode {
-    pointer-events: none !important;
-}
-
-.lock-contact-mode label {
-    cursor: not-allowed !important;
-}
-
-.lock-contact-mode input {
-    pointer-events: none;
-    opacity: 1;   /* tick clearly dikhe */
-}
-.call-mail-option input[type="radio"] {
-    transform: scale(1.4);   /* size control */
-    margin-right: 6px;
-    cursor: pointer;
-}
-
-
-
-</style>
-
-
-
-
-                                        </div>
-                                                </div><!--end col-->
                                                <!-- Good / Bad Form -->
 <div class="col-6">
     <div class="mb-3">
@@ -1121,32 +1059,41 @@ $(document).on('change', '.live-transfer-radio', function() {
             Loss Runs <span class="text-danger">*</span>
         </label>
 
-        <div class="d-flex gap-3">
-<label class="loss-option">
-    <input type="radio" name="loss_runs" value="yes">
-    <span class="custom-checkbox"></span>
-    Yes
-</label>
+        <select name="loss_runs" class="form-select">
+          
+            <option value="yes" {{ old('loss_runs') == 'yes' ? 'selected' : '' }}>Yes</option>
+            <option value="no" {{ old('loss_runs') == 'no' ? 'selected' : '' }}>No</option>
+        </select>
 
-<label class="loss-option">
-    <input type="radio" name="loss_runs" value="no">
-    <span class="custom-checkbox"></span>
-    No
-</label>
-
-
-
-
-        </div>
-
-        <!-- ✅ VALIDATION ERROR MESSAGE (YAHI SHOW HOGA) -->
+        <!-- Validation Error -->
         @error('loss_runs')
-            <small class="text-danger d-block mt-1">
-                {{ $message }}
-            </small>
+            <small class="text-danger d-block mt-1">{{ $message }}</small>
         @enderror
     </div>
 </div>
+<div class="col-6">
+    <div class="mb-3">
+        <label class="form-label fw-semibold">
+            Live Transfer <span class="text-danger">*</span>
+        </label>
+
+        <select name="live_transfer" class="form-select shadow-sm">
+            <option value="yes" {{ old('live_transfer', 'yes') == 'yes' ? 'selected' : '' }}>
+                Yes
+            </option>
+            <option value="no" {{ old('live_transfer') == 'no' ? 'selected' : '' }}>
+                No
+            </option>
+        </select>
+
+        <!-- Validation Error -->
+        @error('live_transfer')
+            <small class="text-danger d-block mt-1">{{ $message }}</small>
+        @enderror
+    </div>
+</div>
+
+
 
 </div>
 <style>
@@ -1165,7 +1112,7 @@ $(document).on('change', '.live-transfer-radio', function() {
 
 /* box */
 .loss-option .custom-checkbox {
-    width: 22px;
+    width: 30px;
     height: 22px;
     border: 2px solid #bfbfbf;
     border-radius: 4px;

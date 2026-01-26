@@ -1,7 +1,7 @@
 <div style="background:#f0f0f0; padding:20px; border:2px solid #4a4f96; margin:10px 0;">
     <h4>Admin Navigation</h4>
 
-    <div style="display:flex; gap:5px; flex-wrap:wrap;">
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
     <?php
     $admin_services = Session::get('services');
     $ser = json_decode($admin_services);

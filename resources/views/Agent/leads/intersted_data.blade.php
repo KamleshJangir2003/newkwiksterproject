@@ -1328,55 +1328,30 @@
                                             
                                         </div>
                                     </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="pt-0">
-                                           <label id="model-form-status" class="form-label">Form on</label>
+<div class="col-6">
+    <div class="mb-3">
+        <label class="form-label">Mode On</label>
 
-<div class="d-flex gap-3 lock-contact-mode">
+        <select name="mail_status" class="form-select" disabled>
+            <option value="Call"
+                {{ ($data->mail_status ?? '') === 'Call' ? 'selected' : '' }}>
+                Call
+            </option>
 
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Call"
-               id="callCheck"
-               {{ ($data->mail_status ?? '') === 'Call' ? 'checked' : '' }}
-               disabled>
-        <span class="custom-checkbox"></span>
-        <i class="fa fa-phone"></i> Call
-    </label>
+            <option value="Email"
+                {{ ($data->mail_status ?? '') === 'Email' ? 'selected' : '' }}>
+                Email
+            </option>
+        </select>
 
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Email"
-               id="emailCheck"
-               {{ ($data->mail_status ?? '') === 'Email' ? 'checked' : '' }}
-               disabled>
-        <span class="custom-checkbox"></span>
-        <i class="fa fa-envelope"></i> Email
-    </label>
-
+        <!-- disabled select submit nahi hota -->
+        <input type="hidden" name="mail_status" value="{{ $data->mail_status }}">
+    </div>
 </div>
-<style>
-    .lock-contact-mode {
-    pointer-events: none !important;
-}
-
-.lock-contact-mode label {
-    cursor: not-allowed !important;
-}
-
-.lock-contact-mode input {
-    pointer-events: none !important;
-}
-
-</style>
 
 
 
-
-                                        </div>
-                                    </div><!--end col-->
+<!--end col-->
                                     {{-- <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-check-label">
@@ -1492,7 +1467,7 @@
                                     <hr/>
                                     <div class="col-12">
                                         <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner Dob <span
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
                                                     class="text-danger">*</span></label>
                                             <input type="date" class="form-control"
                                                 placeholder="Enter driver dob" id="owner_dob"
@@ -1534,7 +1509,10 @@
                                         </div>
                                     </div><!--end col-->
                                     <hr/>
-                                    <h5>Loss Runs/Docs Files</h5>
+                                    <h5 class="mb-3">Loss Runs / Docs Files <br>
+                                <small style="color:red;">
+    Allowed file types: ZIP, PDF, DOC, DOCX
+</small></h5>
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <input class="form-control" style="margin-left: 10px"

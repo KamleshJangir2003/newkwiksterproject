@@ -445,7 +445,7 @@ $absent = $absentCount+$lessWorkCount-4-$holidays;
   
     }
     public function training_material(){
-      $datas = Training::latest()->get();
+      $datas = Training::where('heading', 'NOT LIKE', '%Factoring%')->latest()->get();
       return view('Agent.scripts.training',compact('datas'));
     }
     public function store_notes(Request $req){

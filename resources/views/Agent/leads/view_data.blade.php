@@ -1700,37 +1700,26 @@
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
-                                        <div class="pt-4">
+                                        <div class="pt-0">
     
 
- <div class="mt-2">
-    <h6 class="mb-2">Mode On</h6>
+<div class="mt-2">
+     <label for="ForminputState" class="form-label">Mode On<span
+                                                    class="text-danger">*</span></label>
 
-   <div class="d-flex gap-3 align-items-center">
-
-    <div class="form-check d-flex align-items-center gap-2">
-        <input class="form-check-input" type="radio"
-               name="contact_mode"
-               id="callCheck"
-               value="Call"
-               {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'checked' : '' }}
-               required>
-        <label class="form-check-label" for="callCheck">Call</label>
-    </div>
-
-    <div class="form-check d-flex align-items-center gap-2">
-        <input class="form-check-input" type="radio"
-               name="contact_mode"
-               id="emailCheck"
-               value="Email"
-               {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'checked' : '' }}
-               required>
-        <label class="form-check-label" for="emailCheck">Email</label>
-    </div>
-
+    <select name="contact_mode" class="form-select" required>
+       
+        <option value="Call"
+            {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'selected' : '' }}>
+            Call
+        </option>
+        <option value="Email"
+            {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'selected' : '' }}>
+            Email
+        </option>
+    </select>
 </div>
 
-</div>
 
 
 
@@ -1846,7 +1835,13 @@
                                     </div><!--end col-->
                                     </div><!--end col-->
                                     <hr />
-                                   <h5 class="mb-3">Loss Runs/Docs Files</h5>
+                                   <h5 class="mb-3">Loss Runs / Docs Files <br>
+                                <small style="color:red;">
+    Allowed file types: ZIP, PDF, DOC, DOCX
+</small></h5>
+
+
+
 
 <div class="row">
     <div class="col-md-6 mb-3">

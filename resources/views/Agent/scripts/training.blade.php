@@ -23,6 +23,7 @@
         <h5 class="card-title">Scripts & Files</h5>
         <hr/>
         @foreach ($datas as $data)
+        
     <div class="accordion accordion-flush" id="accordionFlushExample{{$data->id}}">
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-heading{{$data->id}}">

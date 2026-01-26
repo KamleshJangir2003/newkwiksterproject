@@ -1356,24 +1356,26 @@
                                             </select>
                                         </div>
                                     </div><!--end col-->
-                                    <div class="col-6">
-                                        <div class="pt-0">
-                                            <label id="model-form-status" class="form-label">Form on</label>
-                                          <div class="d-flex gap-3">
-    <label class="call-mail-option">
-        <input type="checkbox" name="contact_type[]" value="call">
-        <span class="custom-checkbox"></span>
-        <i class="fa fa-phone"></i> Call
-    </label>
+                                 <div class="col-6">
+    <div class="mb-3">
+        <label class="form-label">Mode On</label>
 
-    <label class="call-mail-option">
-        <input type="checkbox" name="contact_type[]" value="mail">
-        <span class="custom-checkbox"></span>
-        <i class="fa fa-envelope"></i> Mail
-    </label>
-</div>
-                                        </div>
-                                    </div><!--end col-->
+        <select name="mail_status" class="form-select" disabled>
+            <option value="Call"
+                {{ ($data->mail_status ?? '') === 'Call' ? 'selected' : '' }}>
+                Call
+            </option>
+
+            <option value="Email"
+                {{ ($data->mail_status ?? '') === 'Email' ? 'selected' : '' }}>
+                Email
+            </option>
+        </select>
+
+        <!-- disabled select submit nahi hota -->
+        <input type="hidden" name="mail_status" value="{{ $data->mail_status }}">
+    </div>
+</div><!--end col-->
                                     <div class="col-6 reminder" style="display: none;">
                                         <div class="pb-4">
                                             <label for="dateInput" class="form-label">Date</label>
@@ -1523,7 +1525,10 @@
                                         </div>
                                     </div><!--end col-->
                                     <hr/>
-                                    <h5>Loss Runs/Docs Files</h5>
+                                    <h5 class="mb-3">Loss Runs / Docs Files <br>
+                                <small style="color:red;">
+    Allowed file types: ZIP, PDF, DOC, DOCX
+</small></h5>
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <input class="form-control" style="margin-left: 10px"
