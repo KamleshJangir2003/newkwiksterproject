@@ -530,6 +530,11 @@
                                                                                         data-tab="#bank_details">Bank
                                                                                         Details</a>
                                                                                 </li>
+                                                                                 <li class="nav-item">
+                                                                                    <a href="#" class="nav-link"
+                                                                                        data-tab="#bank_details">Monthly
+                                                                                        Target</a>
+                                                                                </li>
                                                                             </ul>
                                                                             <!-- END profile-header-tab -->
                                                                         </div>
