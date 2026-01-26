@@ -1355,6 +1355,16 @@ if(!empty($req->assign_leads)){
                 $tab_data = $tab_view->total_data;
                 $tab_view->total_data = $tab_data + $count;
                 $tab_view->save();
+            } else {
+                // Create new tab view entry if it doesn't exist
+                $firstLead = $excelDatas->where('batch_name', $batchName)->first();
+                if ($firstLead) {
+                    Tab_view_lead::create([
+                        'team_id' => $firstLead->rel_id,
+                        'batch' => $batchName,
+                        'total_data' => $count
+                    ]);
+                }
             }
         } 
         } 
@@ -1607,6 +1617,16 @@ public function bluck_delete_assign(Request $req){
            $tab_data = $tab_view->total_data;
            $tab_view->total_data = $tab_data + $count;
            $tab_view->save();
+       } else {
+           // Create new tab view entry if it doesn't exist
+           $firstLead = $excelDatas->where('batch_name', $batchName)->first();
+           if ($firstLead) {
+               Tab_view_lead::create([
+                   'team_id' => $firstLead->rel_id,
+                   'batch' => $batchName,
+                   'total_data' => $count
+               ]);
+           }
        }
    } 
    } 
