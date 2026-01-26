@@ -238,10 +238,10 @@
 
             <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Voice Mail">Voice Mail</a>
             <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Not Intrested">Not Intrested</a>
-            <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Insured Leads">Insured Leads</a>
+            <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Insured Leads">Insured </a>
             <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Not Connected">Not Connected</a>
             <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="Wrong Number">Wrong Number</a>
-            <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="WON">WON</a>
+            <!-- <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="WON">WON</a> -->
             <a class="dropdown-item lead-status-item update-status" href="javascript:void(0)" data-lead-id="{{ $data->id }}" data-status="DND">DND</a>
         </div>
     </div>

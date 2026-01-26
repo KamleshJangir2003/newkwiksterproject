@@ -94,6 +94,9 @@ $lossRunsCount = $lossRunsRequired;
     $total_call = $dayReportToday->total_call ?? 0;
     $intrested_call = $dayReportToday->intrested ?? 0;
 
+    // 4. Get interested leads count from timezone-filtered data (Eastern Time)
+    $intrested_call = $this->getInterestedLeadsCountByTimezone($agentId, 'Eastern Time');
+
     // 4. Monthly pipeline count directly in DB
     $month_pipeline = \DB::table('excel_data')
         ->where('click_id', $agentId)
@@ -449,6 +452,51 @@ public function resubmitTransfer(Request $request)
         'success' => false,
         'message' => 'Lead not found or already processed'
     ]);
+}
+
+/**
+ * Get count of interested leads filtered by timezone
+ */
+private function getInterestedLeadsCountByTimezone($agentId, $timezone)
+{
+    // Define state-to-timezone mapping
+    $stateTimezones = [
+        'CA' => 'Pacific Time', 'OR' => 'Pacific Time', 'WA' => 'Pacific Time', 'NV' => 'Pacific Time',
+        'MT' => 'Mountain Time', 'CO' => 'Mountain Time', 'NM' => 'Mountain Time', 'UT' => 'Mountain Time',
+        'WY' => 'Mountain Time', 'AZ' => 'Mountain Time', 'ID' => 'Mountain Time',
+        'TX' => 'Central Time', 'AL' => 'Central Time', 'AR' => 'Central Time', 'IL' => 'Central Time',
+        'IA' => 'Central Time', 'KS' => 'Central Time', 'LA' => 'Central Time', 'MN' => 'Central Time',
+        'MS' => 'Central Time', 'MO' => 'Central Time', 'NE' => 'Central Time', 'ND' => 'Central Time',
+        'OK' => 'Central Time', 'SD' => 'Central Time', 'TN' => 'Central Time', 'WI' => 'Central Time',
+        'CT' => 'Eastern Time', 'DE' => 'Eastern Time', 'FL' => 'Eastern Time', 'GA' => 'Eastern Time',
+        'IN' => 'Eastern Time', 'KY' => 'Eastern Time', 'ME' => 'Eastern Time', 'MD' => 'Eastern Time',
+        'MA' => 'Eastern Time', 'MI' => 'Eastern Time', 'NH' => 'Eastern Time', 'NJ' => 'Eastern Time',
+        'NY' => 'Eastern Time', 'NC' => 'Eastern Time', 'OH' => 'Eastern Time', 'PA' => 'Eastern Time',
+        'RI' => 'Eastern Time', 'SC' => 'Eastern Time', 'VT' => 'Eastern Time', 'VA' => 'Eastern Time',
+        'WV' => 'Eastern Time', 'DC' => 'Eastern Time',
+    ];
+
+    // Build query for timezone filtering
+    $query = \DB::table('excel_data')
+        ->where('click_id', $agentId)
+        ->where('form_status', 'Intrested');
+    
+    // Apply timezone filter
+    $query->where(function($q) use ($timezone, $stateTimezones) {
+        foreach ($stateTimezones as $state => $tz) {
+            if ($tz === $timezone) {
+                $q->orWhere('business_state', $state);
+            }
+        }
+        // Handle empty/invalid states as Pacific Time
+        if ($timezone === 'Pacific Time') {
+            $q->orWhereNull('business_state')
+              ->orWhere('business_state', '')
+              ->orWhereNotIn('business_state', array_keys($stateTimezones));
+        }
+    });
+
+    return $query->count();
 }
 
 

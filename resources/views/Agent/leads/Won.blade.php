@@ -494,8 +494,13 @@
                                         <div class="mb-3">
                                             <label for="citynameInput" class="form-label">DOT <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" placeholder="Enter DOT"
-                                                id="dot" name="dot" required="">
+                                           <input type="number" 
+       class="form-control" 
+       placeholder="Enter DOT"
+       id="dot" 
+       name="dot" 
+       required>
+
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -506,6 +511,15 @@
                                                 id="mc_docket" name="mc_docket">
                                         </div>
                                     </div><!--end col-->
+                                     <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
                                     <div class="col-12 mb-3">
                                         <h5>Commodities</h5>
                                         <div class="row">
@@ -1017,18 +1031,26 @@
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
-                                        <div class="pt-4">
-                                            <label id="model-form-status" class="form-label">Interested</label>
-                                            <div class="progress animated-progress custom-progress mb-4"
-                                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
-                                                style="cursor:pointer;">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width:100%"
-                                                    ;="" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                                    id="progress-bar">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!--end col-->
+    <div class="mb-3">
+        <label class="form-label">Mode On</label>
+
+        <select name="mail_status" class="form-select" disabled>
+            <option value="Call"
+                {{ ($data->mail_status ?? '') === 'Call' ? 'selected' : '' }}>
+                Call
+            </option>
+
+            <option value="Email"
+                {{ ($data->mail_status ?? '') === 'Email' ? 'selected' : '' }}>
+                Email
+            </option>
+        </select>
+
+        <!-- disabled select submit nahi hota -->
+        <input type="hidden" name="mail_status" value="{{ $data->mail_status }}">
+    </div>
+</div>
+<!--end col-->
                                     {{-- <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-check-label">

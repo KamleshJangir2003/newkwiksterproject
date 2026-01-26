@@ -469,7 +469,7 @@
  <div class="dash-card total">
   <div class="icon"><i class="fa-solid fa-file-lines"></i></div>
   <h6>Total Interested Forms</h6>
-  <h4>{{ $total_all_forms }}</h4>
+  <h4>{{ $intrested_call }}</h4>
 </div>
 
 <div class="dash-card pipeline">
