@@ -745,6 +745,15 @@
                                                             id="mc_docket" name="mc_docket">
                                                     </div>
                                                 </div><!--end col-->
+                                                  <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
                                                 <div class="col-12 mb-3">
                                                     <h5>Commodities</h5>
                                                     <div class="row">
@@ -1229,111 +1238,51 @@
                                                         </select>
                                                     </div>
                                                 </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="pt-0">
-                                           <label id="model-form-status" class="form-label">Form on</label>
+          <div class="col-6">
+    <div class="form-group-custom">
+        <label class="form-label">
+            Mode <span class="text-danger">*</span>
+        </label>
 
-<div class="d-flex gap-3 lock-contact-mode">
-
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Call"
-               id="callCheck">
-        <span class="custom-checkbox"></span>
-         Call
-    </label>
-
-    <label class="call-mail-option">
-        <input type="radio"
-               name="contact_mode"
-               value="Email"
-               id="emailCheck">
-        <span class="custom-checkbox"></span>
-         Email
-    </label>
-
+        <select name="contact_mode" class="form-select" required>
+            
+            <option value="Call"
+                {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'selected' : '' }}>
+                Voice
+            </option>
+            <option value="Email"
+                {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'selected' : '' }}>
+                Email
+            </option>
+        </select>
+    </div>
 </div>
 <style>
-    .call-mail-option {
+    .form-group-custom {
     display: flex;
-    align-items: center;
-   
-    cursor: pointer;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.form-select {
+    margin-top: 2px;
+    border-radius: 8px;
+    padding: 10px 14px;
     font-size: 14px;
+    border: 1px solid #ced4da;
 }
 
-/* hide default radio */
-.call-mail-option input[type="radio"] {
-    display: none;
+.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
 }
 
-/* custom checkbox */
-.custom-checkbox {
-    width: 22px;              /* size */
-    height: 22px;
-    border: 2px solid #bfbfbf;
-    border-radius: 4px;
-    display: inline-block;
-    position: relative;
-    transition: all 0.2s ease;
-}
-
-/* checked state */
-.call-mail-option input[type="radio"]:checked + .custom-checkbox {
-    background: #16a34a;
-    border-color: #16a34a;
-}
-
-/* check mark */
-.call-mail-option input[type="radio"]:checked + .custom-checkbox::after {
-    content: "✓";
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -55%);
-}
-
-/* admin read-only */
-.lock-contact-mode {
-    pointer-events: none;
-    opacity: 0.95;
-}
-
-</style>
-
-<style>
-    .lock-contact-mode {
-    pointer-events: none !important;
-}
-
-.lock-contact-mode label {
-    cursor: not-allowed !important;
-}
-
-.lock-contact-mode input {
-    pointer-events: none;
-    opacity: 1;   /* tick clearly dikhe */
-}
-.call-mail-option input[type="radio"] {
-    transform: scale(1.4);   /* size control */
-    margin-right: 6px;
-    cursor: pointer;
-}
-
-
-
-</style>
-
-
-
-
-                                        </div>
-                                                </div><!--end col-->
-                                               <!-- Good / Bad Form -->
+</style>                                       <!-- Good / Bad Form -->
 <div class="col-6">
     <div class="mb-3">
         <label class="form-check-label">
@@ -1380,6 +1329,7 @@
 
 
         </div>
+       
 
         <!-- ✅ VALIDATION ERROR MESSAGE (YAHI SHOW HOGA) -->
         @error('loss_runs')
@@ -1542,69 +1492,72 @@
                                                     </div>
                                                 </div><!--end col-->
                                                 <hr/>
-                                                <div class="col-12">
-                                                    <h5>Documents/Files</h5>
-                                                    </div>
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value=""
-                                                        name="file1">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton1" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value="" 
-                                                        name="file2">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton2" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value=""
-                                                        name="file3">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton3" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value=""
-                                                        name="file4">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton4" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value=""
-                                                        name="file5">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton5" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <input class="form-control" style="margin-left: 10px"
-                                                        type="file" value="" 
-                                                        name="file6">
-                                                    </div>
-                                                    <button type="button" id="openPdfButton6" style="
-                                                    margin-bottom: 12px;
-                                                " class="btn btn-primary">Open file</button>
-                                                </div><!--end col-->
+                                              <div class="row">
+    <div class="col-12">
+        <h5>Documents/Files</h5>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file1">
+        </div>
+        <button type="button" id="openPdfButton1"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file2">
+        </div>
+        <button type="button" id="openPdfButton2"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file3">
+        </div>
+        <button type="button" id="openPdfButton3"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file4">
+        </div>
+        <button type="button" id="openPdfButton4"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file5">
+        </div>
+        <button type="button" id="openPdfButton5"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+
+    <div class="col-6">
+        <div class="mb-3">
+            <input class="form-control" style="margin-left: 10px"
+                   type="file" value="" name="file6">
+        </div>
+        <button type="button" id="openPdfButton6"
+                style="margin-bottom: 12px;"
+                class="btn btn-primary">Open file</button>
+    </div>
+</div>
+
                                                 <div class="col-lg-12">
                                                     <div class="text-end">
                                                         <div class="mt-4">
