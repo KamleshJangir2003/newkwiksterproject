@@ -159,6 +159,9 @@ Route::group(['prefix' => 'agent'], function () {
         Route::get('/agent/won/view', [agentleadcontroller::class, 'agent_won_data'])->name('agent_won_data');
         Route::get('/agent/voicemail/view', [agentleadcontroller::class, 'agent_voicemail_data'])->name('agent_voicemail_data');
         Route::get('/agent/search/view{id?}/{n?}', [agentleadcontroller::class, 'agent_search_data'])->name('agent_search_data');
+        Route::get('/agent/search/leads', [agentleadcontroller::class, 'agent_search_leads'])->name('agent_search_leads');
+        Route::get('/agent/lead/details/{id}', [agentleadcontroller::class, 'agent_get_lead_details'])->name('agent_get_lead_details');
+        Route::post('/agent/update/search/lead', [agentleadcontroller::class, 'agent_update_search_lead'])->name('agent_update_search_lead');
         Route::post('/agent_reminder_noti', [agentleadcontroller::class, 'reminder_notif'])->name('agent_reminder_notif');
          Route::post('/agent_email_form', [agentleadcontroller::class, 'agent_email_form'])->name('agent_email_form');
          Route::get('/show_email_inrsted', [agentleadcontroller::class, 'show_email_inrsted'])->name('show_email_inrsted');

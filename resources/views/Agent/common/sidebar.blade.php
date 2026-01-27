@@ -97,6 +97,8 @@
 }
 
 </style>
+                        <li> <a href="{{ route('agent_search_leads') }}"><i class='bx bx-radio-circle'></i>Search Leads</a>
+                        </li>
                         <!-- <li> <a href="{{ route('show_email_inrsted') }}"><i class='bx bx-radio-circle'></i>Email Verified
                             Forms</a>
                     </li> -->

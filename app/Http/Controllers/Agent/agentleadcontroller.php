@@ -1299,6 +1299,101 @@ $lead = ExcelData::with('userDetail')->with('unitOwned')->findOrFail($id); // Fe
 return response()->json($lead);
 }
 
+// Search leads functionality
+public function agent_search_leads(Request $request)
+{
+    $searchTerm = $request->get('search');
+    $leads = collect();
+    
+    if ($searchTerm && strlen($searchTerm) >= 2) {
+        $leads = ExcelData::where(function ($query) use ($searchTerm) {
+            $query->where('company_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('phone', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('email', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('company_rep1', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('business_address', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('business_city', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('business_state', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('business_zip', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('dot', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('mc_docket', 'like', '%' . $searchTerm . '%');
+        })
+        ->whereNotNull('click_id') // Only show assigned leads
+        ->limit(300)
+        ->paginate(25);
+        
+        $leads->appends(['search' => $searchTerm]);
+    }
+    
+    return view('Agent.leads.search_view', compact('leads', 'searchTerm'));
+}
+
+// Get lead details for modal view
+public function agent_get_lead_details($id)
+{
+    try {
+        $lead = ExcelData::findOrFail($id);
+        
+        return response()->json([
+            'success' => true,
+            'lead' => $lead,
+            'is_owner' => $lead->click_id == session('agent_id')
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Lead not found'
+        ], 404);
+    }
+}
+
+// Update lead with ownership check
+public function agent_update_search_lead(Request $request)
+{
+    try {
+        $leadId = $request->lead_id;
+        $lead = ExcelData::findOrFail($leadId);
+        
+        // Check if current agent is the owner
+        if ($lead->click_id != session('agent_id')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only edit your own leads'
+            ], 403);
+        }
+        
+        // Validate input
+        $validated = $request->validate([
+            'company_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'dot' => 'nullable|string|max:50',
+            'mc_docket' => 'nullable|string|max:50',
+            'form_status' => 'nullable|string|in:Intrested,Pipeline,Voice Mail,Not Interested,WON,Not Connected,Wrong Number,Insured Leads,DND',
+            'comment' => 'nullable|string'
+        ]);
+        
+        // Update lead
+        $lead->update($validated);
+        
+        // Update lead status history
+        if ($request->form_status && $request->form_status != $lead->form_status) {
+            $this->updateLeadStatus($leadId, $request->form_status);
+        }
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead updated successfully'
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error updating lead: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
 
 
 }
