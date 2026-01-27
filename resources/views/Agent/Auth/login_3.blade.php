@@ -8,8 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-
-        
         :root {
             --primary-blue: #0066cc;
             --secondary-yellow: #ffd700;
@@ -20,6 +18,9 @@
             --cargo-red: #e74c3c;
             --liability-green: #2ecc71;
             --freight-purple: #9b59b6;
+            --accident-orange: #ff4400;
+            --fire-red: #ff3300;
+            --smoke-gray: #666666;
         }
 
         * {
@@ -32,20 +33,18 @@
             font-family: 'Montserrat', sans-serif;
             height: 100vh;
             overflow: hidden;
-            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(to bottom, #6dc1c9, #b21f1f, #fdbb2d);
             animation: skyAnimation 30s infinite alternate;
             position: relative;
         }
 
         @keyframes skyAnimation {
             0% {
-                background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+                background: linear-gradient(to bottom, #303237, #b21f1f, #fdbb2d);
             }
-
             50% {
                 background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
             }
-
             100% {
                 background: linear-gradient(to bottom, #000428, #004e92);
             }
@@ -82,7 +81,6 @@
             0% {
                 background-position-x: 0;
             }
-
             100% {
                 background-position-x: -50px;
             }
@@ -102,44 +100,330 @@
             height: 90px;
             background-size: contain;
             background-repeat: no-repeat;
-            animation: truckAnimation 20s linear infinite;
             filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
+            transform-origin: center center;
         }
 
-        /* More realistic truck designs */
+        /* Truck designs */
         .truck:nth-child(1) {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 90"><rect x="10" y="30" width="160" height="45" fill="%23e74c3c" rx="3"/><rect x="170" y="40" width="40" height="35" fill="%23e74c3c" rx="3"/><rect x="15" y="20" width="150" height="10" fill="%23e74c3c" rx="2"/><circle cx="45" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><circle cx="135" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><rect x="40" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 40 75)"/><rect x="130" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 130 75)"/><text x="110" y="45" font-family="Arial" font-size="10" fill="%23ffffff" text-anchor="middle" font-weight="bold">CARGO</text><text x="110" y="58" font-family="Arial" font-size="8" fill="%23ffffff" text-anchor="middle">INSURANCE</text><rect x="180" y="45" width="5" height="5" fill="%23ffd700"/><rect x="187" y="45" width="5" height="5" fill="%23ffd700"/></svg>');
             bottom: 50px;
-            animation-delay: 0s;
+            left: -250px;
         }
 
         .truck:nth-child(2) {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 90"><rect x="10" y="30" width="160" height="45" fill="%232ecc71" rx="3"/><rect x="170" y="40" width="40" height="35" fill="%232ecc71" rx="3"/><rect x="15" y="20" width="150" height="10" fill="%232ecc71" rx="2"/><circle cx="45" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><circle cx="135" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><rect x="40" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 40 75)"/><rect x="130" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 130 75)"/><text x="110" y="45" font-family="Arial" font-size="10" fill="%23ffffff" text-anchor="middle" font-weight="bold">LIABILITY</text><text x="110" y="58" font-family="Arial" font-size="8" fill="%23ffffff" text-anchor="middle">COVERAGE</text><rect x="180" y="45" width="5" height="5" fill="%23ffd700"/><rect x="187" y="45" width="5" height="5" fill="%23ffd700"/></svg>');
             bottom: 100px;
-            animation-delay: -5s;
+            right: -250px;
+            transform: rotateY(180deg);
         }
 
         .truck:nth-child(3) {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 90"><rect x="10" y="30" width="160" height="45" fill="%239b59b6" rx="3"/><rect x="170" y="40" width="40" height="35" fill="%239b59b6" rx="3"/><rect x="15" y="20" width="150" height="10" fill="%239b59b6" rx="2"/><circle cx="45" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><circle cx="135" cy="75" r="12" fill="%23333" stroke="%23ccc" stroke-width="2"/><rect x="40" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 40 75)"/><rect x="130" cy="75" width="5" height="12" fill="%23333" transform="rotate(45 130 75)"/><text x="110" y="45" font-family="Arial" font-size="10" fill="%23ffffff" text-anchor="middle" font-weight="bold">FREIGHT</text><text x="110" y="58" font-family="Arial" font-size="8" fill="%23ffffff" text-anchor="middle">PROTECTION</text><rect x="180" y="45" width="5" height="5" fill="%23ffd700"/><rect x="187" y="45" width="5" height="5" fill="%23ffd700"/></svg>');
             bottom: 150px;
-            animation-delay: -10s;
+            left: 30%;
+            opacity: 0.7;
         }
 
-        @keyframes truckAnimation {
+        /* Truck movement animations */
+        .truck.moving-right {
+            animation: moveRight 4s linear forwards;
+        }
+
+        @keyframes moveRight {
             0% {
-                transform: translateX(-220px);
+                left: -250px;
+                transform: rotate(0deg);
             }
-
             100% {
-                transform: translateX(2000px);
+                left: calc(50% - 110px);
+                transform: rotate(0deg);
             }
         }
 
+        .truck.moving-left {
+            animation: moveLeft 4s linear forwards;
+        }
+
+        @keyframes moveLeft {
+            0% {
+                right: -250px;
+                transform: rotateY(180deg);
+            }
+            100% {
+                right: calc(50% - 110px);
+                transform: rotateY(180deg);
+            }
+        }
+
+        /* Collision animations */
+        .truck.collide-right {
+            animation: collideRight 1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes collideRight {
+            0% {
+                left: calc(50% - 110px);
+                transform: rotate(0deg);
+            }
+            30% {
+                left: calc(50% - 80px);
+                transform: rotate(-10deg);
+            }
+            60% {
+                left: calc(50% - 140px);
+                transform: rotate(25deg) scale(0.95);
+            }
+            100% {
+                left: calc(50% - 160px);
+                transform: rotate(40deg) scale(0.9);
+                filter: brightness(0.8) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.7));
+            }
+        }
+
+        .truck.collide-left {
+            animation: collideLeft 1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes collideLeft {
+            0% {
+                right: calc(50% - 110px);
+                transform: rotateY(180deg);
+            }
+            30% {
+                right: calc(50% - 80px);
+                transform: rotateY(180deg) rotate(10deg);
+            }
+            60% {
+                right: calc(50% - 140px);
+                transform: rotateY(180deg) rotate(-25deg) scale(0.95);
+            }
+            100% {
+                right: calc(50% - 160px);
+                transform: rotateY(180deg) rotate(-40deg) scale(0.9);
+                filter: brightness(0.8) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.7));
+            }
+        }
+
+        /* Broken truck parts */
+        .broken-part {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 4;
+            opacity: 0;
+        }
+
+        .wheel {
+            width: 25px;
+            height: 25px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"><circle cx="12.5" cy="12.5" r="12" fill="%23333" stroke="%23ccc" stroke-width="1"/><circle cx="12.5" cy="12.5" r="4" fill="%23666"/></svg>');
+        }
+
+        .debris {
+            width: 40px;
+            height: 20px;
+            background-color: var(--cargo-red);
+            border-radius: 3px;
+        }
+
+        .debris.green {
+            background-color: var(--liability-green);
+        }
+
+        /* Explosion effects */
+        .explosion {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--fire-red) 0%, var(--accident-orange) 30%, rgba(255, 100, 0, 0.3) 60%, transparent 70%);
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .explosion.medium {
+            animation: explodeMedium 0.8s forwards;
+        }
+
+        @keyframes explodeMedium {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                transform: scale(0.1);
+            }
+            50% {
+                width: 200px;
+                height: 200px;
+                opacity: 0.9;
+                transform: scale(1);
+            }
+            100% {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        .explosion.large {
+            animation: explodeLarge 1s forwards;
+        }
+
+        @keyframes explodeLarge {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                transform: scale(0.1);
+            }
+            40% {
+                width: 300px;
+                height: 300px;
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            100% {
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+                transform: scale(1.8);
+            }
+        }
+
+        /* Fire effect */
+      
+
+        @keyframes fireFlicker {
+            0% {
+                transform: scale(1) translateY(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.1) translateY(-5px);
+                opacity: 1;
+            }
+        }
+
+        /* Smoke effect */
+        .smoke {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(100, 100, 100, 0.8) 0%, rgba(50, 50, 50, 0.4) 40%, transparent 70%);
+            border-radius: 50%;
+            z-index: 3;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .smoke.float-up {
+            animation: floatUp 3s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-200px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Accident popup */
+        .accident-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 500px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(255, 50, 0, 0.8);
+            border: 3px solid var(--accident-orange);
+            z-index: 100;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .accident-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .accident-popup h2 {
+            color: var(--accident-orange);
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
+        }
+
+        .accident-popup p {
+            color: var(--white);
+            font-size: 18px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .accident-popup .highlight {
+            color: var(--secondary-yellow);
+            font-weight: 600;
+        }
+
+        .popup-btn {
+            background: linear-gradient(to right, var(--primary-blue), #0044aa);
+            color: var(--white);
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-btn:hover {
+            background: linear-gradient(to right, #0055aa, #003388);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.5);
+        }
+
+        .warning-icon {
+            font-size: 60px;
+            color: var(--accident-orange);
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+            text-shadow: 0 0 20px rgba(255, 100, 0, 0.7);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(255, 100, 0, 0.7);
+            }
+            50% {
+                transform: scale(1.1);
+                text-shadow: 0 0 20px rgba(255, 100, 0, 1);
+            }
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(255, 100, 0, 0.7);
+            }
+        }
+
+        /* Login container */
         .login-container {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0);
             width: 420px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
@@ -149,22 +433,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             z-index: 10;
             overflow: hidden;
-            transition: all 0.5s ease;
-            animation: float 6s ease-in-out infinite;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes float {
-            0% {
-                transform: translate(-50%, -52%);
-            }
-
-            50% {
-                transform: translate(-50%, -48%);
-            }
-
-            100% {
-                transform: translate(-50%, -52%);
-            }
+        .login-container.show {
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .login-container::before {
@@ -185,21 +458,6 @@
         .logo {
             text-align: center;
             margin-bottom: 30px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
         }
 
         .logo-icon {
@@ -419,7 +677,6 @@
             text-decoration: none;
         }
 
-        /* Security shield animation */
         .shield {
             position: absolute;
             width: 100%;
@@ -445,6 +702,11 @@
                 padding: 30px 20px;
             }
 
+            .accident-popup {
+                width: 90%;
+                padding: 20px;
+            }
+
             .highway {
                 height: 150px;
             }
@@ -454,37 +716,53 @@
             }
         }
 
-        /* Loading animation */
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        /* Screen shake effect */
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
         }
 
-        .loading {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
+        .shake {
+            animation: screenShake 0.5s linear;
         }
-        .logo {
-    text-align: center;
-}
 
-.logo-icon img {
-    width: 220px;      /* size adjust kar sakte ho */
-    height: auto;
-    
-}
+        /* Broken glass effect */
+        .glass-crack {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
+            background-size: 50px 50px;
+            z-index: 6;
+            opacity: 0;
+            pointer-events: none;
+        }
 
+        .glass-crack.show {
+            animation: crackAppear 0.5s forwards;
+        }
+
+        @keyframes crackAppear {
+            0% { opacity: 0; }
+            100% { opacity: 0.3; }
+        }
+
+        /* Skid marks */
+        .skid-mark {
+            position: absolute;
+            height: 8px;
+            background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            border-radius: 4px;
+            bottom: 50px;
+            z-index: 2;
+            transform-origin: left center;
+            opacity: 0.7;
+        }
     </style>
 </head>
 
@@ -492,24 +770,61 @@
     <div class="highway"></div>
     <div class="road-line"></div>
 
+    <!-- Skid marks -->
+    <div class="skid-mark" id="skidMark1" style="width: 0; left: 30%;"></div>
+    <div class="skid-mark" id="skidMark2" style="width: 0; right: 30%;"></div>
+
+    <!-- Glass crack effect -->
+    <div class="glass-crack" id="glassCrack"></div>
+
     <div class="moving-trucks">
-        <div class="truck"></div>
-        <div class="truck"></div>
-        <div class="truck"></div>
+        <div class="truck" id="truck1"></div>
+        <div class="truck" id="truck2"></div>
+        <div class="truck" id="truck3"></div>
     </div>
 
-    <div class="login-container">
+    <!-- Explosion effects -->
+    <div class="explosion" id="explosion1"></div>
+    <div class="explosion" id="explosion2"></div>
+    
+    <!-- Fire effect -->
+    <div class="fire" id="fire1"></div>
+    <div class="fire" id="fire2"></div>
+    
+    <!-- Smoke effects -->
+    <div class="smoke" id="smoke1"></div>
+    <div class="smoke" id="smoke2"></div>
+    <div class="smoke" id="smoke3"></div>
+
+    <!-- Broken parts -->
+    <div class="broken-part wheel" id="wheel1"></div>
+    <div class="broken-part wheel" id="wheel2"></div>
+    <div class="broken-part debris" id="debris1"></div>
+    <div class="broken-part debris green" id="debris2"></div>
+
+    <!-- Accident Popup -->
+    <div class="accident-popup" id="accidentPopup">
+        <i class="fas fa-exclamation-triangle warning-icon"></i>
+        <h2>MAJOR COLLISION!</h2>
+        <p>A serious accident has occurred between commercial vehicles.</p>
+        <p>Estimated damage: <span class="highlight">$250,000+</span></p>
+        <p>This highlights the critical need for proper <span class="highlight">insurance coverage</span> and our CRM system helps manage such incidents efficiently.</p>
+        <button class="popup-btn" id="proceedBtn">
+            <i class="fas fa-shield-alt"></i> Access Claims System
+        </button>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container" id="loginContainer">
         <div class="shield"></div>
 
         <div class="logo">
-    <div class="logo-icon">
-        <img src="{{ asset('Admin/kwikster-logo.png') }}" alt="Edtim Global CRM">
-    </div>
-
-    <h1><span>Kwikster</span> CRM</h1>
-    <p>Insurance Management System</p>
-</div>
-
+            <div class="logo-icon">
+                <i class="fas fa-truck-moving"></i>
+            </div>
+            <h1><span>Kwikster</span> CRM</h1>
+            <p>Insurance Claims & Policy Management</p>
+        </div>
 
         <form id="loginForm" action="{{ route('ajent_login_process') }}" method="POST">
             @csrf
@@ -549,92 +864,262 @@
             </div>
 
             <button type="submit" class="login-btn" id="loginButton">
-                <span>LOGIN</span>
+                <span>LOGIN TO CLAIMS SYSTEM</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
         </form>
 
-
         <div class="footer">
-            <p>Need help? Contact <a href="#">IT Support</a></p>
+            <p>Emergency Claims Hotline: <a href="tel:+18005551234">1-800-555-1234</a></p>
             <p>© 2025 Kwikster CRM. All rights reserved.</p>
         </div>
     </div>
 
     <script>
-        // Password strength indicator
-        const passwordInput = document.getElementById('password');
-        const strengthMeter = document.getElementById('strengthMeter');
-
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-
-            // Check for length
-            if (password.length >= 8) strength += 25;
-            if (password.length >= 12) strength += 25;
-
-            // Check for uppercase letters
-            if (/[A-Z]/.test(password)) strength += 15;
-
-            // Check for numbers
-            if (/[0-9]/.test(password)) strength += 15;
-
-            // Check for special characters
-            if (/[^A-Za-z0-9]/.test(password)) strength += 20;
-
-            // Update strength meter
-            strengthMeter.style.width = strength + '%';
-
-            // Change color based on strength
-            if (strength < 40) {
-                strengthMeter.style.background = '#e74c3c';
-            } else if (strength < 70) {
-                strengthMeter.style.background = '#f39c12';
-            } else {
-                strengthMeter.style.background = '#2ecc71';
-            }
-        });
-
-        // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            const truck1 = document.getElementById('truck1');
+            const truck2 = document.getElementById('truck2');
+            const truck3 = document.getElementById('truck3');
+            const explosion1 = document.getElementById('explosion1');
+            const explosion2 = document.getElementById('explosion2');
+            const fire1 = document.getElementById('fire1');
+            const fire2 = document.getElementById('fire2');
+            const smoke1 = document.getElementById('smoke1');
+            const smoke2 = document.getElementById('smoke2');
+            const smoke3 = document.getElementById('smoke3');
+            const wheel1 = document.getElementById('wheel1');
+            const wheel2 = document.getElementById('wheel2');
+            const debris1 = document.getElementById('debris1');
+            const debris2 = document.getElementById('debris2');
+            const skidMark1 = document.getElementById('skidMark1');
+            const skidMark2 = document.getElementById('skidMark2');
+            const glassCrack = document.getElementById('glassCrack');
+            const accidentPopup = document.getElementById('accidentPopup');
+            const proceedBtn = document.getElementById('proceedBtn');
+            const loginContainer = document.getElementById('loginContainer');
             const passwordInput = document.getElementById('password');
-            const icon = this;
+            const strengthMeter = document.getElementById('strengthMeter');
+            const togglePassword = document.getElementById('togglePassword');
+            const highway = document.querySelector('.highway');
+            const roadLine = document.querySelector('.road-line');
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+            // Start the animation sequence
+            setTimeout(() => {
+                // Start trucks moving towards each other
+                truck1.classList.add('moving-right');
+                truck2.classList.add('moving-left');
+                
+                // Show skid marks
+                setTimeout(() => {
+                    skidMark1.style.width = '200px';
+                    skidMark1.style.transition = 'width 0.5s ease-out';
+                    skidMark2.style.width = '200px';
+                    skidMark2.style.transition = 'width 0.5s ease-out';
+                }, 3500);
+                
+                // Create collision effect
+                setTimeout(() => {
+                    // Stop highway animation
+                    highway.style.animationPlayState = 'paused';
+                    roadLine.style.animationPlayState = 'paused';
+                    
+                    // Screen shake
+                    document.body.classList.add('shake');
+                    
+                    // Glass crack effect
+                    glassCrack.classList.add('show');
+                    
+                    // Stop trucks and apply collision animation
+                    truck1.classList.remove('moving-right');
+                    truck2.classList.remove('moving-left');
+                    truck1.classList.add('collide-right');
+                    truck2.classList.add('collide-left');
+                    
+                    // Position explosions at collision point
+                    explosion1.style.left = 'calc(50% - 100px)';
+                    explosion1.style.top = 'calc(50% + 30px)';
+                    explosion1.classList.add('medium');
+                    
+                    explosion2.style.left = 'calc(50% - 150px)';
+                    explosion2.style.top = 'calc(50% + 50px)';
+                    explosion2.classList.add('large');
+                    
+                    // Position fires
+                    setTimeout(() => {
+                        fire1.style.left = 'calc(50% - 120px)';
+                        fire1.style.top = 'calc(50% + 40px)';
+                        fire1.style.opacity = '0.8';
+                        
+                        fire2.style.left = 'calc(50% - 180px)';
+                        fire2.style.top = 'calc(50% + 60px)';
+                        fire2.style.opacity = '0.6';
+                    }, 300);
+                    
+                    // Create smoke
+                    setTimeout(() => {
+                        smoke1.style.left = 'calc(50% - 100px)';
+                        smoke1.style.top = 'calc(50% + 50px)';
+                        smoke1.classList.add('float-up');
+                        smoke1.style.animationDelay = '0s';
+                        
+                        smoke2.style.left = 'calc(50% - 140px)';
+                        smoke2.style.top = 'calc(50% + 60px)';
+                        smoke2.classList.add('float-up');
+                        smoke2.style.animationDelay = '0.5s';
+                        
+                        smoke3.style.left = 'calc(50% - 80px)';
+                        smoke3.style.top = 'calc(50% + 70px)';
+                        smoke3.classList.add('float-up');
+                        smoke3.style.animationDelay = '1s';
+                    }, 500);
+                    
+                    // Flying debris
+                    setTimeout(() => {
+                        // Wheel 1
+                        wheel1.style.left = 'calc(50% - 50px)';
+                        wheel1.style.top = 'calc(50% + 30px)';
+                        wheel1.style.opacity = '1';
+                        wheel1.style.animation = 'wheelFly1 1.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards';
+                        
+                        // Wheel 2
+                        wheel2.style.left = 'calc(50% + 20px)';
+                        wheel2.style.top = 'calc(50% + 40px)';
+                        wheel2.style.opacity = '1';
+                        wheel2.style.animation = 'wheelFly2 1.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards';
+                        
+                        // Debris 1
+                        debris1.style.left = 'calc(50% - 80px)';
+                        debris1.style.top = 'calc(50% + 20px)';
+                        debris1.style.opacity = '1';
+                        debris1.style.animation = 'debrisFly1 1.2s cubic-bezier(0.2, 0.8, 0.3, 1) forwards';
+                        
+                        // Debris 2
+                        debris2.style.left = 'calc(50% + 40px)';
+                        debris2.style.top = 'calc(50% + 50px)';
+                        debris2.style.opacity = '1';
+                        debris2.style.animation = 'debrisFly2 1.3s cubic-bezier(0.2, 0.8, 0.3, 1) forwards';
+                        
+                        // Define flying animations
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            @keyframes wheelFly1 {
+                                0% { transform: translate(0, 0) rotate(0deg); }
+                                100% { transform: translate(-100px, -80px) rotate(720deg); }
+                            }
+                            @keyframes wheelFly2 {
+                                0% { transform: translate(0, 0) rotate(0deg); }
+                                100% { transform: translate(120px, -60px) rotate(-720deg); }
+                            }
+                            @keyframes debrisFly1 {
+                                0% { transform: translate(0, 0) rotate(0deg); }
+                                100% { transform: translate(-60px, -40px) rotate(180deg); }
+                            }
+                            @keyframes debrisFly2 {
+                                0% { transform: translate(0, 0) rotate(0deg); }
+                                100% { transform: translate(80px, -30px) rotate(-180deg); }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                        
+                    }, 200);
+                    
+                    // Third truck reacts to accident
+                    setTimeout(() => {
+                        truck3.style.animation = 'swerve 1s forwards';
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            @keyframes swerve {
+                                0% { left: 30%; transform: translateX(0); }
+                                100% { left: 40%; transform: translateX(50px) rotate(15deg); }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }, 400);
+                    
+                    // Show accident popup
+                    setTimeout(() => {
+                        accidentPopup.classList.add('show');
+                    }, 1500);
+                    
+                }, 4000); // Time until collision
+                
+            }, 1000); // Initial delay
+
+            // Proceed to login
+            proceedBtn.addEventListener('click', function() {
+                accidentPopup.classList.remove('show');
+                
+                // Fade out accident scene
+                setTimeout(() => {
+                    truck1.style.opacity = '0.3';
+                    truck2.style.opacity = '0.3';
+                    fire1.style.opacity = '0';
+                    fire2.style.opacity = '0';
+                    glassCrack.classList.remove('show');
+                    
+                    // Show login form
+                    setTimeout(() => {
+                        loginContainer.classList.add('show');
+                    }, 500);
+                }, 300);
+            });
+
+            // Password strength indicator
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+
+                if (password.length >= 8) strength += 25;
+                if (password.length >= 12) strength += 25;
+                if (/[A-Z]/.test(password)) strength += 15;
+                if (/[0-9]/.test(password)) strength += 15;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+
+                strengthMeter.style.width = strength + '%';
+
+                if (strength < 40) {
+                    strengthMeter.style.background = '#e74c3c';
+                } else if (strength < 70) {
+                    strengthMeter.style.background = '#f39c12';
+                } else {
+                    strengthMeter.style.background = '#2ecc71';
+                }
+            });
+
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this;
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+
+            // Add sound effects (uncomment if you have audio files)
+            /*
+            function playCollisionSound() {
+                const audio = new Audio('collision.mp3');
+                audio.volume = 0.6;
+                audio.play();
             }
+            
+            function playExplosionSound() {
+                const audio = new Audio('explosion.mp3');
+                audio.volume = 0.7;
+                audio.play();
+            }
+            
+            setTimeout(playCollisionSound, 4000);
+            setTimeout(playExplosionSound, 4050);
+            */
         });
-
-        // Form submission
-        // document.getElementById('loginForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-
-        //     const loginButton = document.getElementById('loginButton');
-        //     const originalContent = loginButton.innerHTML;
-
-        //     // Show loading state
-        //     loginButton.innerHTML = '<span class="loading"></span> AUTHENTICATING';
-        //     loginButton.disabled = true;
-
-        //     // Simulate API call
-        //     setTimeout(() => {
-        //         loginButton.innerHTML = '<i class="fas fa-check"></i> ACCESS GRANTED';
-        //         loginButton.style.background = '#2ecc71';
-
-        //         // Redirect after delay
-        //         setTimeout(() => {
-        //             window.location.href = 'dashboard.html';
-        //         }, 1000);
-        //     }, 2000);
-        // });
     </script>
 </body>
-
 </html>

@@ -39,6 +39,7 @@ use App\Events\UserNotification;
 
 class Scriptcontroller extends Controller
 {
+     private $MAX_AGENT_LEADS = 300;
 	public function Submit_daily_report()
 	{     session()->put('agent_passcode', 2);
         $timeZone = 'America/New_York';
@@ -624,10 +625,39 @@ $totalsalary = $holidaysalary +$presentsalary + $extralevesalary + $halfdayssala
         $batch_name = $batch_id->batch;
        
         // Fetch the first 100 ExcelData records that are NOT 'forwarded' with 300 limit
-        $excelDatas = ExcelData::where('status', 'not_forwarded')->where('batch_name',$batch_name)
-            ->take(100) // Limit the selection to 100 records
-            ->limit(300) // Additional 300 limit for agents
-            ->get();
+       // ===== STEP 1: agent ke paas already kitni leads hain =====
+$existing = managerfwd::where('agent_id', $id)->pluck('data_id')->toArray();
+
+$existingIds = [];
+
+foreach ($existing as $json) {
+    $decoded = json_decode($json, true);
+    if (is_array($decoded)) {
+        foreach ($decoded as $set) {
+            $existingIds = array_merge($existingIds, explode(',', $set));
+        }
+    }
+}
+
+$currentCount = count(array_unique($existingIds));
+
+// ===== STEP 2: remaining limit calculate =====
+$remaining = $this->MAX_AGENT_LEADS - $currentCount;
+
+if ($remaining <= 0) {
+    return redirect()->back()->with('success', 'You already have maximum 300 leads');
+}
+// ===== STEP 3: ExcelData ko dynamic limit ke saath fetch karo =====
+$excelDatas = ExcelData::where('status', 'not_forwarded')
+    ->where('batch_name', $batch_name)
+    ->limit($remaining)   // 🔥 dynamic limit (300 rule)
+    ->get();
+
+if ($excelDatas->isEmpty()) {
+    return redirect()->back()->with('success', 'No data available to forward');
+}
+
+
         // Extract the IDs of the ExcelData records into an array
         $leadIds = $excelDatas->pluck('id')->toArray();
 

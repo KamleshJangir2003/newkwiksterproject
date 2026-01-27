@@ -15,7 +15,10 @@
                     </div>
                     
 <div>
-                    <img src="{{url('Admin/kwikster-logo.png')}}" class="logo-icon" alt="logo icon" > 
+                   <a href="{{ url('/agent/agent_dashboard') }}">
+    <img src="{{ url('Admin/kwikster-logo.png') }}" class="logo-icon" alt="logo icon">
+</a>
+ 
                 </div>
                 <ul class="metismenu" id="menu">
                 <li>
@@ -97,8 +100,8 @@
 }
 
 </style>
-                        <li> <a href="{{ route('agent_search_leads') }}"><i class='bx bx-radio-circle'></i>Search Leads</a>
-                        </li>
+                        <!-- <li> <a href="{{ route('agent_search_leads') }}"><i class='bx bx-radio-circle'></i>Search Leads</a>
+                        </li> -->
                         <!-- <li> <a href="{{ route('show_email_inrsted') }}"><i class='bx bx-radio-circle'></i>Email Verified
                             Forms</a>
                     </li> -->
@@ -1708,6 +1711,15 @@ body > .metismenu > li.more-menu > ul,
                                                     id="mc_docket" name="mc_docket">
                                             </div>
                                         </div><!--end col-->
+                                          <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="owner_dob" class="form-label">Owner DOB <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="date" class="form-control"
+                                                placeholder="Enter driver dob" id="owner_dob"
+                                                name="owner_dob">
+                                        </div>
+                                    </div>
                                         <div class="col-12 mb-3">
                                             <h5>Commodities</h5>
                                             <div class="row">
@@ -2444,16 +2456,23 @@ body > .metismenu > li.more-menu > ul,
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-6">
-                                            <div class="pt-4">
-                                                <label id="model-form-status" class="form-label">NEW</label>
-                                                <div class="progress animated-progress custom-progress mb-4"
-                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                    aria-expanded="false" style="cursor:pointer;">
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                        style="width:100%" ;="" aria-valuenow="100"
-                                                        aria-valuemin="0" aria-valuemax="100" id="progress-bar">
-                                                    </div>
-                                                </div>
+                                            <div class="pt-0">
+                                               <div class="mt-2">
+     <label for="ForminputState" class="form-label">Mode<span
+                                                    class="text-danger">*</span></label>
+
+    <select name="contact_mode" class="form-select" required>
+       
+        <option value="Call"
+            {{ old('contact_mode', $data->mail_status ?? '') == 'Call' ? 'selected' : '' }}>
+            Voice
+        </option>
+        <option value="Email"
+            {{ old('contact_mode', $data->mail_status ?? '') == 'Email' ? 'selected' : '' }}>
+            Email
+        </option>
+    </select>
+</div>
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-6 reminder" style="display:none">
