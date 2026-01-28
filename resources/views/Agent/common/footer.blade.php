@@ -77,9 +77,9 @@
  </div>
  <!--end wrapper-->
  <!--start switcher-->
- <div class="switcher-wrapper">
+ <!-- <div class="switcher-wrapper">
      <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
-     </div>
+     </div> -->
      @php
          $users = App\Models\User::whereNull('deleted_at')
              ->where('is_active', 1)
@@ -89,7 +89,7 @@
          $header = $users->header;
          $sidebar = $users->sidebar;
      @endphp
-     <div class="switcher-body">
+     <!-- <div class="switcher-body">
          <div class="d-flex align-items-center">
              <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
              <button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
@@ -183,7 +183,7 @@
                  </div>
              </div>
          </div>
-     </div>
+     </div> -->
  </div>
  <div id="routeUrls" data-logout="{{ route('agent_time_logout') }}" data-login="{{ route('ajent_login') }}">
  </div>

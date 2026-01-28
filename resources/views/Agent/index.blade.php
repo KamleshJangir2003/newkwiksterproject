@@ -410,6 +410,48 @@ body {
         width: 100%;
     }
 }
+.goal-insights-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed #e5e7eb;
+}
+
+.goal-insight-card {
+    background: #f9fafb;
+    border-radius: 14px;
+    padding: 12px 10px;
+    text-align: center;
+    box-shadow: 0 6px 14px rgba(0,0,0,.06);
+}
+
+.goal-insight-card span {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.goal-insight-card strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* highlights */
+.goal-insight-card.highlight {
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.goal-insight-card.warning {
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+
 
     </style>
    
@@ -528,7 +570,7 @@ body {
         <i class="fa-solid fa-folder-open"></i>
     </div>
 
-    <h6>Loss Runs Required</h6>
+    <h6>Loss Runs </h6>
 
     <div class="d-flex justify-content-center gap-5 mt-2">
         <div class="text-center">
@@ -603,9 +645,36 @@ body {
           <span>Remaining</span>
           <strong>{{ (int)$remainingLeads }}</strong>
         </div>
+
       </div>
+      
 
     </div>
+   <div class="goal-insights-wrapper">
+
+  <div class="goal-insight-card">
+    <span>Total Days</span>
+    <strong>31</strong>
+  </div>
+
+  <div class="goal-insight-card">
+    <span>Today</span>
+    <strong>28 Jan</strong>
+  </div>
+
+  <div class="goal-insight-card highlight">
+    <span>Days Reached</span>
+    <strong>28</strong>
+  </div>
+
+  <div class="goal-insight-card warning">
+    <span>Required Pace</span>
+    <strong>3 / day</strong>
+  </div>
+
+</div>
+
+
   </div>
 </div>
 
