@@ -269,7 +269,7 @@
 </p>
 
 <p class="mb-1"><strong>Date -</strong> {{ \Carbon\Carbon::parse($data->updated_at)->format('d-m-y') }}</p>
-<p class="mb-1"><strong>Location -</strong> {{ $data->business_city }}, {{ $data->business_state }}</p>
+<p class="mb-1"><strong>Location -</strong> {{ $data->business_city }} {{ $data->business_state }}</p>
 <p class="mb-1"><strong>Phone -</strong> {{ $data->phone }}</p>
 
 
