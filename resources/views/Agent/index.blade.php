@@ -134,16 +134,20 @@ body {
   display: flex;
   gap: 24px;
   margin-top: 30px;
+  
 }
 
 .agent-goal-box {
   background: rgba(255,255,255,.9);
   backdrop-filter: blur(10px);
   border-radius: 22px;
-  padding: 22px;
-  width: 40%;
+  padding: 20px;
+  width: 95%;
   box-shadow: 0 16px 40px rgba(0,0,0,.12);
+
+  margin: 0 auto; /* 👈 center */
 }
+
 
 .goal-header {
   display: flex;
@@ -250,6 +254,161 @@ body {
   .goal-stats {
     grid-template-columns: 1fr;
   }
+}
+
+    </style>
+    <style>
+      .goal-ultra {
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+    border-radius: 20px;
+    padding: 26px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.goal-ultra::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(135deg, #22c55e, #3b82f6, #a855f7);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.goal-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.goal-header small {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.goal-pill {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.goal-body {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+/* 🔥 MAIN FIX */
+.circle-progress {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    flex-shrink: 0;
+}
+
+/* SVG */
+.bg-circle {
+    fill: none;
+    stroke: #e5e7eb;
+    stroke-width: 14;
+}
+
+.progress-circle {
+    fill: none;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 452;
+    transition: stroke-dashoffset 0.6s ease;
+}
+
+/* % TEXT FIX */
+.circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.circle-text h3 {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.circle-text p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.goal-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    flex: 1;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+}
+
+.stat-card i {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: #6366f1;
+}
+
+.stat-card span {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.stat-card.success i { color: #22c55e; }
+.stat-card.danger i { color: #ef4444; }
+
+@media (max-width: 768px) {
+    .goal-body {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .goal-stats {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
 }
 
     </style>
@@ -389,25 +548,7 @@ body {
 </div>
 
 </div>
-<div style="text-align:center;">
-    <img src="{{ asset('Agent/assets/images/StateCoverage-1.png') }}" 
-         alt="State Coverage Map" 
-         style="width:80%;">
-</div>
-
-
-
-
-
-        </div>
-    </div>
-
-
-
-
-
-    
-  <div class="goal-graph-wrapper">
+<div class="goal-graph-wrapper">
   <div class="agent-goal-box goal-ultra">
 
     <div class="goal-header">
@@ -468,6 +609,28 @@ body {
   </div>
 </div>
 
+
+
+
+<div style="text-align:center;">
+    <img src="{{ asset('Agent/assets/images/StateCoverage-2.jpeg') }}" 
+         alt="State Coverage Map" 
+         style="width:80%;">
+</div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+    
+  
 
 
 
