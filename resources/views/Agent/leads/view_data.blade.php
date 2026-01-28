@@ -1946,23 +1946,30 @@
                         mangerfwd: managerfwd,
                         _token: '{{ csrf_token() }}'
                     },
-                    success: function(response) {
-                        // Status to route mapping
-                        const statusRoutes = {
-                            'Voice Mail': 'VoiceMail',
-                            'Not Intrested': 'NotInterested', 
-                            'Not Connected': 'NotConnected',
-                            'Wrong Number': 'WrongNumber',
-                            'WON': 'WON',
-                            'DND': 'DND',
-                            'Insured Leads': 'InsuredLeads'
-                        };
-                        
-                        if (statusRoutes[status]) {
-                            const redirectUrl = '{{ url("/agent") }}/' + statusRoutes[status] + '/leads';
-                            window.location.href = redirectUrl;
-                        }
-                    },
+                success: function(response) { 
+    // Status to route mapping
+    const statusRoutes = {
+        'Voice Mail': 'VoiceMail',
+        'Not Intrested': 'NotInterested', 
+        'Not Connected': 'NotConnected',
+        'Wrong Number': 'WrongNumber',
+        'WON': 'WON',
+        'DND': 'DND',
+        
+    };
+    
+    // Check if status is 'Insured Leads' for admin redirect
+    if (status === 'Insured Leads') {
+        // Redirect to ADMIN route for Insured Leads
+        const redirectUrl = '{{ url("/admin") }}/InsuredLeads/leads';
+        window.location.href = redirectUrl;
+    } 
+    else if (statusRoutes[status]) {
+        // Redirect to AGENT route for other statuses
+        const redirectUrl = '{{ url("/agent") }}/' + statusRoutes[status] + '/leads';
+        window.location.href = redirectUrl;
+    }
+},
                     error: function(xhr, status, error) {
                         // Handle error response if needed
                         console.error(error);
@@ -2380,6 +2387,7 @@ $(document).on('click', '.update-status', function () {
         'Not Intrested': 'NotInterested',
         'Not Connected': 'NotConnected',
         'Wrong Number': 'WrongNumber',
+         'Insured Leads': 'InsuredLeads',
         'WON': 'WON',
         'DND': 'DND'
     };

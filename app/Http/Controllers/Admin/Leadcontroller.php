@@ -1091,7 +1091,7 @@ if(!empty($req->assign_leads)){
     }
     public function InsuredLeadsleads(){
         ini_set('memory_limit', '-1');
-        $datas = ExcelData::where('form_status', 'Voice Mail')
+        $datas = ExcelData::where('form_status', 'Insured Leads')
         ->paginate(100);
       return view('admin.disposition.InsuredLeads', compact('datas'));
     }
