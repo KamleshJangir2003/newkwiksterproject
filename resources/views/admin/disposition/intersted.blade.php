@@ -1226,6 +1226,7 @@
                                                         height="400" class="img-fluid">
                                                 </div>
                                             </div>
+                                            <hr>
                                             <div class="row mt-4">
                                                 <div class="col-6">
                                                     <div class="mb-3">
@@ -1264,7 +1265,7 @@
 }
 
 .form-label {
-    font-weight: 600;
+   
     margin-bottom: 6px;
     color: #333;
 }
@@ -1418,79 +1419,84 @@
                                                     margin-bottom: 12px;
                                                 " class="btn btn-primary">Open file</button>
                                                 </div><!--end col-->
+                                                <hr>
                                                 <div class="col-12">
                                                     <h4>Policy</h4>
                                                     </div>
-                                                <div class="col-6">
-                                                   
-                                                    <div class="mb-3">
-                                                        <label for="Liability" class="form-label">Liability limit</label>
-                                                        <select id="Liability"class="form-control" name="Liability"
-                                                           >
-                                                            <option value="N/A">N/A</option>
-                                                            <option value="$250,000">$250,000</option>
-                                                            <option value="$300,000">$300,000</option>
-                                                            <option value="$500,000">$500,000</option>
-                                                            <option value="$750,000">$750,000</option>
-                                                            <option value="$1,000,000">$1,000,000</option>
-                                                            <option value="$1,500,000">$1,500,000</option>
-                                                            <option value="$1,750,000">$1,750,000</option>
-                                                            <option value="$2,000,000">$2,000,000</option>
-                                                        </select>
-                                                    </div>
-                                                </div><!--end col--> <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <label for="MTC" class="form-label">Do you need MTC ?</label>
-                                                        <select id="MTC" class="form-control" name="MTC"
-                                                            >
-                                                            <option value="N/A">N/A</option>
-                                                            <option value="$25,000">$25,000</option>
-                                                            <option value="$50,000">$50,000</option>
-                                                            <option value="$100,000">$100,000</option>
-                                                            <option value="$150,000">$150,000</option>
-                                                            <option value="$200,000">$200,000</option>
-                                                            <option value="$250,000">$250,000</option>
-                                                            <option value="$300,000">$300,000</option>
-                                                            <option value="$500,000">$500,000</option>
-                                                        </select>
-                                                    </div>
-                                                </div><!--end col--> <div class="col-7">
-                                                    <div class="mb-3">
-                                                        <label for="ForminputState" class="form-label">Trailer interchange</label>
-                                                        <select id="interchange" class="form-control" name="interchange"
-                                                           >
-                                                            <option value="N/A">N/A</option>
-                                                            <option value="$1,000">$1,000</option>
-                                                            <option value="$2,500">$2,500</option>
-                                                            <option value="$5,000">$5,000</option>
-                                                            <option value="$10,000">$10,000</option>
-                                                            <option value="$15,000">$15,000</option>
-                                                            <option value="$25,000">$25,000</option>
-                                                            <option value="$30,000">$30,000</option>
-                                                            <option value="$40,000">$40,000</option>
-                                                            <option value="$50,000">$50,000</option>
-                                                            <option value="$60,000">$60,000</option>
-                                                            <option value="$75,000">$75,000</option>
-                                                            <option value="$100,000">$100,000</option>
-                                                        </select>
-                                                    </div>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" name="physical" id="physicall" value="1" class="form-check-input">
-                                                            Physical Damage
-                                                        </label>
-                                                    </div>
-                                                </div><!--end col-->
-                                                <div class="col-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" name="general" id="generall" value="1" class="form-check-input">
-                                                            General Liability
-                                                        </label>
-                                                    </div>
-                                                </div><!--end col-->
+                                               <div class="row">
+    
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Liability limit</label>
+        <select class="form-control" name="Liability">
+            <option value="N/A">N/A</option>
+            <option value="$250,000">$250,000</option>
+            <option value="$300,000">$300,000</option>
+            <option value="$500,000">$500,000</option>
+            <option value="$750,000">$750,000</option>
+            <option value="$1,000,000">$1,000,000</option>
+            <option value="$1,500,000">$1,500,000</option>
+            <option value="$1,750,000">$1,750,000</option>
+            <option value="$2,000,000">$2,000,000</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Do you need MTC ?</label>
+        <select class="form-control" name="MTC">
+            <option value="N/A">N/A</option>
+            <option value="$25,000">$25,000</option>
+            <option value="$50,000">$50,000</option>
+            <option value="$100,000">$100,000</option>
+            <option value="$150,000">$150,000</option>
+            <option value="$200,000">$200,000</option>
+            <option value="$250,000">$250,000</option>
+            <option value="$300,000">$300,000</option>
+            <option value="$500,000">$500,000</option>
+        </select>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <label class="form-label">Trailer interchange</label>
+        <select class="form-control" name="interchange">
+            <option value="N/A">N/A</option>
+            <option value="$1,000">$1,000</option>
+            <option value="$2,500">$2,500</option>
+            <option value="$5,000">$5,000</option>
+            <option value="$10,000">$10,000</option>
+            <option value="$15,000">$15,000</option>
+            <option value="$25,000">$25,000</option>
+            <option value="$30,000">$30,000</option>
+            <option value="$40,000">$40,000</option>
+            <option value="$50,000">$50,000</option>
+            <option value="$60,000">$60,000</option>
+            <option value="$75,000">$75,000</option>
+            <option value="$100,000">$100,000</option>
+        </select>
+    </div>
+
+</div>
+<div class="row">
+    
+    <div class="col-md-6">
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="physical" id="physical" value="1">
+            <label class="form-check-label" for="physical">
+                Physical Damage
+            </label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="general" id="general" value="1">
+            <label class="form-check-label" for="general">
+                General Liability
+            </label>
+        </div>
+    </div>
+
+</div>
+
                                                 <hr/>
                                               <div class="row">
     <div class="col-12">

@@ -792,13 +792,18 @@
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-12">
-                                        <div class="mb-3">
-                                            <label for="owner_dob" class="form-label">Owner DOB <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="date" class="form-control"
-                                                placeholder="Enter driver dob" id="owner_dob"
-                                                name="owner_dob">
-                                        </div>
+                       <div class="mb-3">
+    <label for="owner_dob" class="form-label">
+        Owner DOB <span class="text-danger">*</span>
+    </label>
+    <input type="date" class="form-control"
+           placeholder="Enter driver dob"
+           id="owner_dob"
+           name="owner_dob"
+           required>
+</div>
+
+
                                     </div>
                                        
                                     <div class="col-12 mb-3">
@@ -906,7 +911,7 @@
                                         <div class="mb-3">
                                             <label for="ForminputState" class="form-label">Unit Owned <span
                                                     class="text-danger">*</span></label>
-                                            <select id="unit_owned2" class="form-select" name="unit_owned">
+                                            <select id="unit_owned2" class="form-select" name="unit_owned" required>
                                                 <option value="1" selected>1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -925,7 +930,7 @@
                                             <label for="citynameInput" class="form-label">VIN <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Enter VIN"
-                                                id="vin" name="vin">
+                                                id="vin" name="vin" required>
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -1298,7 +1303,7 @@
                                             <label for="citynameInput" class="form-label">Driver Name <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Enter driver name"
-                                                id="driver_name" name="driver_name">
+                                                id="driver_name" name="driver_name" required>
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -1306,7 +1311,7 @@
                                             <label for="citynameInput" class="form-label">Driver DOB <span
                                                     class="text-danger">*</span></label>
                                             <input type="date" class="form-control" placeholder="Enter driver dob"
-                                                id="driver_dob" name="driver_dob">
+                                                id="driver_dob" name="driver_dob" required>
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -1314,7 +1319,7 @@
                                             <label for="citynameInput" class="form-label">Driver License <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Enter driver license"
-                                                id="driver_license" name="driver_license">
+                                                id="driver_license" name="driver_license" required>
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-6">
@@ -1322,7 +1327,7 @@
                                             <label for="citynameInput" class="form-label">Driver License State<span
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Enter driver license"
-                                                id="driver_license_state" name="driver_license_state">
+                                                id="driver_license_state" name="driver_license_state" required>
                                         </div>
                                     </div><!--end col-->
                                     <div class="row unit2" id="driver22" style="display: '';">
@@ -1333,7 +1338,7 @@
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control"
                                                     placeholder="Enter driver name" id="driver_name2"
-                                                    name="driver_name2">
+                                                    name="driver_name2" required>
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-6">
@@ -1341,7 +1346,7 @@
                                                 <label for="citynameInput" class="form-label">Driver DOB2 <span
                                                         class="text-danger">*</span></label>
                                                 <input type="date" class="form-control" placeholder="Enter driver dob"
-                                                    id="driver_dob2" name="driver_dob2">
+                                                    id="driver_dob2" name="driver_dob2" required>
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-6">
@@ -1380,7 +1385,7 @@
                                                         class="text-danger">*</span></label>
                                                 <input type="date" class="form-control"
                                                     placeholder="Enter driver dob" id="driver_dob3"
-                                                    name="driver_dob3">
+                                                    name="driver_dob3" required>
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-6">
@@ -1696,6 +1701,7 @@
                                             height="400" class="img-fluid">
                                     </div>
                                 </div>
+                                <hr>
                                 <div class="row mt-4">
                                     <div class="col-6">
                                         <div class="mb-3">
@@ -1760,6 +1766,7 @@
                                                 required=""></textarea>
                                         </div>
                                     </div><!--end col-->
+                                    <hr>
 
                                     <h4>Policy</h4>
                                     <div class="col-6">
@@ -1833,7 +1840,7 @@
     </div>
 </div><!--end col-->
                                     <hr />
-                                   <h5 class="mb-3">Loss Runs / Docs Files <br>
+                                   <h5 class="mb-3">Loss Runs / Files <br>
                                 <small style="color:red;">
     Allowed file types: ZIP, PDF, DOC, DOCX
 </small></h5>
@@ -1908,9 +1915,10 @@ $(document).ready(function () {
         // ⛔ cooldown check
         if (now - lastStatusChangeTime < COOLDOWN) {
             const waitSec = Math.ceil((COOLDOWN - (now - lastStatusChangeTime)) / 1000);
-            alert(`⏳ Please wait ${waitSec} seconds before changing status again`);
+            alert(`⏳ Please dial this number first.`);
             return;
         }
+        // ${waitSec}
 
         // ✅ allow change
         lastStatusChangeTime = now;

@@ -1323,6 +1323,7 @@
                                             height="400" class="img-fluid">
                                     </div>
                                 </div>
+                                <hr>
                                 <div class="row mt-4">
                                     <div class="col-6">
                                         <div class="mb-3">
@@ -1338,7 +1339,7 @@
                                     </div><!--end col-->
                                   <div class="col-6">
     <div class="mb-3">
-        <label class="form-label">Mode On</label>
+        <label class="form-label">Mode</label>
 
         <select name="mail_status" class="form-select" disabled>
             <option value="Call"
@@ -1397,7 +1398,7 @@
                                         margin-bottom: 12px;
                                     " class="btn btn-primary">Open file</button>
                                     </div><!--end col-->
-
+                                       <hr> 
                                     <h4>Policy</h4>
                                     <div class="col-6">
                                         <div class="mb-3">

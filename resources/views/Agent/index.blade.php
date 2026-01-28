@@ -5,389 +5,252 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-     /* ============================================
-   🎨 COMPLETE MODERN DASHBOARD CSS
-   ============================================ */
+     /* ==============================
+   🌈 GLOBAL DASHBOARD THEME
+================================ */
+:root {
+  --primary: #2563eb;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #dc2626;
+  --dark: #1f2937;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --border: #e5e7eb;
+}
 
-/* --- Time Zone Cards --- */
+body {
+  background: #f5f7fb;
+  font-family: "Inter", sans-serif;
+}
+
+/* ==============================
+   🕒 TIME ZONE CARDS
+================================ */
 .row-cols-1 .card {
-    background: #ffffff;
-    border: none !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--card-bg);
+  border-radius: 14px;
+  border: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  transition: .3s ease;
 }
 
 .row-cols-1 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
 }
 
-.row-cols-1 .card .card-body {
-    padding: 20px;
+.card-body {
+  text-align: center;
 }
 
-/* Border colors with gradient effect */
-.card.radius-10::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    z-index: 1;
+.card-body h4 {
+  font-weight: 700;
 }
 
-/* --- Dashboard Metric Cards --- */
+/* ==============================
+   📊 METRIC DASHBOARD CARDS
+================================ */
 .dashboard-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    /* margin: 25px 0; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  margin-top: 20px;
 }
 
 .dash-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    text-align: left;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+  position: relative;
+  overflow: hidden;
+  transition: .35s ease;
+  text-align: center;
 }
 
 .dash-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.14);
 }
 
-/* Left border accent */
+/* LEFT COLOR STRIP */
 .dash-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
 }
 
-.dash-card:hover::before {
-    width: 6px;
-}
+.total::before { background: #2563eb; }
+.pipeline::before { background: #16a34a; }
+.live::before { background: #f59e0b; }
+.loss::before { background: #dc2626; }
 
-/* Border colors matching time zones */
-.dash-card.total::before { 
-    background: linear-gradient(180deg, #ff4500, #ff6347);
-}
-.dash-card.pipeline::before { 
-    background: linear-gradient(180deg, #28a745, #20c997);
-}
-.dash-card.live::before { 
-    background: linear-gradient(180deg, #ffc107, #fd7e14);
-}
-.dash-card.loss::before { 
-    background: linear-gradient(180deg, #dc3545, #e74c3c);
-}
-
-/* Subtle gradient backgrounds */
-.dash-card.total {
-    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-}
-.dash-card.pipeline {
-    background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
-}
-.dash-card.live {
-    background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
-}
-.dash-card.loss {
-    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-}
-
-/* Icon styling */
+/* ICON */
 .dash-card .icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin-bottom: 12px;
-    transition: transform 0.3s ease;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
 }
 
-.dash-card:hover .icon {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.dash-card.total .icon {
-    background: linear-gradient(135deg, #fff5f5, #ffe5e5);
-    color: #ff4500;
-}
-.dash-card.pipeline .icon {
-    background: linear-gradient(135deg, #f0fff4, #d4f4dd);
-    color: #28a745;
-}
-.dash-card.live .icon {
-    background: linear-gradient(135deg, #fffbf0, #ffeaa7);
-    color: #ffc107;
-}
-.dash-card.loss .icon {
-    background: linear-gradient(135deg, #fff5f5, #ffe5e5);
-    color: #dc3545;
-}
+.total .icon { background:#e0e7ff; color:#2563eb; }
+.pipeline .icon { background:#dcfce7; color:#16a34a; }
+.live .icon { background:#fef3c7; color:#f59e0b; }
+.loss .icon { background:#fee2e2; color:#dc2626; }
 
 .dash-card h6 {
-    margin: 8px 0;
-    font-weight: 600;
-    color: #555;
-    font-size: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
 }
 
-.dash-card h4 {
-    margin: 0;
-    font-weight: 700;
-    font-size: 28px;
-    color: #2c3e50;
+.dash-card h4,
+.dash-card h3 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--dark);
 }
 
-/* --- Goal & Graph Wrapper --- */
+/* ==============================
+   🎧 LIVE TRANSFER SPLIT
+================================ */
+.dash-card .d-flex > div h4 {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+/* ==============================
+   🎯 GOAL SECTION
+================================ */
 .goal-graph-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 25px;
-    margin-top: 25px;
+  display: flex;
+  gap: 24px;
+  margin-top: 30px;
 }
 
-/* --- Monthly Goal Box --- */
 .agent-goal-box {
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    width: 35%;
-    position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.agent-goal-box:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.agent-goal-box::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    border-radius: 16px 0 0 16px;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(10px);
+  border-radius: 22px;
+  padding: 22px;
+  width: 40%;
+  box-shadow: 0 16px 40px rgba(0,0,0,.12);
 }
 
 .goal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
 .goal-header h5 {
-    margin: 0;
-    font-weight: 700;
-    color: #2c3e50;
-    font-size: 16px;
+  font-weight: 800;
+  font-size: 18px;
 }
 
-.month {
-    font-size: 13px;
-    color: #7f8c8d;
-    font-weight: 600;
-    background: #f8f9fa;
-    padding: 4px 12px;
-    border-radius: 20px;
+.goal-pill {
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-/* Circle Progress */
 .goal-body {
-    display: flex;
-    align-items: center;
-    gap: 25px;
+  display: flex;
+  gap: 26px;
+  align-items: center;
 }
 
+/* ==============================
+   🔵 CIRCLE PROGRESS
+================================ */
 .circle-progress {
-    position: relative;
-    width: 160px;
-    height: 160px;
+  position: relative;
+  width: 170px;
+  height: 170px;
 }
 
 .bg-circle {
-    fill: none;
-    stroke: #f0f0f0;
-    stroke-width: 12;
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 14;
 }
 
 .progress-circle {
-    fill: none;
-    stroke-width: 12;
-    stroke-dasharray: 440;
-    stroke-dashoffset: 440;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    stroke-linecap: round;
+  fill: none;
+  stroke-width: 14;
+  stroke-dasharray: 452;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: 1.2s ease;
 }
 
-/* Multi-color progress */
-.step-1 { stroke: #dc3545; }
-.step-2 { stroke: #fd7e14; }
-.step-3 { stroke: #ffc107; }
-.step-4 { stroke: #28a745; }
-
 .circle-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
 }
 
 .circle-text h3 {
-    margin: 0;
-    font-size: 32px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  font-size: 32px;
+  font-weight: 900;
 }
 
-.circle-text p {
-    margin: 4px 0 0;
-    font-size: 13px;
-    color: #7f8c8d;
-    font-weight: 600;
-}
-
-/* Goal Stats */
+/* ==============================
+   📈 STATS
+================================ */
 .goal-stats {
-    flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
 }
 
-.goal-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
+.stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
 }
 
-.goal-row:last-child {
-    border-bottom: none;
+.stat-card strong {
+  font-size: 20px;
+  font-weight: 800;
 }
 
-.goal-row span {
-    font-size: 14px;
-    color: #7f8c8d;
-    font-weight: 500;
+/* ==============================
+   📱 RESPONSIVE
+================================ */
+@media(max-width:992px){
+  .goal-graph-wrapper {
+    flex-direction: column;
+  }
+  .agent-goal-box {
+    width: 100%;
+  }
 }
 
-.goal-row strong {
-    font-size: 18px;
-    font-weight: 700;
-    color: #2c3e50;
+@media(max-width:768px){
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+  .goal-stats {
+    grid-template-columns: 1fr;
+  }
 }
-
-.goal-row .achieved {
-    color: #28a745;
-}
-
-.goal-row .remaining {
-    color: #dc3545;
-}
-
-/* --- Graph Box --- */
-.graph-box {
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    width: 65%;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.graph-box:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.graph-box h5 {
-    margin: 0 0 20px;
-    font-weight: 700;
-    color: #2c3e50;
-    font-size: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-.graph-box canvas {
-    width: 100% !important;
-    height: auto !important;
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 1200px) {
-    .dashboard-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .goal-graph-wrapper {
-        flex-direction: column;
-    }
-    
-    .agent-goal-box,
-    .graph-box {
-        width: 100%;
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-cards {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* --- Smooth Animations --- */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.dash-card,
-.agent-goal-box,
-.graph-box {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.dash-card:nth-child(1) { animation-delay: 0.1s; }
-.dash-card:nth-child(2) { animation-delay: 0.2s; }
-.dash-card:nth-child(3) { animation-delay: 0.3s; }
-.dash-card:nth-child(4) { animation-delay: 0.4s; }
-
-
-
 
     </style>
    
@@ -607,320 +470,7 @@
 
 
 
-<style>
-    .goal-graph-wrapper{
-  padding: 20px 24px;
-}
 
- .goal-ultra{
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(12px);
-  border-radius:22px;
-  padding:20px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
-.goal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.goal-header h5{
-  margin:0;
-  font-weight:800;
-  font-size:18px;
-}
-
-.goal-header small{
-  color:#6b7280;
-  font-size:13px;
-}
-
-.goal-pill{
-  background:linear-gradient(135deg,#6366f1,#a855f7);
-  color:#fff;
-  padding:6px 14px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:600;
-}
-
-.goal-body{
-  display:flex;
-  gap:28px;
-  align-items:center;
-}
-
-.circle-progress{
-  position:relative;
-  width:170px;
-  height:170px;
-}
-
-.glow{
-  filter:drop-shadow(0 0 18px rgba(99,102,241,0.45));
-}
-
-.bg-circle{
-  fill:none;
-  stroke:#e5e7eb;
-  stroke-width:14;
-}
-
-.progress-circle{
-  fill:none;
-  stroke-width:14;
-  stroke-dasharray:452;
-  transform:rotate(-90deg);
-  transform-origin:50% 50%;
-  transition:1.2s cubic-bezier(.4,0,.2,1);
-}
-
-.circle-text{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-}
-
-.circle-text h3{
-  font-size:30px;
-  font-weight:900;
-  margin:0;
-}
-
-.circle-text p{
-  font-size:13px;
-  color:#6b7280;
-  margin:0;
-}
-
-.goal-stats{
-  flex:1;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
-
-.stat-card{
-  background:#fff;
-  border-radius:16px;
-  padding:14px;
-  text-align:center;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-  transition:.25s ease;
-}
-
-.stat-card:hover{
-  transform:translateY(-4px);
-}
-
-.stat-card i{
-  font-size:20px;
-  margin-bottom:6px;
-  display:block;
-  color:#6366f1;
-}
-
-.stat-card span{
-  font-size:12px;
-  color:#6b7280;
-}
-
-.stat-card strong{
-  display:block;
-  font-size:20px;
-  margin-top:4px;
-}
-
-.stat-card.success i{ color:#22c55e; }
-.stat-card.danger i{ color:#ef4444; }
-
-/* Mobile */
-@media(max-width:768px){
-  .goal-body{
-    flex-direction:column;
-  }
-  .goal-stats{
-    grid-template-columns:1fr;
-    width:100%;
-  }
-}
-
-/* FIX stats overflow issue */
-.goal-stats{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-/* each stat card responsive */
-.stat-card{
-  flex: 1 1 100px;
-  min-width: 90px;
-}
-
-/* safety – card ke bahar kuch na nikle */
-.goal-ultra{
-  overflow: hidden;
-}
-
-
-</style>
-<style>
-    .dashboard-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.dash-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     /* horizontal center */
-    justify-content: center; /* vertical center */
-    text-align: center;
-    padding: 20px;
-    border-radius: 12px;
-}
-
-.dash-card .icon {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-</style>
-<style>
-    .goal-graph-wrapper{
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-/* Monthly Goal Box */
-.agent-goal-box{
-  background:#ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  width: 35%;        /* control size */
-  position: relative;
-  height: 320px;
-}
-
-/* Graph Box */
-.graph-box{
-  background:#ffffff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  width: 65%;        /* control size */
-}
-
-/* Make graph fit box */
-.graph-box canvas{
-  width: 100% !important;
-  height: auto !important;
-}
-
-</style>
-
-    <style>
-   .graph-box{
-
-  margin-left: 25px;
-  background:#ffffff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-
-  width: 75%;        /* 👉 Aap change kar sakte ho */
-  max-width: 900px;  /* graph box limit */
-  min-width: 400px;  /* minimum size */
-
-  height: auto;      /* graph ke according adjust */
-  
-}
-
-
-
-
-        .dashboard-cards{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.dash-card{
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  text-align: left;
-  /* min-height: 150px; */
-  position: relative;
-}
-
-.dash-card h6{
-  margin: 10px 0 5px;
-  font-weight: 600;
-  color: #555;
-}
-
-.dash-card h2{
-  margin: 0;
-  font-weight: 700;
-}
-
-.icon{
-  width: 35px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  font-size: 22px;
-}
-
-/* Different colors for each card */
-.total .icon{ background:#e6f2ff; }
-.pipeline .icon{ background:#e6fff2; }
-.live .icon{ background:#fff2e6; }
-.loss .icon{ background:#ffe6e6; }
-
-
-
-    </style>
-    <style>
-        .dash-card{
-  position: relative;
-  overflow: hidden;
-}
-
-/* 2px color line on left */
-.dash-card::before{
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-}
-
-/* Colors for each card */
-.total::before{ background:#ff4500; }
-.pipeline::before{ background:#2ecc71; }
-.live::before{ background:#f39c12; }
-.loss::before{ background:#e74c3c; }
-
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const labels = @json($teamLabels);
