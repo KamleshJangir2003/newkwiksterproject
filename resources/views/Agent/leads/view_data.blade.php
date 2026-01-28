@@ -1893,91 +1893,81 @@
     <!--end page wrapper -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('.update-status').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Close dropdown immediately
-                $('.lead-status-menu').removeClass('show');
-                
-                var leadId = $(this).data('lead-id');
-                var status = $(this).data('status');
-                var managerfwd = $('#manager_id').val();
-                var $clickedItem = $(this);
-                var $button = $clickedItem.closest('.lead-status-dropdown').find('.lead-status-btn');
+  <script>
+let lastStatusChangeTime = 0; // ⏱️ last change time
+const COOLDOWN = 5000; // 5 seconds
 
-                // Immediate UI update
-                $button.text(status);
-                
-                var color = '#119711';
-                var textColor = '#fff';
-                
-                switch (status) {
-                    case 'Voice Mail':
-                        color = '#742dc1';
-                        break;
-                    case 'Not Intrested':
-                    case 'Wrong Number':
-                    case 'DND':
-                        color = '#d91c1c';
-                        break;
-                    case 'Not Connected':
-                        color = '#e6ca00';
-                        textColor = '#000';
-                        break;
-                    case 'WON':
-                        color = '#00ff72';
-                        break;
-                    case 'Insured Leads':
-                        color = '#17a2b8';
-                        break;
-                }
-                
-                $button.attr('style', `background:${color};color:${textColor};padding:3px 15px;border:none;border-radius:20px;font-size:13px;`);
+$(document).ready(function () {
 
-                $.ajax({
-                    url: '{{ route('agent_status_update') }}',
-                    method: 'POST',
-                    data: {
-                        lead_id: leadId,
-                        status: status,
-                        mangerfwd: managerfwd,
-                        _token: '{{ csrf_token() }}'
-                    },
-                success: function(response) { 
-    // Status to route mapping
-    const statusRoutes = {
-        'Voice Mail': 'VoiceMail',
-        'Not Intrested': 'NotInterested', 
-        'Not Connected': 'NotConnected',
-        'Wrong Number': 'WrongNumber',
-        'WON': 'WON',
-        'DND': 'DND',
-        
-    };
-    
-    // Check if status is 'Insured Leads' for admin redirect
-    if (status === 'Insured Leads') {
-        // Redirect to ADMIN route for Insured Leads
-        const redirectUrl = '{{ url("/admin") }}/InsuredLeads/leads';
-        window.location.href = redirectUrl;
-    } 
-    else if (statusRoutes[status]) {
-        // Redirect to AGENT route for other statuses
-        const redirectUrl = '{{ url("/agent") }}/' + statusRoutes[status] + '/leads';
-        window.location.href = redirectUrl;
-    }
-},
-                    error: function(xhr, status, error) {
-                        // Handle error response if needed
-                        console.error(error);
-                    }
-                });
-            });
+    $('.update-status').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const now = Date.now();
+
+        // ⛔ cooldown check
+        if (now - lastStatusChangeTime < COOLDOWN) {
+            const waitSec = Math.ceil((COOLDOWN - (now - lastStatusChangeTime)) / 1000);
+            alert(`⏳ Please wait ${waitSec} seconds before changing status again`);
+            return;
+        }
+
+        // ✅ allow change
+        lastStatusChangeTime = now;
+
+        $('.lead-status-menu').removeClass('show');
+
+        var leadId = $(this).data('lead-id');
+        var status = $(this).data('status');
+        var managerfwd = $('#manager_id').val();
+        var $button = $(this).closest('.lead-status-dropdown').find('.lead-status-btn');
+
+        // 🔥 INSTANT UI CHANGE
+        $button.text(status);
+
+        let color = '#119711';
+        let textColor = '#fff';
+
+        switch (status) {
+            case 'Voice Mail':
+                color = '#742dc1';
+                break;
+            case 'Not Intrested':
+            case 'Wrong Number':
+            case 'DND':
+                color = '#d91c1c';
+                break;
+            case 'Not Connected':
+                color = '#e6ca00';
+                textColor = '#000';
+                break;
+            case 'Insured Leads':
+                color = '#17a2b8';
+                break;
+        }
+
+        $button.attr(
+            'style',
+            `background:${color};color:${textColor};padding:3px 15px;border:none;border-radius:20px;font-size:13px;`
+        );
+
+        // ✅ AJAX CALL
+        $.ajax({
+            url: '{{ route('agent_status_update') }}',
+            method: 'POST',
+            data: {
+                lead_id: leadId,
+                status: status,
+                mangerfwd: managerfwd,
+                _token: '{{ csrf_token() }}'
+            }
         });
-    </script>
+
+    });
+
+});
+</script>
+
     <script>
         $(document).ready(function() {
             $('#exampleFullScreenModal').on('show.bs.modal', function(event) {
